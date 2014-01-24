@@ -34,7 +34,7 @@ class Users extends Website_Controller{
 		
 	}
 	
-	function signin(){
+	function login(){
 		//Redirect
 		if($this->_is_logged_in()){
 			redirect('');

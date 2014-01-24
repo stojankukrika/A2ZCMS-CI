@@ -1,4 +1,3 @@
-<div class="row">
   <div class="col-xs-12 col-sm-6 col-lg-8">
 	<br>
 	<div class="row"> 	 
@@ -19,51 +18,3 @@
 	 <hr>
  </div> 	 
 </div>
-<br>
-   <br>
-	<div class="col-xs-6 col-lg-4">			 
-		<div class="well">			
-		<ul class="list-unstyled">
-   		<h4>Login to system</h4>
-		<form accept-charset="UTF-8" action="<?php echo base_url('signin'); ?>" method="POST">
-			<fieldset>
-				<div class="form-group">
-					<label for="email" class="col-md-4 control-label">Username or Email</label>
-					<div class="col-md-8">
-						<input type="text" value="" id="email" name="email" placeholder="Username or Email" tabindex="1" class="form-control">
-					</div>
-				</div>
-				<div class="form-group">&nbsp;</div>
-				<div class="form-group">
-					<label for="password" class="col-md-4 control-label"> Password</label>
-					<div class="col-md-8">
-						<input type="password" id="password" name="password" placeholder="Password" tabindex="2" class="form-control">
-					</div>
-				</div>			
-				<div class="form-group">
-					<div class="col-md-offset-2 col-md-10">
-						<div class="checkbox">
-							<label for="remember">Remember me
-							<input type="hidden" value="0" name="remember">
-								<input type="checkbox" value="1" id="remember" name="remember" tabindex="4">
-							</label>
-						</div>
-					</div>
-				</div>	
-				<p>
-					<button class="btn btn-primary" type="submit" tabindex="3">
-						Submit					</button>
-					<a href="#" class="btn btn-success">Forgot password</a>
-				</p>
-			</fieldset>
-		</form>	
-	    <h4>Need an Account?</h4>
-			<p>
-				Create an account here			</p>
-			<p>
-				<a class="btn btn-info" href="<?php echo base_url('signup'); ?>">Create Account</a>
-			</p>
-			</ul>			</div>
-		 
-	</div>	        
-      </div>

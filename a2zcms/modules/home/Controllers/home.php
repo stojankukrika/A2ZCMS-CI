@@ -13,6 +13,7 @@ class Home extends Website_Controller{
     }
 	function index(){
 		$data['main_content'] = 'index';
+		$data['right_content'] = 'users/login';
 		//$data['menu'] = 'menu';
 		//$this->load->module('menu/menu');
 		//$this->menu->index();
