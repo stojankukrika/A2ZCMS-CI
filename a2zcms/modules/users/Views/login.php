@@ -1,9 +1,9 @@
-<br><br>
+ <div class="well">	
 <ul class="list-unstyled">
-   <? if($currentuser){ ?>
-   	<h4>Welcome name surname</h4>
-		<? if(user_avatar()){ ?>
-		<img alt="Avatar" src="<?='avatar/'.user_avatar();?>">
+   <? if($this->session->userdata('username')){ ?>
+   	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
+		<? if($this->session->userdata('avatar')!=""){ ?>
+		<img alt="Avatar" src="<?='avatar/'.$this->session->userdata('avatar');?>">
 		<?} else {?>
 		<img alt="Avatar" src="<?= 'avatar/avatar.png';?>">
 		<? }
@@ -14,7 +14,7 @@
 		</li>
 		<? } ?>
 		<li>
-			<a href="users/messages">Messages ( <?=$unreadmessages;?>)</a>
+			<a href="users/messages">Messages</a>
 		</li>
 		<li>
 			<a href="users/account">Edit profile</a>
@@ -27,8 +27,8 @@
 		</li>
 		<? } 
 		else { ?>
-		<h4>Login to sistem</h4>
-		<form method="POST" action="users/login" accept-charset="UTF-8">
+		<h4>Login to system</h4>
+		<form method="POST" action="login" accept-charset="UTF-8">
 			<fieldset>
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="email">Username or email</label>
@@ -76,3 +76,4 @@
 			</p>
 		<? } ?>
 	</ul>
+</div>

@@ -41,102 +41,60 @@ class Users extends Website_Controller{
 		}
 		
 		if($_POST){
-			//Data
-			$user_email = $this->input->post('user_email', true);
-			$password 	= $this->input->post('password', true);
-			$userdata 	= $this->user_model->validate($user_email, md5($password));	
 			
-			//Validation
-			if($userdata){
-				if($userdata->status == 0){
-					$data['error'] = "Not validated!";
-					$data['main_content'] = 'signin';
-					$this->load->view('page', $data);
-				}else{
-					$data['userid'] = $userdata->id;
-					$data['logged_in'] = true;
+			// Create user object
+	        $u = new User();
+	
+	        // Put user supplied data into user object
+	        // (no need to validate the post variables in the controller,
+	        // if you've set your DataMapper models up with validation rules)
+	        $u->username = $this->input->post('username');
+	        $u->password = $this->input->post('password');
+		
+			  if ($u->login())
+		        {
+		        	$data = array(
+					'username' => $u->username,
+					'name' => $u->name,
+					'surname' => $u->surname,
+					'is_logged_in' => true
+					);
 					$this->session->set_userdata($data);
 					redirect('');
-				}				
-			}else{
-				$data['error'] = "You shall not pass!";
-				$data['main_content'] = 'signin';
-				$this->load->view('page', $data);
-			}
-
-			return;
+		        }
+		        else
+		        {
+		            // Show the custom login error message
+		            echo '<p>' . $u->error->login . '</p>';
+		        }
 		}
-		$data['main_content'] = 'signin';
-		$this->load->view('page', $data);
+		$data['main_content'] = 'index';
+		$this->load->view('page');
 	}
 	
 	function signup(){
 		if($_POST){
-		
-			$config = array(
-				array(
-					'field' => 'fullname',
-					'label' => 'Full name',
-					'rules' => 'trim|required',
-				),
-				array(
-					'field' => 'username',
-					'label' => 'User name',
-					'rules' => 'trim|is_unique[users.user_nicename]',
-				),
-				array(
-					'field' => 'email',
-					'label' => 'E-mail',
-					'rules' => 'trim|required|valid_email|is_unique[users.user_email]',
-				),
-				array(
-					'field' => 'password',
-					'label' => 'Password',
-					'rules' => 'trim|required',
-				)
-			);
-			
-			$this->form_validation->set_rules($config);
-			
-			if($this->form_validation->run() === false){
-				$data['error'] = validation_errors();
-				$data['main_content'] = 'signup';
-				$this->load->view('page', $data);
-			}else{
-				$data['user_login']		= $this->input->post('fullname',true);
-				$data['user_pass']		= md5($this->input->post('password',true));
-				$data['user_nicename']	= $this->input->post('username',true); 
-				$data['user_email']		= $this->input->post('email',true);
-				$data['activation_key']	= md5(rand(0,1000).'uniquefrasehere');
-				
-				$create = $this->user_model->create($data);
-				
-				if($create){
-					
-					//Send validation mail 
-					
-					$this->load->library('email');
+		// Create user object
+	        $u = new User();
+	
+	        // Put user supplied data into user object
+	        // (no need to validate the post variables in the controller,
+	        // if you've set your DataMapper models up with validation rules)
+	        $u->username = $this->input->post('username');
+	        $u->password = $this->input->post('password');
+	        $u->confirm_password = $this->input->post('confirm_password');
+	        $u->email = $this->input->post('email');
 
-					$this->email->from('noreply@yoursite.com', 'Site Name');
-					$this->email->to($data['user_email']); 
-					
-					$this->email->subject('Confirmation');
-					$this->email->message("Confirm your subscription <a href=''>Confirmar</a>".$data['activation_key']);	
-					$this->email->send();
-					
-					
-					$data['main_content'] = 'signup-success';
-					$this->load->view('page', $data);
-					
-					
-				
-				}else{
-					error_log("Un usuario no se pudo registrar");
-				}
-			}
-			
-			
-			return;
+	        // Attempt to save the user into the database
+	        if ($u->save())
+	        {
+	            echo '<p>You have successfully registered</p>';
+	        }
+	        else
+	        {
+	            // Show all error messages
+	            echo '<p>' . $u->error->string . '</p>';
+	        }
 		}
 		$data['main_content'] = 'signup';
 		$this->load->view('page', $data);

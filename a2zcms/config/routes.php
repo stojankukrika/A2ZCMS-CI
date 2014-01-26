@@ -45,7 +45,7 @@ $route['admin/(:any)'] = "admin/$1";
 $route['404_override'] = 'errors/error_404.php';
 
 //Custom routing
-$route['signin'] = 'users/signin';
+$route['login'] = 'users/login';
 $route['signup'] = 'users/signup';
 
 
