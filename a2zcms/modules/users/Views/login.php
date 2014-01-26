@@ -72,7 +72,7 @@
 				Create an account here?
 			</p>
 			<p>
-				<a href="users/create" class="btn btn-info">Create account</a>
+				<a href="register" class="btn btn-info">Create account</a>
 			</p>
 		<? } ?>
 	</ul>

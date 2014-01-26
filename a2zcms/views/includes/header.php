@@ -31,5 +31,6 @@
 			<script src="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/js/html5.js"></script>
 		<![endif]-->
 		<?php echo $analytics;?>
+		<link rel="shortcut icon" href="<?php echo ASSETS_PATH;?>../ico/favicon.ico">
 	</head>
 	<body>

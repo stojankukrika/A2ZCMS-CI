@@ -40,13 +40,13 @@
 
 
 $route['default_controller'] = "home";
-$route['admin/(:any)'] = "admin/$1";
+$route['admin/(:any)'] = "users/admin/$1";
 
 $route['404_override'] = 'errors/error_404.php';
 
 //Custom routing
 $route['login'] = 'users/login';
-$route['signup'] = 'users/signup';
+$route['register'] = 'users/register';
 
 
 /* End of file routes.php */
