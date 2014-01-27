@@ -40,7 +40,7 @@
 
 
 $route['default_controller'] = "home";
-$route['admin/(:any)'] = "users/admin/$1";
+$route['admin/(:any)'] = "admin/$1";
 
 $route['404_override'] = 'errors/error_404.php';
 

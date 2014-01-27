@@ -12,14 +12,6 @@ class Users extends Website_Controller{
 		$this->load->model('user');		
 	
 	}
-	
-	function index(){
-		$users = new User();		
-		$data["users"] = $users->get();
-		$data['main_content'] = 'users';
-		$this->load->view('page', $data);
-	}
-	
 	function login(){
 			
 		if($this->_is_logged_in()){
@@ -38,7 +30,8 @@ class Users extends Website_Controller{
 					'username' => $u->username,
 					'name' => $u->name,
 					'surname' => $u->surname,
-					'is_logged_in' => true
+					'logged_in' => true,
+					'admin_logged_in' => true,
 					);
 					$this->session->set_userdata($data);
 					redirect('');
@@ -106,7 +99,9 @@ class Users extends Website_Controller{
 	function userdata(){
 		if($this->_is_logged_in()){
 			$user = new User();
-			 $user->get($this->session->userdata('userid'));
+			$user->select('name, surname, username,email');
+			$user->where('username', $this->session->userdata('username'));
+			$user->get(1);
 			return $user;
 		}else{
 			return false;
@@ -120,12 +115,6 @@ class Users extends Website_Controller{
 	        }else{
 	                return false;
 	        }
-	}
-	
-	function admin()
-	{
-		echo "ADMIN";
-		
 	}
 }
 

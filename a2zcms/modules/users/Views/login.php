@@ -1,16 +1,16 @@
  <div class="well">	
 <ul class="list-unstyled">
-   <? if($this->session->userdata('username')){ ?>
+   <? if($this->session->userdata('logged_in')){ ?>
    	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
 		<? if($this->session->userdata('avatar')!=""){ ?>
 		<img alt="Avatar" src="<?='avatar/'.$this->session->userdata('avatar');?>">
 		<?} else {?>
 		<img alt="Avatar" src="<?= 'avatar/avatar.png';?>">
 		<? }
-		if(_is_admin()){
+		if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
-			<a href="/admin">Admin panel</a>
+			<a href="admin/index">Admin panel</a>
 		</li>
 		<? } ?>
 		<li>
