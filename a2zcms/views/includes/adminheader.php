@@ -2,7 +2,6 @@
 <html lang="en">
 	<head>
 		<?php
-		$sitetheme = $this->session->userdata('sitetheme');
 		$titlecopyright = $this->session->userdata('title');		
 		$copyright = $this->session->userdata('copyright');
 		$metadesc = $this->session->userdata('description');
@@ -10,27 +9,43 @@
 		$metaauthor = $this->session->userdata('metaauthor');
 		$analytics = $this->session->userdata('analytics');		
 		?>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta charset="utf-8">
-		<title><?php echo $titlecopyright?></title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<!-- @todo: fill with your company info or remove -->
-		<meta name="description" content="<?php echo $metadesc;?>">
-		<meta name="keywords" content="<?php echo $metakey;?>">
-		<meta name="author" content="<?php echo $metaauthor;?>">
-		<link rel="stylesheet" type="text/css"  href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/bootstrap.css">	
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/jquery-ui-1.10.3.custom.css">		
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/jquery.multiselect.css">	
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/a2zcms.css">				
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/summernote.css">	
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/summernote-bs3.css">				
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/font-awesome.min.css">	
-		<link rel="stylesheet" type="text/css" href="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/css/prettify.css">			
-		<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	<head>
+		<meta charset="UTF-8">
+
+		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+		<title> Administration :: <?=$titlecopyright?> </title>
+
+		<meta name="keywords" content="<?=$metakey?>" />
+		<meta name="author" content="<?=$metaauthor?>" />
+		<!-- Google will often use this as its description of your page/site. Make it good. -->
+		<meta name="description" content="<?=$metadesc?>" />
+		<!-- Speaking of Google, don't forget to set your site up: http://google.com/webmasters -->
+		<meta name="google-site-verification" content="">
+		<!-- Dublin Core Metadata : http://dublincore.org/ -->
+		<meta name="DC.title" content="A2ZCMS">
+		<meta name="DC.subject" content="<?=$metadesc?>">
+		<meta name="DC.creator" content="<?=$metaauthor?>">
+		<!--  Mobile Viewport Fix -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+		<!-- start: CSS -->
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/print.css" rel="stylesheet"media="print"/>
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.dataTables.css">
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/colorbox.css">
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery-ui-1.10.3.custom.css">		
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap-dataTables.css">
+		<!-- end: CSS -->
+		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-			<script src="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/js/html5.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/html5.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/respond.min.js"></script>
 		<![endif]-->
-		<?php echo $analytics;?>
-		<link rel="shortcut icon" href="<?php echo ASSETS_PATH;?>/../ico/favicon.ico">
+		<!-- start: Favicon and Touch Icons -->
+		<link rel="shortcut icon" href="<?=ASSETS_PATH_ADMIN?>/ico/favicon.ico">
+		<!-- end: Favicon and Touch Icons -->
 	</head>
 	<body>
+		<?=$analytics?>
