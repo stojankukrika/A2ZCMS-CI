@@ -7,41 +7,34 @@ Version: 1.0
 
 class Admin_menu_model extends CI_Model{
 	
-	function create(){
-		
-	}
-	
-	function read(){
-		//Just a prototype
-		$menu = array();
-		
-		$menu[0] = new stdClass();
-		$menu[0]->url = "";
-		$menu[0]->name = "Back to webpage";
-		
-		return $menu;
-	}
-	
 	function menu_admin(){
-		//Just a prototype
 
-		$menu = new stdClass();
-		$menu->url = "admin";
-		$menu->name = "Admin";
+		$mainadminmenu = new Admin_navigation();
+		$mainadminmenu->select('id, title, icon, url, order')
+					->where(array('deleted_at' => NULL))
+					->order_by("order", "asc")
+					->get();
+		foreach ($mainadminmenu as $item) {
+			$mainadminsubmenu = new Admin_subnavigation();
+			$mainadminsubmenu->select('id,admin_navigation_id,title,icon,  url, order')
+					->where(array('deleted_at' => NULL))
+					->where('admin_navigation_id',$item->id)
+					->order_by("order", "asc")
+					->order_by("admin_navigation_id", "asc")
+					->get();
+			$item->adminsubmenu = $mainadminsubmenu;
+		}
+		
+				
+		return array('mainadminmenu' =>$mainadminmenu);
+	}		
+}
 
-		return $menu;
-	}
-	
-	function update(){
-		
-	}
-	
-	function delete(){
-		
-	}
-	
-	
-		
+class Admin_navigation extends DataMapper{
+	var $table = "admin_navigations";
+}
+class Admin_subnavigation extends DataMapper{
+	var $table = "admin_subnavigations";
 }
 
 ?>

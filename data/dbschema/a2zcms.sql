@@ -556,6 +556,45 @@ CREATE TABLE IF NOT EXISTS `user_login_historys` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `admin_navigations`
+--
+CREATE TABLE IF NOT EXISTS `admin_navigations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `plugin_id` int(10) unsigned NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `icon` VARCHAR( 50 ) NOT NULL,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `admin_navigations_plugin_id_index` (`plugin_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin_subnavigations`
+--
+CREATE TABLE IF NOT EXISTS `admin_subnavigations` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `admin_navigation_id` int(10) unsigned NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `icon` VARCHAR( 50 ) NOT NULL,
+  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `order` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `admin_subnavigations_admin_navigation_id_index` (`admin_navigation_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+
+-- --------------------------------------------------------
+
+--
 -- Constraints for table `assigned_roles`
 --
 ALTER TABLE `assigned_roles`
@@ -668,4 +707,18 @@ ALTER TABLE `todolist`
 --
 ALTER TABLE `user_login_historys`
   ADD CONSTRAINT `user_login_historys_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  
+--
+-- Constraints for table `admin_navigations`
+--
+ALTER TABLE `admin_navigations`
+  ADD CONSTRAINT `admin_navigations_plugin_id_foreign` FOREIGN KEY (`plugin_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE;
+
+  --
+-- Constraints for table `admin_subnavigations`
+--
+ALTER TABLE `admin_subnavigations`
+  ADD CONSTRAINT `admin_subnavigations_admin_navigation_id_foreign` FOREIGN KEY (`admin_navigation_id`) REFERENCES `admin_navigations` (`id`) ON DELETE CASCADE;
+  
+   
   

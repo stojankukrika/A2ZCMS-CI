@@ -15,23 +15,20 @@ class AdminMenu extends Website_Controller{
 		$this->load->module("users");
 	}
 	
-	function index(){
+	function head_navigation(){
 		$data['current'] = $this->uri->segment(1);
-		$data['items'] = $this->admin_menu_model->read();
-		
+		$data['currentuser'] = @$this->users->userdata();
+		$this->load->view("adminmenu",$data);
+	}
+	function left_navigation(){
+		$data['current'] = $this->uri->segment(1);
 		//Admin links
 		if($this->users->_is_admin()){
-			$data['items'][] = $this->admin_menu_model->menu_admin();
+			$data['items'] = $this->admin_menu_model->menu_admin();
 		}
 		
 		$data['currentuser'] = @$this->users->userdata();
-
-		$this->load->view("adminmenu", $data);
-	}
-	
-	//Limit access
-	function _remap(){
-		show_404();
+		$this->load->view("adminleftmenu", $data);
 	}
 		
 }

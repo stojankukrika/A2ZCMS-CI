@@ -64,7 +64,7 @@
 						<span style="text-align:left;float:left">
 							&copy; 2013 <a class="a2zcms" href="#">A2Z CMS</a></span>
 						<span style="text-align:right;float:right">
-							Powered by: <a class="a2zcms" href="http://codeigniter.com/" alt="Codeigniter 2.0">Codeigniter 2.0</a></span>
+							Powered by: <a class="a2zcms" href="http://codeigniter.com/" alt="Codeigniter 2.0">Codeigniter 2.1.4</a></span>
 				</div>
 			</div>
 		</footer>

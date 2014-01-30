@@ -48,4 +48,4 @@
 		<!-- end: Favicon and Touch Icons -->
 	</head>
 	<body>
-		<?=$analytics?>
+		
