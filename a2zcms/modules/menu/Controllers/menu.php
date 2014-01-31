@@ -1,11 +1,10 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 Author: Stojan Kukrika
-Date: 01/21/14
 Version: 1.0
 */
 
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+// ------------------------------------------------------------------------
 
 class Menu extends Website_Controller{
 	

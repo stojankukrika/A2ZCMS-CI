@@ -10,17 +10,17 @@
 		if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
-			<a href="admin/index">Admin panel</a>
+			<a href="<?=base_url('admin/users/index')?>">Admin panel</a>
 		</li>
 		<? } ?>
 		<li>
-			<a href="users/messages">Messages</a>
+			<a href="<?=base_url('users/messages')?>">Messages</a>
 		</li>
 		<li>
-			<a href="users/account">Edit profile</a>
+			<a href="<?=base_url('users/account')?>">Edit profile</a>
 		</li>
 		<li>
-			<a href="users/logout">
+			<a href="<?=base_url('users/logout')?>">
 				<button tabindex="3" type="submit" class="btn btn-danger">
 						Logout
 					</button></a>

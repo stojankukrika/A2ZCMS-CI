@@ -38,7 +38,35 @@
 |
 */
 
+// admin and modules
+$handle = opendir(APPPATH.'modules');
+if ($handle)
+{
+	while ( false !== ($module = readdir($handle)) )
+	{
+		// make sure we don't map silly dirs like .svn, or . or ..
+		
+		if (substr($module, 0, 1) != ".")
+		{
+			if ( file_exists(APPPATH.'modules/'.$module.'/'.$module.'_routes.php') )
+			{
+				include(APPPATH.'modules/'.$module.'/'.$module.'_routes.php');
+			}
 
+			if ( file_exists(APPPATH.'modules/'.$module.'/controllers/admin.php') )
+			{
+				$route['admin/'.$module] = $module.'/admin';
+				$route['admin/'.$module.'/(.*)'] = $module.'/admin/$1';
+			}
+
+			if ( file_exists(APPPATH.'modules/'.$module.'/controllers/'.$module.'.php') )
+			{
+				$route[$module] = $module;
+				$route[$module.'/(.*)'] = $module.'/$1';
+			}
+		}
+	}
+}
 $route['default_controller'] = "home";
 $route['admin/(:any)'] = "admin/$1";
 
@@ -47,6 +75,9 @@ $route['404_override'] = 'errors/error_404.php';
 //Custom routing
 $route['login'] = 'users/login';
 $route['register'] = 'users/register';
+
+// cms
+$route['(.*)'] = 'pages/index/$1';
 
 
 /* End of file routes.php */

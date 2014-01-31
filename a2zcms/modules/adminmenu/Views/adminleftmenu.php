@@ -2,7 +2,7 @@
 <div class="sidebar-nav nav-collapse collapse navbar-collapse">
 	<ul class="nav main-menu">
 		<li>
-			<a href="<?=base_url('admin/index')?>"><i class="icon-dashboard"></i><span class="hidden-sm text">Dashboard</span></a>
+			<a href="<?=base_url('admin/users/index')?>"><i class="icon-dashboard"></i><span class="hidden-sm text">Dashboard</span></a>
 		</li>
 		<?php
 		$menu = '';

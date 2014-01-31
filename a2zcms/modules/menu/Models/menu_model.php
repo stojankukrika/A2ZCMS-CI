@@ -1,10 +1,10 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 Author: Stojan Kukrika
-Date: 01/21/14
 Version: 1.0
 */
 
+// ------------------------------------------------------------------------
 class Menu_model extends CI_Model{
 	
 	function create(){
@@ -26,7 +26,7 @@ class Menu_model extends CI_Model{
 		//Just a prototype
 
 		$menu = new stdClass();
-		$menu->url = "admin";
+		$menu->url = "admin/users/index";
 		$menu->name = "Admin";
 
 		return $menu;

@@ -1,10 +1,10 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 Author: Stojan Kukrika
-Date: 01/21/14
 Version: 1.0
 */
 
+// ------------------------------------------------------------------------
 class User extends DataMapper {
 	
     public $validation = array(

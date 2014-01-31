@@ -1,10 +1,10 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 Author: Stojan Kukrika
-Date: 01/21/14
 Version: 1.0
 */
 
+// ------------------------------------------------------------------------
 class Admin_menu_model extends CI_Model{
 	
 	function menu_admin(){
