@@ -22,7 +22,10 @@ class Admin_menu_model extends CI_Model{
 					->order_by("order", "asc")
 					->order_by("admin_navigation_id", "asc")
 					->get();
-			$item->adminsubmenu = $mainadminsubmenu;
+					if(!empty($mainadminsubmenu->id)){
+						$item->adminsubmenu = $mainadminsubmenu;
+					}
+			
 		}
 		
 				
