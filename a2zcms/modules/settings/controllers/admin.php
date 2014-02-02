@@ -16,8 +16,9 @@ class Admin extends Administrator_Controller {
 	
 	function index()
 	{
-		$data['main_content'] = 'dashboard';
-		$this->load->view('admin/settings', $data);
+		$data['view'] = 'settings';
+		$data['content'] = '<h2> TESTAROSA </h2> dasjdklasjdklsjadkl asdlska kldsa ';
+		$this->load->view('adminpage', $data);
 	}
 
 }

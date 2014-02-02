@@ -12,7 +12,7 @@ class Admin extends Administrator_Controller{
 	}
 	
 	function index(){
-		$data['main_content'] = 'dashboard';
+		$data['view'] = 'dashboard';
 		$this->load->view('adminpage', $data);
 	}
 	function test()
