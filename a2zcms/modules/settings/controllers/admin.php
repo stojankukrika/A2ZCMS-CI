@@ -11,12 +11,13 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model("settings_model");
 	}
 	
 	function index()
 	{
-		echo "Index/Settings";
-		die();
+		$data['main_content'] = 'dashboard';
+		$this->load->view('admin/settings', $data);
 	}
 
 }

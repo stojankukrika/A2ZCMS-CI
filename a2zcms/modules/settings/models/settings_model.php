@@ -7,10 +7,6 @@ Version: 1.0
 // ------------------------------------------------------------------------
 
 class Settings_Model extends DataMapper {
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
+	var $table = "settings";
 			
 }
