@@ -10,7 +10,7 @@ class AdminMenu extends Website_Controller{
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->model("admin_menu_model");
+		$this->load->model("adminmenu_model");
 		$this->load->module("users");
 	}
 	
@@ -23,7 +23,7 @@ class AdminMenu extends Website_Controller{
 		$data['current'] = $this->uri->segment(1);
 		//Admin links
 		if($this->users->_is_admin()){
-			$data['items'] = $this->admin_menu_model->menu_admin();
+			$data['items'] = $this->adminmenu_model->menu_admin();
 		}
 		
 		$data['currentuser'] = @$this->users->userdata();
