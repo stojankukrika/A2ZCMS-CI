@@ -6,11 +6,14 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Testmodule_Model extends DataMapper {
+class Pages extends DataMapper {
+
 	
 	function __construct()
 	{
 		parent::__construct();
+		
+		$this->table = 'pages';
 	}
-			
+	
 }

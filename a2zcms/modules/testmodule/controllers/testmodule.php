@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Blog extends Website_Controller {
+class Testmodule extends Website_Controller {
 	
 	function __construct()
 	{

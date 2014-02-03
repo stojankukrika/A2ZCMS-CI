@@ -11,13 +11,15 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model("settings_model");
+		$this->load->model("settings");
 	}
 	
 	function index()
 	{
 		$data['view'] = 'settings';
-		$data['content'] = '<h2> TESTAROSA </h2> dasjdklasjdklsjadkl asdlska kldsa ';
+		$s = new Settings();
+		$s->getSettigns();
+		$data['content'] = $s;
 		$this->load->view('adminpage', $data);
 	}
 

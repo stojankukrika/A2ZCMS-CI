@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Blog_Model extends DataMapper {
+class Customform extends DataMapper {
 	
 	function __construct()
 	{

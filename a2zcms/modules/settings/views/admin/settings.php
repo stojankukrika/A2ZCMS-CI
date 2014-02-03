@@ -5,7 +5,10 @@
 		</div>
 		<p>
 			<?php
-			echo $content;
+			foreach($content as $item)
+			{
+				print_r($item);
+			}
 			?>
 		</p>
 	</div>

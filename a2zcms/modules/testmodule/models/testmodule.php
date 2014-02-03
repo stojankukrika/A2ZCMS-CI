@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Gallery_Model extends DataMapper {
+class Testmodule extends DataMapper {
 	
 	function __construct()
 	{

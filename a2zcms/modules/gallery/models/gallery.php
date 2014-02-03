@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Blog_Model extends DataMapper {
+class Gallery extends DataMapper {
 	
 	function __construct()
 	{
