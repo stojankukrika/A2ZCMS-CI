@@ -6,7 +6,16 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Settings_Model extends DataMapper {
+class Settings extends DataMapper {
 	var $table = "settings";
-			
+	 function Settings()
+    {
+        parent::DataMapper();
+    }
+	public function getSettigns()
+	{
+		$s = new Settings();
+       	$s->not_like('groupname', 'version')->get();
+       	return $s;
+	}
 }
