@@ -264,4 +264,4 @@ INSERT INTO `admin_subnavigations` (`id`, `admin_navigation_id`, `title`, `url`,
 (8, 5, 'Galleries', 'galleries', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
 (9, 5, 'Gallery comments', 'galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
 (10, 6, 'Users', 'users', 'icon-user', 1, NOW(), NOW(), NULL),
-(11, 6, 'Roles', 'users/roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
+(11, 6, 'Roles', 'roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
