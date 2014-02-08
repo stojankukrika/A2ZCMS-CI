@@ -8,19 +8,16 @@ Version: 1.0
 class Admin extends Administrator_Controller{
 	
 	function __construct(){
-		parent::__construct();						
+		parent::__construct();	
+		$this->load->model("role");						
 	}
 	
 	function index(){
 		$data['view'] = 'dashboard';
+		$roles = $this->role->get();
+		$data['content'] = $roles;
 		$this->load->view('adminpage', $data);
 	}
-	function test()
-	{
-		echo "TEST";
-		die();
-	}
-		
 }
 
 ?>

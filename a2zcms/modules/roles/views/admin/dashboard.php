@@ -1,8 +1,34 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h3>Welcome, Administrator</h3>
+			<h1>List of roles</h1>
 		</div>
-		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut egestas pulvinar odio nec dignissim. Aenean vulputate, lorem condimentum sollicitudin blandit, leo elit fermentum mauris, eget congue nunc mi vel turpis. Donec consequat, tellus eu pretium semper, nibh lectus blandit eros, quis auctor</p>
+		<table class="table table-hover">
+			<thead>
+        <tr>
+          <th>Name</th>
+          <th># of Users</th>
+          <th>Created at</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+		<?
+		foreach ($content as $item) {
+			echo '<tr>
+			<td>'.$item->name.'</td>
+			<td>
+			<a class="btn btn-link btn-sm" href="#">1</a>
+			</td>
+			<td>'.$item->created_at.'</td>
+			<td class="">
+				<a class="btn btn-sm btn-link" href="#"><i class="icon-signal "></i></a>                               
+				<a class="iframe btn btn-sm btn-default cboxElement" href="#"><i class="icon-edit "></i></a>
+            </td>
+			</tr>';
+		}
+		?>
+		</tbody>
+		</table>
 	</div>
 </div>
