@@ -10,12 +10,6 @@ class Website_Controller extends MY_Controller
     {
         parent::__construct();
 		
-		$this->load->helper('url');
-		if(!defined('ASSETS_PATH')){
-			  define('ASSETS_PATH', base_url('/data/assets/site'));
-    	}      
-		
-		
     	$this->load->config('a2zcms');
     	$installed = $this->config->item('installed');
 		if($installed!='true')

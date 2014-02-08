@@ -466,9 +466,12 @@ CREATE TABLE IF NOT EXISTS `roles` (
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `varname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `vartitle` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `groupname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` text COLLATE utf8_unicode_ci,
   `defaultvalue` text COLLATE utf8_unicode_ci,
+  `type` VARCHAR( 50 ) NOT NULL COLLATE utf8_unicode_ci,
+  `rule` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 

@@ -31,7 +31,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 		<!-- start: CSS -->
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/print.css" rel="stylesheet"media="print"/>
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.dataTables.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/colorbox.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
@@ -46,6 +45,32 @@
 		<!-- start: Favicon and Touch Icons -->
 		<link rel="shortcut icon" href="<?=ASSETS_PATH_ADMIN?>/ico/favicon.ico">
 		<!-- end: Favicon and Touch Icons -->
+		
+		<!-- start: JavaScript-->
+		<!--[if !IE]>-->
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery-2.0.3.min.js"></script>
+		<!--<![endif]-->
+		<!--[if IE]>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery-1.10.2.min.js"></script>
+		<![endif]-->
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery-migrate-1.2.1.min.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/bootstrap.min.js"></script>
+		<!-- page scripts -->
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery-ui-1.10.3.custom.min.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.ui.touch-punch.min.js"></script>
+		<!--[if lte IE 8]>
+			<script language="javascript" type="text/javascript" src="<?=ASSETS_PATH_ADMIN?>/js/excanvas.min.js"></script>
+		<![endif]-->		
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.dataTables.min.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/dataTables.bootstrap.min.js"></script>
+		<!-- theme scripts -->
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/custom.min.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/core.min.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.colorbox.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/bootstrap-dataTables-paging.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/select2.js"></script>		
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.multiselect.js"></script>
+		<!-- end: JavaScript-->
 	</head>
 	<body>
 		

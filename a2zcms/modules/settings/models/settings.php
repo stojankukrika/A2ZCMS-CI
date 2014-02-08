@@ -15,7 +15,7 @@ class Settings extends DataMapper {
 	public function getSettigns()
 	{
 		$s = new Settings();
-       	$s->not_like('groupname', 'version')->get();
+       	$s->not_like('groupname', 'version')->select('id,varname,vartitle,groupname,value,type')->get();
        	return $s;
 	}
 }

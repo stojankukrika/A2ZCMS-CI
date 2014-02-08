@@ -30,25 +30,25 @@ INSERT INTO `plugin_functions` (`id`, `title`, `plugin_id`, `function`, `params`
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `varname`, `groupname`, `value`, `defaultvalue`) VALUES
-(1, 'updatetime', 'version', '1389785102', '1389785102'),
-(2, 'offline', 'general', '0', '0'),
-(3, 'version', 'version', '1.0', '1.0'),
-(4, 'offlinemessage', 'general', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.'),
-(5, 'title', 'general', 'A2Z CMS', 'A2Z CMS'),
-(6, 'copyright', 'general', 'yoursite.com &copy; 2013', 'A2Z CMS 2013'),
-(7, 'metadesc', 'general', '', ''),
-(8, 'metakey', 'general', '', ''),
-(9, 'metaauthor', 'general', 'http://www.yoursite.com', 'http://www.a2zcms.com'),
-(10, 'analytics', 'general', '', ''),
-(11, 'email', 'setting', 'admin@mail.com', ''),
-(12, 'dateformat', 'setting', 'd.m.Y', 'd.m.Y'),
-(13, 'timeformat', 'setting', ' - H:i', 'h:i A'),
-(14, 'useravatwidth', 'setting', '150', '150'),
-(15, 'useravatheight', 'setting', '113', '113'),
-(16, 'pageitem', 'setting', '15', '15'),
-(17, 'searchcode', 'setting', '', ''),
-(18, 'sitetheme', 'setting', '', 'default');
+INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defaultvalue`,`type`,`rule`) VALUES
+(1, 'updatetime','Update time', 'version', '1389785102', '1389785102','text',''),
+(2, 'offline', 'Offline', 'offline', 'No', 'Yes;No','radio',''),
+(3, 'version', 'Version', 'version', '1.0', '1.0','text',''),
+(4, 'offlinemessage', 'Offline message', 'offline', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.','textarea',''),
+(5, 'title', 'Title', 'general', 'A2Z CMS', 'A2Z CMS','text','required'),
+(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2013', 'A2Z CMS 2013','text','required'),
+(7, 'metadesc', 'Meta desc', 'metadata', '', '','textarea',''),
+(8, 'metakey', 'Meta key', 'metadata', '', '','textarea',''),
+(9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com','text',''),
+(10, 'analytics', 'Analytics', 'analitic', '', '','textarea',''),
+(11, 'email', 'Email', 'settings', 'admin@mail.com', '','text','required|email'),
+(12, 'dateformat', 'Date format', 'settings', 'd.m.Y', 'd.m.Y','text','required'),
+(13, 'timeformat', 'Time format', 'settings', ' - H:i', 'h:i A','text','required'),
+(14, 'useravatwidth', 'User avatar width', 'settings', '150', '150','text','required|integer'),
+(15, 'useravatheight', 'User avatar height', 'settings', '113', '113','text','required|integer'),
+(16, 'pageitem', 'Per page item', 'settings', '8', '8','text','required|integer'),
+(17, 'searchcode', 'Search code', 'search', '', '','textarea',''),
+(18, 'sitetheme', 'Site theme', 'settings', '', 'sitetheme','option','required');
 
 
 --
@@ -264,4 +264,4 @@ INSERT INTO `admin_subnavigations` (`id`, `admin_navigation_id`, `title`, `url`,
 (8, 5, 'Galleries', 'galleries', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
 (9, 5, 'Gallery comments', 'galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
 (10, 6, 'Users', 'users', 'icon-user', 1, NOW(), NOW(), NULL),
-(11, 6, 'Roles', 'roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
+(11, 6, 'Roles', 'users/roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
