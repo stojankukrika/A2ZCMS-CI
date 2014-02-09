@@ -54,7 +54,7 @@ $autoload['packages'] = array();
 $ci =& get_instance();
 if ($ci->uri->segment(1) != 'install')
 {
-	$autoload['libraries'] = array('session', 'database', 'form_validation','form_builder', 'datamapper','session');
+	$autoload['libraries'] = array('session', 'database', 'form_validation','form_builder', 'datamapper','pagination');
 }
 else
 {

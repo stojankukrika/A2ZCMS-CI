@@ -80,7 +80,7 @@
 							<span class="icon-refresh"></span> Reset
 						</button>
 						<button type="submit" class="btn btn-success">
-							<span class="icon-ok"></span> Update
+							<span class="icon-ok"></span> Save
 						</button>
 					</div>
 				</div>
