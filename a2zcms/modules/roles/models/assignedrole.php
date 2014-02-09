@@ -5,18 +5,18 @@ Version: 1.0
 */
 
 // ------------------------------------------------------------------------
-class PermissionRole extends DataMapper {
+class AssignedRole extends DataMapper {
 	
     public $validation = array(
 		'role_id' => array(
 			'rules' => array('required', 'integer')
 		),
-		'permission_id' => array(
+		'user_id' => array(
 			'rules' => array('required', 'integer')
 		)
 	);
-	var $has_many = array("permission","role");
-	var $table = "permission_role";
+	var $has_many = array("user","role");
+	var $table = "assigned_roles";
 	
 	function __construct($id = NULL)
     {

@@ -21,10 +21,17 @@ class Admin extends Administrator_Controller{
             $offset = 0;
         }
         $role = new Role();
+		
         $role->where(array('deleted_at' => NULL))
 			->select('id,name,is_admin,created_at')
             ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
- 
+ 		
+ 		foreach ($role as $item) {
+ 			$role->countusers = 0;
+ 			$assignedrole = new AssignedRole();		
+			$assignedrole->where('role_id', $item->id);
+			$item->countusers = $assignedrole->count();
+		 }
         if ($offset > $role->paged->total_rows) {
             $offset = floor($role->paged->total_rows / $this->session->userdata('pageitemadmin')) *
                 $this->session->userdata('pageitemadmin');

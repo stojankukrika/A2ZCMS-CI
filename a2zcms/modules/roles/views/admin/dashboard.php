@@ -19,11 +19,11 @@
 	        </tr>
       	</thead>
       	<tbody>
-        <?php foreach ($content['role'] as $item) { 
+        <?php foreach ($content['role'] as $item) {
             echo '<tr>
 		            <td>'.$item->name.'</td>
 					<td>
-					<a class="btn btn-link btn-sm" href="#">1</a>
+					<a class="btn btn-link btn-sm" href="#">'.$item->countusers.'</a>
 					</td>
 					<td>'.$item->created_at.'</td>
 					<td class="">              
