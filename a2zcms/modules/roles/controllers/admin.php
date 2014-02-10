@@ -169,6 +169,22 @@ class Admin extends Administrator_Controller{
 		        }
 			}
         }
+    }
+	function delete($id)
+	{
+		$data['view'] = 'delete';
+		$data['content'] = array('roleid' => $id);
+		
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('roleid', "roleid", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$id = $this->input->post('roleid');
+			
+			$role = new Role();
+			$role->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        }
 	}
 }
 

@@ -3,6 +3,12 @@
 		<div class="page-header">
 			<h1>List of users</h1>
 		</div>
+		<div class="pull-right">
+			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/roles/create")?>">
+				<span class="icon-plus-sign icon-white"></span> Create</a>
+		</div>
+		<?php if ($content['users']->result_count() > 0) { ?>
+			   
 		<table class="table table-hover">
 			<thead>
         <tr>
@@ -18,7 +24,7 @@
       </thead>
       <tbody>
 		<?
-		foreach ($content as $item) {
+		foreach ($content['users'] as $item) {
 			echo '<tr>
 			<td>'.$item->name.'</td>
 			<td>'.$item->surname.'</td>
@@ -28,13 +34,28 @@
 			<td>'.$item->last_login.'</td>
 			<td>'.$item->created_at.'</td>
 			<td class="">
-				<a class="btn btn-sm btn-link" href="#"><i class="icon-signal "></i></a>                               
+				<a class="iframe cboxElement btn btn-sm btn-link" href="#"><i class="icon-signal "></i></a>                               
 				<a class="iframe btn btn-sm btn-default cboxElement" href="#"><i class="icon-edit "></i></a>
             </td>
 			</tr>';
 		}
 		?>
-		</tbody>
-		</table>
+    	</tbody>
+	</table>
+   <div class="dataTables_paginate paging_bootstrap">
+            <?php echo $content['pagination']->create_links(); ?>
+    </div>
+<?php } else { ?>
+    <div class="item_list_empty">
+        No items found matching your search terms.
+    </div>
+<?php } ?>
 	</div>
 </div>
+<script>
+	$(".iframe").colorbox({
+					iframe : true,
+					width : "50%",
+					height : "70%"
+				});
+</script>

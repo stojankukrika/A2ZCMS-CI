@@ -28,7 +28,7 @@
 					<td>'.$item->created_at.'</td>
 					<td class="">              
 						<a class="iframe btn btn-sm btn-default cboxElement" href="'.base_url("admin/roles/create/".$item->id).'"><i class="icon-edit "></i></a>
-						<a class="btn btn-sm btn-danger" href="'.base_url("admin/roles/delete/".$item->id).'"><i class="icon-trash "></i></a>
+						<a class="iframe btn btn-sm btn-danger cboxElement" href="'.base_url("admin/roles/delete/".$item->id).'"><i class="icon-trash "></i></a>
 		            </td>
                </tr>';
   		} ?>
