@@ -12,7 +12,7 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<input class="form-control" type="hidden" name="roleid" id="roleid" value="<?=$content['roleid']?>" />
+				<input class="form-control" type="hidden" name="userid" id="userid" value="<?=$content['userid']?>" />
 				<div class="col-md-10">
 					<label>Do you want do delete this item?</label>				
 				</div>

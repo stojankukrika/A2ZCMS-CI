@@ -41,7 +41,7 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (8, 'metakey', 'Meta key', 'metadata', '', '','textarea',''),
 (9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com','text',''),
 (10, 'analytics', 'Analytics', 'analitic', '', '','textarea',''),
-(11, 'email', 'Email', 'settings', 'admin@mail.com', '','text','required|email'),
+(11, 'email', 'Email', 'settings', 'admin@mail.com', '','text','required|valid_email'),
 (12, 'dateformat', 'Date format', 'settings', 'd.m.Y', 'd.m.Y','text','required'),
 (13, 'timeformat', 'Time format', 'settings', ' - H:i', 'h:i A','text','required'),
 (14, 'useravatwidth', 'User avatar width', 'settings', '150', '150','text','required|integer'),

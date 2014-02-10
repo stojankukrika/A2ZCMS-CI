@@ -23,7 +23,7 @@
             echo '<tr>
 		            <td>'.$item->name.'</td>
 					<td>
-					<a class="btn btn-link btn-sm" href="#">'.$item->countusers.'</a>
+					<a class="btn btn-link btn-sm" href="'.base_url("admin/users/listusersforrole/".$item->id).'">'.$item->countusers.'</a>
 					</td>
 					<td>'.$item->created_at.'</td>
 					<td class="">              
