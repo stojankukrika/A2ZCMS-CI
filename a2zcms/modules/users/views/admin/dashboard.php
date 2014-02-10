@@ -16,7 +16,8 @@
           <th>Last Name</th>
           <th>Username</th>
           <th>Email</th>
-          <th>Activated</th>
+          <th>Active</th>
+          <th>Confirmed</th>
           <th>Last login</th>
           <th>Created at</th>          
           <th>Actions</th>
@@ -31,6 +32,7 @@
 			<td>'.$item->email.'</td>
 			<td>'.$item->username.'</td>
 			<td>'.$item->active.'</td>
+			<td>'.$item->confirmed.'</td>
 			<td>'.$item->last_login.'</td>
 			<td>'.$item->created_at.'</td>
 			<td class="">

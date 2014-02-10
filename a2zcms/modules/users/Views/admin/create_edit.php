@@ -57,7 +57,7 @@
 			<div class="form-group {{{ $errors->has('activated') || $errors->has('confirm') ? 'error' : '' }}}">
 				<label class="col-md-2 control-label" for="confirm">Activate User?</label>
 				<div class="col-md-6">
-					<select class="form-control" name="confirm" id="confirm">
+					<select class="form-control" name="active" id="active">
 						<option value="1" <?=(!isset($content['user_edit']) || (isset($content['user_edit']->active) && $content['user_edit']->active=='1'))?'selected="selected"':""; ?>>Yes</option>
 						<option value="0" <?=(isset($content['user_edit']->active) && $content['user_edit']->active=='0')?'selected="selected"':""; ?>>No</option>
 					</select>					

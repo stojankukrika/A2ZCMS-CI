@@ -140,9 +140,13 @@ class Admin extends Administrator_Controller{
 		$user_edit = array();
 		$assignedrole = array();
 		$validation_password = 'required';
+		$validation_email = "|valid_email|is_unique[users.email]";
+		$validation_username = "|is_unique[users.username]";
 		if($id>0)
 		{
 			$validation_password='';
+			$validation_email ='';
+			$validation_username = '';
 			
 			$user = new User();
 			$user_edit = $user->select('id,name,surname,email,username,confirmed,active,created_at') 
@@ -169,8 +173,8 @@ class Admin extends Administrator_Controller{
 		
 		$this->form_validation->set_rules('name', "Name", 'required');
 		$this->form_validation->set_rules('surname', "Surname", 'required');
-		$this->form_validation->set_rules('email', "Email", 'required|valid_email|is_unique[users.email]');
-	   	$this->form_validation->set_rules('username', "Username", 'required|is_unique[users.username]');
+		$this->form_validation->set_rules('email', "Email", 'required'.$validation_email);
+	   	$this->form_validation->set_rules('username', "Username", 'required'.$validation_username);
 	   	$this->form_validation->set_rules('password', "Password", $validation_password);
 	   	
 	   	if ($this->form_validation->run() == TRUE)
@@ -186,20 +190,19 @@ class Admin extends Administrator_Controller{
 				$user->password = $this->hash->make($this->input->post('password'));
 				$user->confirm_password= $this->hash->make($this->input->post('password'));									
 				$user->confirmation_code = rand(9999, 99999999);
-				$user->confirmed =  $this->input->post('confirm');
-				$user->active = 1;			
+				$user->confirmed =  1;
+				$user->active = $this->input->post('active');			
 				$user->updated_at = date("Y-m-d H:i:s");										
 				$user->created_at = date("Y-m-d H:i:s");
 				$user->save();
 				$id = $user->id;
 			}
 			else {				
-				$user->where('id', $id)->update(array(
+				$user->where('id',$id)
+						->update(array(
 									'name'=>$this->input->post('name'), 
 									'surname'=>$this->input->post('surname'), 
-									'email'=>$this->input->post('email'), 
-									'username'=>$this->input->post('username'),
-									'confirmed'=>$this->input->post('confirm'),
+									'active'=>$this->input->post('active'),
 									'updated_at'=>date("Y-m-d H:i:s")));
 				
 				$user = new User();					
@@ -221,7 +224,8 @@ class Admin extends Administrator_Controller{
 					$ar->user_id = $id;
 					$ar->created_at = date("Y-m-d H:i:s");
 					$ar->updated_at = date("Y-m-d H:i:s");
-					$ar->save();				
+					$ar->save();	
+					$ar->check_last_query();			
 		        }
 			}
         }
