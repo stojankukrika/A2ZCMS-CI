@@ -10,49 +10,93 @@
 	<div class="tab-content">
 		<!-- General tab -->
 		<div class="tab-pane active" id="tab-general">
-			<!-- Name -->
+			<!-- name -->
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">Name</label>
 				<div class="col-md-10">
-					<input class="form-control" type="text" name="name" id="name" value="<?=$content['rolename']?>" />
+					<input class="form-control" tabindex="1" placeholder="Name" type="text" name="name" id="name" value="">
 				</div>
 			</div>
-			<!-- ./ name -->
-			<!-- Permissions -->
+			<!-- name -->
+			<!-- surname -->
 			<div class="form-group">
-			<label class="col-md-2 control-label" for="name">Choose role</label>
+				<label class="col-md-2 control-label" for="surname">Surname</label>
 				<div class="col-md-10">
-					<select tabindex="3" name="permission[]" id="permission" multiple="" style="width:350px;" 
-					data-placeholder="Choose role">		             
-		            	<?php		            	
-		            	$opt ='<optgroup label="User role">';
-		            	foreach ($content['permissionsUser'] as $permission){
-		            		$opt .= '<option value="'.$permission->id.'"';
-		            			foreach($content['permisionsadd'] as $item) {
-				            		if($item->permission_id==$permission->id) 
-				            			$opt.= "selected='selected'";
-		            			}
-		            		$opt .=">".$permission->display_name."</option>";
-		            	}
-		            	$opt .='</optgroup>
-  							<optgroup label="Admin role">';
-		            	foreach ($content['permissionsAdmin'] as $permission){
-		            		$opt .= '<option value="'.$permission->id.'"';
-		            			foreach($content['permisionsadd'] as $item) {
-				            		if($item->permission_id==$permission->id) 
-				            			$opt.= "selected='selected'";
-		            			}
-		            		$opt .=">".$permission->display_name."</option>";
-		            	}
-		            	echo $opt.'</optgroup>';
-		            	?>
-		          </select>
-		        </div>
-		    </div>
-		    <!-- ./ permissions -->
+					<input class="form-control" tabindex="2" placeholder="Surname" type="text" name="surname" id="surname" value="">
+				</div>
+			</div>
+			<!-- surname -->
+			<!-- username -->
+			<div class="form-group {{{ $errors->has('username') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="username">Username</label>
+				<div class="col-md-10">
+					<input class="form-control" type="text" tabindex="3" placeholder="Username" name="username" id="username" value="" />
+				</div>
+			</div>
+			<!-- ./ username -->
+
+			<!-- Email -->
+			<div class="form-group {{{ $errors->has('email') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="email">Email</label>
+				<div class="col-md-10">
+					<input class="form-control" type="text" tabindex="4" placeholder="Email" name="email" id="email" value="" />
+				</div>
+			</div>
+			<!-- ./ email -->
+
+			<!-- Password -->
+			<div class="form-group {{{ $errors->has('password') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="password">Password</label>
+				<div class="col-md-10">
+					<input class="form-control"  tabindex="5" placeholder="Password" type="password" name="password" id="password" value="" />
+				</div>
+			</div>
+			<!-- ./ password -->
+
+			<!-- Password Confirm -->
+			<div class="form-group {{{ $errors->has('password_confirmation') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="password_confirmation">Confirm Password</label>
+				<div class="col-md-10">
+					<input class="form-control" type="password" tabindex="6" placeholder="Confirm Password"  name="password_confirmation" id="password_confirmation" value="" />
+				</div>
+			</div>
+			<!-- ./ password confirm -->
+
+			<!-- Activation Status -->
+			<div class="form-group {{{ $errors->has('activated') || $errors->has('confirm') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="confirm">Activate User?</label>
+				<div class="col-md-6">
+					<select class="form-control" name="confirm" id="confirm">
+						<option value="1" selected="selected">Yes</option>
+						<option value="0">No</option>
+					</select>					
+				</div>
+			</div>
+			<!-- ./ activation status -->
+
+			<!-- Groups -->
+			<div class="form-group {{{ $errors->has('roles') ? 'error' : '' }}}">
+				<label class="col-md-2 control-label" for="roles">Roles</label>
+				<div class="col-md-6">
+					<select name="roles[]" id="roles" multiple style="width:350px;" >
+						<!--@foreach ($roles as $role)
+						@if ($mode == 'create')
+						<option value="{{{ $role->id }}}"{{{ ( in_array($role->id, $selectedRoles) ? ' selected="selected"' : '') }}}>{{{ $role->name }}}</option>
+						@else
+						<option value="{{{ $role->id }}}"{{{ ( array_search($role->id, $user->currentRoleIds()) !== false && array_search($role->id, $user->currentRoleIds()) >= 0 ? ' selected="selected"' : '') }}}>{{{ $role->name }}}</option>
+						@endif
+						@endforeach-->
+					</select>
+
+					<span class="help-block">Select a group to assign to the user, remember that a user takes on the permissions of the group they are assigned.  </span>
+				</div>
+			</div>
+			<!-- ./ groups -->
 		</div>
-		<!-- ./ General tab -->
+		<!-- ./ general tab -->
+
 	</div>
+	<!-- ./ tabs content -->
 	<!-- ./ tabs content -->
 
 	<!-- Form Actions -->
@@ -74,6 +118,6 @@
 
 <script type="text/javascript">
 	$(function() {
-		$("#permission").select2() // 0-based index;  
+		$("#roles").select2() // 0-based index;  
 	});
 </script>
