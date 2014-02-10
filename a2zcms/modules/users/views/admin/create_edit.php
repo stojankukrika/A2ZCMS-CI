@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="name">Name</label>
 				<div class="col-md-10">
-					<input class="form-control" tabindex="1" placeholder="Name" type="text" name="name" id="name" value="">
+					<input class="form-control" tabindex="1" placeholder="Name" type="text" name="name" id="name" value="<?=isset($content['user_edit']->name)?$content['user_edit']->name:""?>">
 				</div>
 			</div>
 			<!-- name -->
@@ -22,7 +22,7 @@
 			<div class="form-group">
 				<label class="col-md-2 control-label" for="surname">Surname</label>
 				<div class="col-md-10">
-					<input class="form-control" tabindex="2" placeholder="Surname" type="text" name="surname" id="surname" value="">
+					<input class="form-control" tabindex="2" placeholder="Surname" type="text" name="surname" id="surname" value="<?=isset($content['user_edit']->surname)?$content['user_edit']->surname:""?>">
 				</div>
 			</div>
 			<!-- surname -->
@@ -30,7 +30,7 @@
 			<div class="form-group {{{ $errors->has('username') ? 'error' : '' }}}">
 				<label class="col-md-2 control-label" for="username">Username</label>
 				<div class="col-md-10">
-					<input class="form-control" type="text" tabindex="3" placeholder="Username" name="username" id="username" value="" />
+					<input class="form-control" type="text" tabindex="3" placeholder="Username" name="username" id="username" value="<?=isset($content['user_edit']->username)?$content['user_edit']->username:""?>" />
 				</div>
 			</div>
 			<!-- ./ username -->
@@ -39,7 +39,7 @@
 			<div class="form-group {{{ $errors->has('email') ? 'error' : '' }}}">
 				<label class="col-md-2 control-label" for="email">Email</label>
 				<div class="col-md-10">
-					<input class="form-control" type="text" tabindex="4" placeholder="Email" name="email" id="email" value="" />
+					<input class="form-control" type="text" tabindex="4" placeholder="Email" name="email" id="email" value="<?=isset($content['user_edit']->email)?$content['user_edit']->email:""?>" />
 				</div>
 			</div>
 			<!-- ./ email -->
@@ -53,22 +53,13 @@
 			</div>
 			<!-- ./ password -->
 
-			<!-- Password Confirm -->
-			<div class="form-group {{{ $errors->has('password_confirmation') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="password_confirmation">Confirm Password</label>
-				<div class="col-md-10">
-					<input class="form-control" type="password" tabindex="6" placeholder="Confirm Password"  name="password_confirmation" id="password_confirmation" value="" />
-				</div>
-			</div>
-			<!-- ./ password confirm -->
-
 			<!-- Activation Status -->
 			<div class="form-group {{{ $errors->has('activated') || $errors->has('confirm') ? 'error' : '' }}}">
 				<label class="col-md-2 control-label" for="confirm">Activate User?</label>
 				<div class="col-md-6">
 					<select class="form-control" name="confirm" id="confirm">
-						<option value="1" selected="selected">Yes</option>
-						<option value="0">No</option>
+						<option value="1" <?=(!isset($content['user_edit']) || (isset($content['user_edit']->active) && $content['user_edit']->active=='1'))?'selected="selected"':""; ?>>Yes</option>
+						<option value="0" <?=(isset($content['user_edit']->active) && $content['user_edit']->active=='0')?'selected="selected"':""; ?>>No</option>
 					</select>					
 				</div>
 			</div>
@@ -79,13 +70,15 @@
 				<label class="col-md-2 control-label" for="roles">Roles</label>
 				<div class="col-md-6">
 					<select name="roles[]" id="roles" multiple style="width:350px;" >
-						<!--@foreach ($roles as $role)
-						@if ($mode == 'create')
-						<option value="{{{ $role->id }}}"{{{ ( in_array($role->id, $selectedRoles) ? ' selected="selected"' : '') }}}>{{{ $role->name }}}</option>
-						@else
-						<option value="{{{ $role->id }}}"{{{ ( array_search($role->id, $user->currentRoleIds()) !== false && array_search($role->id, $user->currentRoleIds()) >= 0 ? ' selected="selected"' : '') }}}>{{{ $role->name }}}</option>
-						@endif
-						@endforeach-->
+						<?php
+						foreach ($content['roles'] as $role){
+							echo '<option value="'.$role->id.'"'.
+							(( array_search($role->id, $content['assignedrole']) !== false 
+								&& array_search($role->id, $content['assignedrole']) >= 0) ? ' selected="selected"' : '').
+								'>'.$role->name.'</option>';
+						}
+							
+						?>
 					</select>
 
 					<span class="help-block">Select a group to assign to the user, remember that a user takes on the permissions of the group they are assigned.  </span>

@@ -139,9 +139,11 @@ class Admin extends Administrator_Controller{
 
 		$user_edit = array();
 		$assignedrole = array();
-		
+		$validation_password = 'required';
 		if($id>0)
 		{
+			$validation_password='';
+			
 			$user = new User();
 			$user_edit = $user->select('id,name,surname,email,username,confirmed,active,created_at') 
 							->where('id',$id)
@@ -155,8 +157,12 @@ class Admin extends Administrator_Controller{
 							->get();
 		}
 		
+		$roles = new Role();
+		$roles->select('id,name')->where(array('deleted_at' => NULL))->get();
+							
 		$data['content'] = array('user_edit' => $user_edit, 
 								'assignedrole' =>$assignedrole,
+								'roles' => $roles,
 								'user_id' => $id);
 		
 		$this->load->view('adminmodalpage', $data);
@@ -165,57 +171,57 @@ class Admin extends Administrator_Controller{
 		$this->form_validation->set_rules('surname', "Surname", 'required');
 		$this->form_validation->set_rules('email', "Email", 'required|valid_email|is_unique[users.email]');
 	   	$this->form_validation->set_rules('username', "Username", 'required|is_unique[users.username]');
-	   	
+	   	$this->form_validation->set_rules('password', "Password", $validation_password);
 	   	
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$name = $this->input->post('name');
-			$permissions = $this->input->post('permission');
+        	$this->load->library('hash');
 			
-			$permission = new Permission();
-			$permissionsAdmin = $permission
-								->select('id,name,display_name,is_admin') 
-								->where('is_admin','1')
-								->where(array('deleted_at' => NULL))
-								->get();
-								
-			foreach ($permissionsAdmin as $perm){
-					if(!empty($permissions)){
-			            foreach($permissions as $item){
-		            		if($item==$perm->id && $perm->is_admin ==1)
-							{
-								$is_admin = 1;
-							}
-			            }
-					}
-				}
-			
-			$role = new Role();
+        	$user = new User();
 			if($id==0){
-				$role->name = $name;
-				$role->is_admin = $is_admin;	
-				$role->updated_at = date("Y-m-d H:i:s");										
-				$role->created_at = date("Y-m-d H:i:s");
-				$role->save();
-				$id = $role->id;
+				$user->name = $this->input->post('name');
+				$user->surname = $this->input->post('surname');
+				$user->email = $this->input->post('email');
+				$user->username = $this->input->post('username');
+				$user->password = $this->hash->make($this->input->post('password'));
+				$user->confirm_password= $this->hash->make($this->input->post('password'));									
+				$user->confirmation_code = rand(9999, 99999999);
+				$user->confirmed =  $this->input->post('confirm');
+				$user->active = 1;			
+				$user->updated_at = date("Y-m-d H:i:s");										
+				$user->created_at = date("Y-m-d H:i:s");
+				$user->save();
+				$id = $user->id;
 			}
-			else {
+			else {				
+				$user->where('id', $id)->update(array(
+									'name'=>$this->input->post('name'), 
+									'surname'=>$this->input->post('surname'), 
+									'email'=>$this->input->post('email'), 
+									'username'=>$this->input->post('username'),
+									'confirmed'=>$this->input->post('confirm'),
+									'updated_at'=>date("Y-m-d H:i:s")));
 				
-				$role->where('id', $id)->update(array('name'=>$name, 'is_admin'=>$is_admin, 
-							'updated_at'=>date("Y-m-d H:i:s"), 'created_at'=>date("Y-m-d H:i:s")));
+				$user = new User();					
+				if($this->input->post('password')!="")
+				{
+					$user->where('id', $id)->update(array(
+									'password'=>$this->hash->make($this->input->post('password'))));
+				}
 				
-				$p = new PermissionRole();
-				$p->where('role_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
+				$ar = new AssignedRole();
+				$ar->where('user_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
 			}
-			if(!empty($permissions)){
-				foreach($permissions as $key => $permission_id)
+	
+			if(!empty($this->input->post('roles'))){
+				foreach($this->input->post('roles') as $key => $role_id)
 		        {
-		        	$permissionrole = new PermissionRole();
-		        	$permissionrole->permission_id = $permission_id;
-					$permissionrole->role_id = $id;
-					$permissionrole->created_at = date("Y-m-d H:i:s");
-					$permissionrole->updated_at = date("Y-m-d H:i:s");
-					$permissionrole->save();				
+		        	$ar = new AssignedRole();
+		        	$ar->role_id = $role_id;
+					$ar->user_id = $id;
+					$ar->created_at = date("Y-m-d H:i:s");
+					$ar->updated_at = date("Y-m-d H:i:s");
+					$ar->save();				
 		        }
 			}
         }
