@@ -50,7 +50,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found matching your search terms.
+        No items found. 
     </div>
 <?php } ?>
 	</div>

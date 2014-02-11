@@ -497,10 +497,10 @@ CREATE TABLE IF NOT EXISTS `tags` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `todolist`
+-- Table structure for table `todolists`
 --
 
-CREATE TABLE IF NOT EXISTS `todolist` (
+CREATE TABLE IF NOT EXISTS `todolists` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,

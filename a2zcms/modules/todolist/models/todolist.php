@@ -12,5 +12,20 @@ class Todolist extends DataMapper {
 	{
 		parent::__construct();
 	}
+		
+    public $validation = array(
+		'title' => array(
+			'rules' => array('required', 'trim', 'max_length' => 255)
+		),
+		'content' => array(
+			'rules' => array('required', 'trim')
+		),
+		'finished' => array(
+			'rules' => array('required', 'trim')
+		),
+		'work_done' => array(
+			'rules' => array('required', 'trim', 'max_length' => 1)
+		)
+	);
 			
 }

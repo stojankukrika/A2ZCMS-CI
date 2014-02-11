@@ -4,31 +4,32 @@
 			<h1>Role Management</h1>
 		</div>
 		<div class="pull-right">
-			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/roles/create")?>">
+			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/todolist/create")?>">
 				<span class="icon-plus-sign icon-white"></span> Create</a>
 		</div>
-		<?php if ($content['role']->result_count() > 0) { ?>
+		<?php if ($content['todolist']->result_count() > 0) { ?>
    
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Name</th>
-	          <th># of Users</th>
+	          <th>Title</th>
+	          <th>Finished</th>
+	          <th>Active</th>
 	          <th>Created at</th>
 	          <th>Actions</th>
 	        </tr>
       	</thead>
       	<tbody>
-        <?php foreach ($content['role'] as $item) {
+        <?php foreach ($content['todolist'] as $item) {
             echo '<tr>
-		            <td>'.$item->name.'</td>
-					<td>
-					<a class="btn btn-link btn-sm" href="'.base_url("admin/users/listusersforrole/".$item->id).'">'.$item->countusers.'</a>
-					</td>
+		            <td>'.$item->title.'</td>
+					<td>'.$item->finished.'</td>
+					<td>'.(($item->work_done=='0')?'Work':'Finished').'</td>
 					<td>'.$item->created_at.'</td>
-					<td class="">              
-						<a class="iframe btn btn-sm btn-default cboxElement" href="'.base_url("admin/roles/create/".$item->id).'"><i class="icon-edit "></i></a>
-						<a class="iframe btn btn-sm btn-danger cboxElement" href="'.base_url("admin/roles/delete/".$item->id).'"><i class="icon-trash "></i></a>
+					<td class="">      
+						<a class="btn btn-link btn-sm" href="'.base_url("admin/todolist/change/".$item->id).'"><i class="icon-retweet "></i></a>        
+						<a class="iframe btn btn-sm btn-default cboxElement" href="'.base_url("admin/todolist/create/".$item->id).'"><i class="icon-edit "></i></a>
+						<a class="iframe btn btn-sm btn-danger cboxElement" href="'.base_url("admin/todolist/delete/".$item->id).'"><i class="icon-trash "></i></a>
 		            </td>
                </tr>';
   		} ?>

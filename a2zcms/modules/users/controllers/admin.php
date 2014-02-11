@@ -215,9 +215,9 @@ class Admin extends Administrator_Controller{
 				$ar = new AssignedRole();
 				$ar->where('user_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
 			}
-	
-			if(!empty($this->input->post('roles'))){
-				foreach($this->input->post('roles') as $key => $role_id)
+			$roles = $this->input->post('roles');
+			if(!empty($roles)){
+				foreach($roles as $key => $role_id)
 		        {
 		        	$ar = new AssignedRole();
 		        	$ar->role_id = $role_id;
