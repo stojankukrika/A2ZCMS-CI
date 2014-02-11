@@ -15,6 +15,7 @@
           <th>Title</th>
           <th>Vote</th>
           <th>Hits</th>
+          <th>Comments</th>
           <th>Start publish</th>
           <th>End publish</th>
           <th>Created at</th>          
@@ -28,6 +29,11 @@
 			<td>'.$item->title.'</td>
 			<td>'.($item->voteup - $item->votedown).'</td>
 			<td>'.$item->hits.'</td>
+			<td>
+				<a class="btn btn-link btn-sm" 
+						href="'.base_url("admin/blogs/listcommentsforblog/".$item->id).'">'.$item->countcomments.'
+				</a>
+			</td>
 			<td>'.$item->start_publish.'</td>
 			<td>'.$item->end_publish.'</td>
 			<td>'.$item->created_at.'</td>
