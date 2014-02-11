@@ -152,7 +152,7 @@ class Admin extends Administrator_Controller{
 			else {
 				
 				$role->where('id', $id)->update(array('name'=>$name, 'is_admin'=>$is_admin, 
-							'updated_at'=>date("Y-m-d H:i:s"), 'created_at'=>date("Y-m-d H:i:s")));
+							'updated_at'=>date("Y-m-d H:i:s")));
 				
 				$p = new PermissionRole();
 				$p->where('role_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));

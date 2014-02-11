@@ -5,16 +5,16 @@ Version: 1.0
 */
 
 // ------------------------------------------------------------------------
-class Blog extends DataMapper {
+class BlogComment extends DataMapper {
 	
 	function __construct($id = NULL)
     {
         parent::__construct($id);
     }
-	var $has_many = array("BlogBlogCategorie");
+	var $table = "blog_comments";
     public $validation = array(
 		'title' => array(
-			'rules' => array('required', 'trim', 'max_length' => 255)
+			'content' => array('required', 'trim')
 		)
 	);
 	

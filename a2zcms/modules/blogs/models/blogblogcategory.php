@@ -5,17 +5,15 @@ Version: 1.0
 */
 
 // ------------------------------------------------------------------------
-
-class Blog extends Website_Controller {
+class BlogBlogCategory extends DataMapper {
 	
-	function __construct()
-	{
-		parent::__construct();
-	}
-
-	function index()
-	{	
-		
-	}
-    
+	function __construct($id = NULL)
+    {
+        parent::__construct($id);
+    }
+	var $table = "blog_blog_categorys";
+	
+	
 }
+
+?>
