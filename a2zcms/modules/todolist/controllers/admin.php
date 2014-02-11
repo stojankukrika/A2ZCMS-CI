@@ -131,7 +131,7 @@ class Admin extends Administrator_Controller {
 		$todolist_edit->select('finished,work_done')->where('id',$id)->get();		
 		
 		$todolist = new Todolist();			
-		$todolist->where('id', $id)->update(array('finished'=>$todolist_edit -> work_done *100.00, 
+		$todolist->where('id', $id)->update(array('finished'=>(($todolist_edit -> work_done + 1) % 2) *100.00, 
 							'work_done'=>($todolist_edit -> work_done + 1) % 2, 
 							'updated_at'=>date("Y-m-d H:i:s")));
 		return redirect(base_url('admin/todolist'));

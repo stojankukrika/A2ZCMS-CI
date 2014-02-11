@@ -1,7 +1,7 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Role Management</h1>
+			<h1>To-do list Management</h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/todolist/create")?>">
@@ -24,7 +24,7 @@
             echo '<tr>
 		            <td>'.$item->title.'</td>
 					<td>'.$item->finished.'</td>
-					<td>'.(($item->work_done=='0')?'Work':'Finished').'</td>
+					<td>'.(($item->work_done=='1')?'Finished':'Work').'</td>
 					<td>'.$item->created_at.'</td>
 					<td class="">      
 						<a class="btn btn-link btn-sm" href="'.base_url("admin/todolist/change/".$item->id).'"><i class="icon-retweet "></i></a>        
