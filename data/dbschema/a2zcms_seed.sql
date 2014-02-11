@@ -244,8 +244,8 @@ INSERT INTO `admin_navigations` (`id`, `plugin_id`, `title`, `url`, `icon`, `ord
 (1, 4, 'To-do list', 'todolist', 'icon-bell', 1, NOW(), NOW(), NULL),
 (2, 3, 'Custom forms', 'customform', 'icon-list-alt', 2, NOW(), NOW(), NULL),
 (3, 5, 'Pages', 'pages', 'icon-globe', 3, NOW(), NOW(), NULL),
-(4, 1, 'Blog', 'blogcategorys', 'icon-external-link', 4, NOW(), NOW(), NULL),
-(5, 2, 'Gallery', 'gallery', 'icon-camera', 5, NOW(), NOW(), NULL),
+(4, 1, 'Blog', 'blogs', 'icon-external-link', 4, NOW(), NOW(), NULL),
+(5, 2, 'Gallery', 'gallerys', 'icon-camera', 5, NOW(), NOW(), NULL),
 (6, 7, 'Users', 'users', 'icon-group', 6, NOW(), NOW(), NULL),
 (7, 6, 'Settings', 'settings', 'icon-cogs', 7, NOW(), NOW(), NULL);
 
@@ -254,14 +254,14 @@ INSERT INTO `admin_navigations` (`id`, `plugin_id`, `title`, `url`, `icon`, `ord
 --
 
 INSERT INTO `admin_subnavigations` (`id`, `admin_navigation_id`, `title`, `url`, `icon`, `order`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 3, 'Navigation group', 'navigationgroups', 'icon-th-list', 1, NOW(), NOW(), NULL),
+(1, 3, 'Navigation group', 'pages/navigationgroups', 'icon-th-list', 1, NOW(), NOW(), NULL),
 (2, 3, 'Pages', 'pages', 'icon-th-large', 2, NOW(), NOW(), NULL),
-(3, 3, 'Navigation', 'navigation', 'icon-th', 3, NOW(), NOW(), NULL),
-(4, 4, 'Blog categorys', 'blogcategorys', 'icon-rss', 1, NOW(), NOW(), NULL),
+(3, 3, 'Navigation', 'pages/navigation', 'icon-th', 3, NOW(), NOW(), NULL),
+(4, 4, 'Blog categorys', 'blogs/blogcategorys', 'icon-rss', 1, NOW(), NOW(), NULL),
 (5, 4, 'Blog', 'blogs', 'icon-book', 2, NOW(), NOW(), NULL),
-(6, 4, 'Blog comments', 'blogcomments', 'icon-comment-alt', 3, NOW(), NOW(), NULL),
-(7, 5, 'Gallery images', 'galleryimages', 'icon-rss', 1, NOW(), NOW(), NULL),
-(8, 5, 'Galleries', 'galleries', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
-(9, 5, 'Gallery comments', 'galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
+(6, 4, 'Blog comments', 'blogs/blogcomments', 'icon-comment-alt', 3, NOW(), NOW(), NULL),
+(7, 5, 'Gallery images', 'gallerys/galleryimages', 'icon-rss', 1, NOW(), NOW(), NULL),
+(8, 5, 'Galleries', 'gallerys', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
+(9, 5, 'Gallery comments', 'gallerys/galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
 (10, 6, 'Users', 'users', 'icon-user', 1, NOW(), NOW(), NULL),
 (11, 6, 'Roles', 'roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
