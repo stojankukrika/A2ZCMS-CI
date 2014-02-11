@@ -155,7 +155,7 @@ class Admin extends Administrator_Controller{
 							->get();
 							
 			$assignedrole = new AssignedRole();
-			$assignedrole->select('id') 
+			$assignedrole->select('role_id') 
 							->where('user_id',$id)
 							->where(array('deleted_at' => NULL))
 							->get();
@@ -224,8 +224,7 @@ class Admin extends Administrator_Controller{
 					$ar->user_id = $id;
 					$ar->created_at = date("Y-m-d H:i:s");
 					$ar->updated_at = date("Y-m-d H:i:s");
-					$ar->save();	
-					$ar->check_last_query();			
+					$ar->save();			
 		        }
 			}
         }
