@@ -245,7 +245,7 @@ INSERT INTO `admin_navigations` (`id`, `plugin_id`, `title`, `url`, `icon`, `ord
 (2, 3, 'Custom forms', 'customform', 'icon-list-alt', 2, NOW(), NOW(), NULL),
 (3, 5, 'Pages', 'pages', 'icon-globe', 3, NOW(), NOW(), NULL),
 (4, 1, 'Blog', 'blogs', 'icon-external-link', 4, NOW(), NOW(), NULL),
-(5, 2, 'Gallery', 'gallerys', 'icon-camera', 5, NOW(), NOW(), NULL),
+(5, 2, 'Gallery', 'galleries', 'icon-camera', 5, NOW(), NOW(), NULL),
 (6, 7, 'Users', 'users', 'icon-group', 6, NOW(), NOW(), NULL),
 (7, 6, 'Settings', 'settings', 'icon-cogs', 7, NOW(), NOW(), NULL);
 
@@ -260,8 +260,8 @@ INSERT INTO `admin_subnavigations` (`id`, `admin_navigation_id`, `title`, `url`,
 (4, 4, 'Blog categorys', 'blogs/blogcategorys', 'icon-rss', 1, NOW(), NOW(), NULL),
 (5, 4, 'Blog', 'blogs', 'icon-book', 2, NOW(), NOW(), NULL),
 (6, 4, 'Blog comments', 'blogs/blogcomments', 'icon-comment-alt', 3, NOW(), NOW(), NULL),
-(7, 5, 'Gallery images', 'gallerys/galleryimages', 'icon-rss', 1, NOW(), NOW(), NULL),
-(8, 5, 'Galleries', 'gallerys', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
-(9, 5, 'Gallery comments', 'gallerys/galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
+(7, 5, 'Gallery images', 'galleries/galleryimages', 'icon-rss', 1, NOW(), NOW(), NULL),
+(8, 5, 'Galleries', 'galleries', 'icon-camera-retro', 2, NOW(), NOW(), NULL),
+(9, 5, 'Gallery comments', 'galleries/galleryimagecomments', 'icon-comments-alt', 3, NOW(), NOW(), NULL),
 (10, 6, 'Users', 'users', 'icon-user', 1, NOW(), NOW(), NULL),
 (11, 6, 'Roles', 'roles', 'icon-user-md', 2, NOW(), NOW(), NULL);
