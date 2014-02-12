@@ -82,7 +82,33 @@ class Users extends Website_Controller{
 		$this->load->view('page', $data);
 		
 	}
-	
+	function account(){
+		//Redirect
+		$this->_member_area();
+		
+		if($_POST){
+			$userdata = new stdClass();
+			$userdata->user_nicename 	= $this->input->post('nickname');
+			$userdata->user_email 		= $this->input->post('email');
+			$userdata->user_pass		= md5($this->input->post('password'));
+			
+			$insert = $this->user_model->update($this->session->userdata('userid'), $userdata);
+			
+			if($insert){
+				$data['message'] = "Updated succesfully";
+				$data['user'] = $this->user_model->user_by_id($this->session->userdata('userid'));
+				$data['main_content'] = 'account';
+				$this->load->view('page', $data);
+			}
+			return;
+		}
+		
+		$data['user'] = $this->user_model->user_by_id($this->session->userdata('userid'));
+		$data['main_content'] = 'account';
+		$this->load->view('page', $data);
+		
+	}
+
 	function _member_area(){
 		if($this->_is_logged_in()){
 			redirect('');
