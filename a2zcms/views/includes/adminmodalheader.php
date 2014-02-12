@@ -36,6 +36,8 @@
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery-ui-1.10.3.custom.css">		
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap-dataTables.css">
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/fineuploader/fineuploader.css">
+		
 		<!-- end: CSS -->
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
@@ -69,6 +71,8 @@
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.colorbox.js"></script>
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/select2.js"></script>		
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.multiselect.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/tag-it.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/fineuploader/jquery.fineuploader-3.1.1.js"></script>
 		<!-- end: JavaScript-->
 	</head>
 	<body>
