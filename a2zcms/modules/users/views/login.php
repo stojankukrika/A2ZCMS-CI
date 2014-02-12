@@ -14,7 +14,7 @@
 		</li>
 		<? } ?>
 		<li>
-			<a href="<?=base_url('users/messages')?>">Messages</a>
+			<a href="<?=base_url('messages/index')?>">Messages</a>
 		</li>
 		<li>
 			<a href="<?=base_url('users/account')?>">Edit profile</a>

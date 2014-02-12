@@ -6,12 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Gallery extends DataMapper {
+class GalleryImage extends DataMapper {
 	
 	function __construct()
 	{
 		parent::__construct();
 	}
+	var $table = "gallery_images";
 	
 	
 			

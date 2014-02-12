@@ -157,10 +157,10 @@ CREATE TABLE IF NOT EXISTS `custom_form_fields` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `gallerys`
+-- Table structure for table `galleries`
 --
 
-CREATE TABLE IF NOT EXISTS `gallerys` (
+CREATE TABLE IF NOT EXISTS `galleries` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -644,9 +644,9 @@ ALTER TABLE `custom_form_fields`
   ADD CONSTRAINT `custom_form_fields_custom_form_id_foreign` FOREIGN KEY (`custom_form_id`) REFERENCES `custom_forms` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `gallerys`
+-- Constraints for table `galleries`
 --
-ALTER TABLE `gallerys`
+ALTER TABLE `galleries`
   ADD CONSTRAINT `gallery_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
@@ -654,14 +654,14 @@ ALTER TABLE `gallerys`
 --
 ALTER TABLE `gallery_images`
   ADD CONSTRAINT `gallery_images_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gallery_images_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `gallerys` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `gallery_images_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `galleries` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `gallery_images_comments`
 --
 ALTER TABLE `gallery_images_comments`
   ADD CONSTRAINT `gallery_images_comments_gallery_image_id_foreign` FOREIGN KEY (`gallery_image_id`) REFERENCES `gallery_images` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gallery_images_comments_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `gallerys` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `gallery_images_comments_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `galleries` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `gallery_images_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --

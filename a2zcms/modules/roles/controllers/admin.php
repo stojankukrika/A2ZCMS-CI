@@ -27,7 +27,6 @@ class Admin extends Administrator_Controller{
             ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
  		
  		foreach ($role as $item) {
- 			$role->countusers = 0;
  			$assignedrole = new AssignedRole();		
 			$assignedrole->where('role_id', $item->id);
 			$item->countusers = $assignedrole->count();

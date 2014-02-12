@@ -6,16 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Blog extends Website_Controller {
+class GalleryImageComment extends DataMapper {
 	
 	function __construct()
 	{
 		parent::__construct();
 	}
-
-	function index()
-	{	
-		
-	}
-    
+	var $table = "gallery_images_comments";
+	
+			
 }

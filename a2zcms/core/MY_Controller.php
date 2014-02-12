@@ -23,5 +23,8 @@ class MY_Controller extends MX_Controller
 		if(!defined('ASSETS_PATH_ADMIN')){
         	define('ASSETS_PATH_ADMIN', base_url('/data/assets/admin'));
 		}
+		if(!defined('DATA_PATH')){
+			  define('DATA_PATH', FCPATH.'/data');
+    	}
      }
 }
