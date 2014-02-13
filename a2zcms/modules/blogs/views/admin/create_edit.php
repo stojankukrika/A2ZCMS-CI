@@ -8,7 +8,7 @@
 	</li>
 </ul>
 <!-- ./ tabs -->
-<form class="form-horizontal" method="post" action="" autocomplete="off">
+<form class="form-horizontal" method="post" action=""  enctype="multipart/form-data" autocomplete="off">
 	<!-- Tabs Content -->
 	<div class="tab-content">
 		<!-- General tab -->

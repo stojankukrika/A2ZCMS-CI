@@ -221,17 +221,40 @@ class Admin extends Administrator_Controller {
 			   	
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	
+        	if($_FILES['image']['name']!=""){
+				$filename = $_FILES['image']['name'];
+				$file = sha1($filename.time()).'.'.pathinfo($filename, PATHINFO_EXTENSION);
+				$config['file_name'] = $file;
+				$config['upload_path'] = DATA_PATH.'/blog/';
+				$config['allowed_types'] = 'gif|jpg|png';
+				$this->load->library('upload', $config);
+				$this->upload->do_upload('image');
+				
+				$config_manip['source_image'] = $config['upload_path'].$file;
+				$config_manip['new_image'] = DATA_PATH.'/blog/thumbs';
+	            $config_manip['maintain_ratio'] = TRUE;
+			    $config_manip['create_thumb'] = TRUE;
+			    $config_manip['width'] = 150;
+			    $config_manip['quality'] = 100;
+				$config_manip['height'] = 100;
+			    $config_manip['thumb_marker'] = '_thumb';
+	            $this->load->library('image_lib', $config_manip);
+	            $this->image_lib->resize();
+			
+			}
+			$start_publish = ($this->input->post('start_publish')=='')?date('Y-m-d') : $this->input->post('start_publish');
+			$end_publish = ($this->input->post('end_publish')=='')?null : $this->input->post('end_publish');
+			
         	$blog = new Blog();
 			if($id==0){
 				$blog->user_id = $this->session->userdata('user_id');
 				$blog->title = $this->input->post('title');
 				$blog->slug = url_title( $this->input->post('title'), 'dash', true);
 				$blog->resource_link = $this->input->post('resource_link');
-				$blog->image = $this->input->post('image');
+				$blog->image = $file;
 				$blog->content = $this->input->post('content');
-				$blog->start_publish= $this->input->post('start_publish');
-				$blog->end_publish= $this->input->post('end_publish');	
+				$blog->start_publish= $start_publish;
+				$blog->end_publish= $end_publish;	
 				$blog->updated_at = date("Y-m-d H:i:s");										
 				$blog->created_at = date("Y-m-d H:i:s");
 				$blog->save();
@@ -243,12 +266,15 @@ class Admin extends Administrator_Controller {
 									'title'=>$this->input->post('title'), 
 									'slug' => url_title( $this->input->post('title'), 'dash', true),
 									'resource_link'=>$this->input->post('resource_link'), 
-									'image'=>$this->input->post('image'),
 									'content'=>$this->input->post('content'),
-									'start_publish'=>$this->input->post('start_publish'),
-									'end_publish'=>$this->input->post('end_publish'),
+									'start_publish'=>$start_publish,
+									'end_publish'=>$end_publish,
 									'updated_at'=>date("Y-m-d H:i:s")));
-								
+				
+				if($file!=""){						
+					$blog->where('id',$id)
+							->update(array('image'=>$file));	
+				}			
 				$ar = new BlogBlogCategory();
 				$ar->where('blog_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
 			}
