@@ -39,9 +39,3 @@
 	</div>
 	<!-- ./ form actions -->
 </form>
-
-<script type="text/javascript">
-	$(function() {
-		$("#permission").select2() // 0-based index;  
-	});
-</script>

@@ -34,8 +34,8 @@
 
 			$('#jquery-wrapped-fine-uploader').fineUploader({
 					request: {
-					endpoint: '<?=base_url("admin/galleries/upload/" . $content['galleryid']. "/"); ?>',
-					params: { 'gid' : <?=$content['galleryid']?>},
+					endpoint: '<?=base_url("admin/galleries/do_upload");?>',
+					params: { 'gid' : '<?=$content['gid']?>'},
 				},
 				text: {
 					uploadButton: 'Upload your images'

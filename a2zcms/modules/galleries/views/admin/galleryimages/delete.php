@@ -12,7 +12,7 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<input class="form-control" type="hidden" name="todolistid" id="todolistid" value="<?=$content['todolistid']?>" />
+				<input class="form-control" type="hidden" name="galleryimageid" id="galleryimageid" value="<?=$content['galleryimageid']?>" />
 				<div class="col-md-10">
 					<label>Do you want do delete this item?</label>				
 				</div>

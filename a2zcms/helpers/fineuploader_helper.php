@@ -6,7 +6,7 @@ class Fineuploader {
 	static $uploadDirectory;
 
 	public static function init($uploadDirectory) {
-		self::$uploader = new qqFileUploader( array('jpg'));
+		self::$uploader = new qqFileUploader( array('jpg','gif','png'));
 		self::$uploadDirectory = $uploadDirectory;
 	}
 

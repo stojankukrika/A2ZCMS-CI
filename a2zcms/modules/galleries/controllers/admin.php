@@ -151,17 +151,15 @@ class Admin extends Administrator_Controller {
 		
 		$gallery = new Gallery();
 		$gallery->select('title')->where('id',$id)->get();
-		$data['content'] = array('galleryid' => $id,'title'=>$gallery->title);
+		$data['content'] = array('gid' => $id,'title'=>$gallery->title);
 		
 		$this->load->view('adminmodalpage', $data);
-		
-		$this->form_validation->set_rules('gid', "Selected gallery", 'required|integer');
-		$this->form_validation->set_rules('qqfile', "Upload file", 'required|image|max:3000');
-	   	if ($this->form_validation->run() == TRUE)
-        {
-        	$id = $this->input->post('gid');
+	}
+	function do_upload()
+	{
+		   	$id = $this->input->get('gid');
 			
-			$gallery = new Gallery();
+        	$gallery = new Gallery();
 			$gallery->select('folderid')->where('id',$id)->get();
 
 			$path = DATA_PATH.'/gallery/'. $gallery -> folderid;
@@ -190,8 +188,7 @@ class Admin extends Administrator_Controller {
 
 			Thumbnail::generate_image_thumbnail($path2 . $name, $path2 . $name);
 			
-			return json_encode("true");
-        }
+			echo json_encode($upload_success);
 	}
 
 	/*Gallery comments*/
@@ -357,5 +354,86 @@ class Admin extends Administrator_Controller {
 	}
 	
 	/*Gallery images*/
+	function galleryimages()
+	{
+		$data['view'] = 'galleryimages/dashboard';
 
+		$gallery = new Gallery();
+    	$gallery->where('user_id',$this->session->userdata('user_id'))
+				->where(array('deleted_at' => NULL))
+				->select('id,title')->get();
+ 
+        $data['content'] = array(
+            'gallery' => $gallery,
+        );
+ 
+        $this->load->view('adminpage', $data);
+		
+		/*delete image*/
+		$this->form_validation->set_rules('galleryimageid', "Image", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$id = $this->input->post('galleryimageid');
+			$galleryimage = new GalleryImage();
+			$galleryimage->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        }
+	}
+	
+	function listimages($id)
+	{
+		$data['view'] = 'galleryimages/listimages';
+
+		$gallery = new Gallery();
+    	$gallery->where('user_id',$this->session->userdata('user_id'))
+				->where(array('deleted_at' => NULL))->where('id',$id)
+				->select('id,title')->get();
+ 
+        $data['content'] = array(
+            'gallery' => $gallery,
+        );
+ 
+        $this->load->view('adminpage', $data);
+		
+		/*delete image*/
+		$this->form_validation->set_rules('galleryimageid', "Image", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$id = $this->input->post('galleryimageid');
+			$galleryimage = new GalleryImage();
+			$galleryimage->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        }
+	}
+	
+	function imageforgallery($id)
+	{
+		$galleryimages = new GalleryImage();
+		$galleryimages->select('id,content,voteup,votedown,hits')
+						->where(array('deleted_at' => NULL))
+						->where('gallery_id',$id)->get();
+		
+		$gallery = new Gallery();
+		$gallery->select('id,folderid')
+						->where('id',$id)->get();
+						
+		$images = array();
+		foreach ($galleryimages as $galleryimage) {
+			$images[] = array (
+					      'id' => $galleryimage->id,
+					      'content' => $galleryimage->content,
+					      'folderid' =>$gallery->folderid,
+					      'voteup' => $galleryimage->voteup,
+					      'votedown' => $galleryimage->votedown,
+					      'hits' => $galleryimage->hits,
+					    );
+		}				
+		echo json_encode($images);
+	}
+	function galleryimages_delete($id)
+	{
+		$data['view'] = 'galleryimages/delete';
+		$data['content'] = array('galleryimageid' => $id);
+		
+		$this->load->view('adminmodalpage', $data);
+		
+	}
 }
