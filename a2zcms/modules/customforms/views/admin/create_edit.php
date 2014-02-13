@@ -54,7 +54,7 @@
 						<label class="control-label"><b>** Disassemble the different values in options ​​with a semicolon **</b></label>
 						<div class="clearfix"></div>
 						<ul id="sortable1">
-							<input type="hidden" value="<?=isset($content['customformfields_count'])?$content['customformfields_count']:'0'?>" name="count" id="count">
+							<input type="hidden" value="<?=isset($content['customformfields_count'])?$content['customformfields_count']:0?>" name="count" id="count">
 							<input type="hidden" value="" name="pagecontentorder" id="pagecontentorder">
 							<?php $id=1;
 							if(!empty($content['customformfields'])){
@@ -113,19 +113,19 @@
 	<!-- ./ form actions -->
 </form>
 <div class="hidden" id ="addfield">
-	<li class="ui-state-default" name="formf" value="" id="formf">
+	<li id="formf" class="ui-state-default" name="formf" value="formf">
 		<label class="control-label" for="name">Fild name</label>
-		<input type="text" id="name" value="" name="name">
+		<input id="name" type="text" value="" name="name">
 		<div>
 			<label class="control-label" for="mandatory">Mandatory </label>
-			<select name="mandatory" id="mandatory"> 
+			<select id="mandatory" name="mandatory"> 
 				<option value="1">No</option>
 		  		<option value="2">Yes</option>
 		  		<option value="3">Only numbers</option>
 		  		<option value="4">Valid email</option>
 			</select>
 			<label class="control-label" for="type">Type </label>
-			<select name="type" id="type"> 
+			<select id="type" name="type"> 
 				<option value="1">Input field</option>
 				<option value="2">Text area</option>
 				<option value="3">Select</option>
@@ -135,8 +135,12 @@
 			</select>
 		</div>		
 		<label class="control-label" for="options"> Options </label>
-		<input type="text" name="options" value="" id="options">
-		<a class="btn btn-default btn-sm btn-small remove"><span class="icon-trash"><input type="hidden" value="" class="remove" name="remove"></span></a>									
+		<input  id="options" type="text" name="options" value="">
+		<a class="btn btn-default btn-sm btn-small remove">
+			<span class="icon-trash">
+				<input class="remove" type="hidden" value="" name="remove">
+			</span>
+		</a>									
 	</li>
 </div>
 
@@ -146,7 +150,7 @@ var clicked = 0;
 $('.remove').click(function(){
 	clicked = $(this).children().children().val();
 	$.ajax({
-            url : "<?=base_url('admin/customforms/deleteitem/' . $content['customform_edit']->id);?>"
+            url : "<?=base_url('admin/customforms/deleteitem/' . ((isset($content['customform_edit']->id))?$content['customform_edit']->id:""));?>"
             , type : "post"
             , data : { id : clicked }
             , success : function(resp){
@@ -159,18 +163,20 @@ $('.remove').click(function(){
 });
  	 
 	$(function() {
-		var count = <?=isset($content['customformfields_count'])?$content['customformfields_count']:'0'?>;
 		var formfild =$('#addfield').html();
 		$("#add").click(function(){
+			var count = $('#count').val();
+			
 			count++;
 			
-			formfild = formfild.replace('<li class="ui-state-default" name="formf" value="formf" id="formf">', '<li class="ui-state-default" name="formf'+count+'" value="'+count+'" id="formf'+count+'">');
-			formfild = formfild.replace('<input id="name" value="" name="name" type="text">', '<input id="name'+count+'" value="" name="name'+count+'" type="text">');
-			formfild = formfild.replace('<select name="mandatory" id="mandatory">', '<select name="mandatory'+count+'" id="mandatory'+count+'">');
-			formfild = formfild.replace('<select name="type" id="type">', '<select name="type'+count+'" id="type'+count+'">');
-			formfild = formfild.replace('<input name="options" value="" id="options" type="text">', '<input name="options'+count+'" value="" id="options'+count+'" type="text">');
-			formfild = formfild.replace('<input type="hidden" value="" class="remove" name="remove">', '<input type="hidden" value="' + count + '" class="remove" name="remove">');
-	
+			formfild = formfild.split('<li id="formf" class="ui-state-default" name="formf" value="formf">').join('<li id="formf'+count+'" class="ui-state-default" name="formf'+count+'" value="'+count+'" >');
+			formfild = formfild.split('<input id="name" value="" name="name" type="text">').join('<input id="name'+count+'" value="" name="name'+count+'" type="text">');
+			formfild = formfild.split('<select id="mandatory" name="mandatory">').join('<select id="mandatory'+count+'" name="mandatory'+count+'">');
+			formfild = formfild.split('<select id="type" name="type">').join('<select id="type'+count+'" name="type'+count+'">');
+			formfild = formfild.split('<input id="options" name="options" value="" type="text">').join('<input id="options'+count+'" name="options'+count+'" value="" type="text">');
+			formfild = formfild.split('<input class="remove" type="hidden" value="" name="remove">').join('<input class="remove" type="hidden" value="'+count+'" name="remove">');
+
+
 			$("#sortable1").append(formfild);
 			$('#count').val(count);
 			

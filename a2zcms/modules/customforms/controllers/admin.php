@@ -104,8 +104,8 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'create_edit';
 
-		$customform_edit = $customformfields=$customformfields_count="";
-		
+		$customform_edit = $customformfields="";
+		$customformfields_count=0;
 		if($id>0)
 		{
 			$customform_edit = new Customform();
@@ -167,18 +167,19 @@ class Admin extends Administrator_Controller {
 		$params = explode(',', $pagecontentorder);
 		$order = 1;
 		for ($i=0; $i <= $count*4-1; $i=$i+4) {
-			 
-			$customformfield = new CustomFormField();
-			$customformfield -> name = $params[$i];
-			$customformfield -> mandatory = $params[$i+1];
-			$customformfield -> type = $params[$i+2];
-			$customformfield -> options = $params[$i+3];
-			$customformfield -> order = $order;
-			$customformfield -> custom_form_id = $customform_id;
-			$customformfield -> user_id = $user_id;	
-			$customformfield -> updated_at = date("Y-m-d H:i:s");										
-			$customformfield -> created_at = date("Y-m-d H:i:s");					
-			$customformfield -> save();	
+			if($params[$i]!=""){
+				$customformfield = new CustomFormField();
+				$customformfield -> name = $params[$i];
+				$customformfield -> mandatory = $params[$i+1];
+				$customformfield -> type = $params[$i+2];
+				$customformfield -> options = $params[$i+3];
+				$customformfield -> order = $order;
+				$customformfield -> custom_form_id = $customform_id;
+				$customformfield -> user_id = $user_id;	
+				$customformfield -> updated_at = date("Y-m-d H:i:s");										
+				$customformfield -> created_at = date("Y-m-d H:i:s");					
+				$customformfield -> save();	
+			}
 			$order++;
 		}
 	}
