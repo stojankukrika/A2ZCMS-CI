@@ -6,16 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Customform extends Website_Controller {
+class Customformfield extends DataMapper {
 	
 	function __construct()
 	{
 		parent::__construct();
 	}
-
-	function index()
-	{	
-		
-	}
-    
+	
+	var $table = "custom_form_fields";
+			
 }

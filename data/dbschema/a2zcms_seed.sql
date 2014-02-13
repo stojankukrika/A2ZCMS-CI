@@ -242,7 +242,7 @@ INSERT INTO `assigned_roles` (`id`, `user_id`, `role_id`, `created_at`, `updated
 
 INSERT INTO `admin_navigations` (`id`, `plugin_id`, `title`, `url`, `icon`, `order`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 4, 'To-do list', 'todolist', 'icon-bell', 1, NOW(), NOW(), NULL),
-(2, 3, 'Custom forms', 'customform', 'icon-list-alt', 2, NOW(), NOW(), NULL),
+(2, 3, 'Custom forms', 'customforms', 'icon-list-alt', 2, NOW(), NOW(), NULL),
 (3, 5, 'Pages', 'pages', 'icon-globe', 3, NOW(), NOW(), NULL),
 (4, 1, 'Blog', 'blogs', 'icon-external-link', 4, NOW(), NOW(), NULL),
 (5, 2, 'Gallery', 'galleries', 'icon-camera', 5, NOW(), NOW(), NULL),

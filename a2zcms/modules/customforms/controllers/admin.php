@@ -13,15 +13,175 @@ class Admin extends Administrator_Controller {
 		parent::__construct();
 	}
 	
-	function index()
-	{
-		echo "Index/customform";
-		die();
+	function index(){
+		$data['view'] = 'dashboard';
+		
+		$offset = (int)$this->uri->segment(4);
+        if (!($offset > 0)) {
+            $offset = 0;
+        }
+        $customform = new Customform();
+        $customform->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
+			->select('id,title,recievers,created_at')
+            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
+		
+		foreach ($customform as $item) {
+ 			$customformfield = new Customformfield();		
+			$customformfield->where('custom_form_id', $item->id)->where(array('deleted_at' => NULL));
+			$item->countfields = $customformfield->count();			
+		 }
+		
+        if ($offset > $customform->paged->total_rows) {
+            $offset = floor($customform->paged->total_rows / $this->session->userdata('pageitemadmin')) *
+                $this->session->userdata('pageitemadmin');
+        }
+ 
+        $pagination_config = array(
+            'base_url' => site_url('admin/customforms/index/'),
+            'first_url' => site_url('admin/customforms/index/0'),
+            'total_rows' => $customform->paged->total_rows,
+            'per_page' => $this->session->userdata('pageitemadmin'),
+            'uri_segment' => 4,
+           	'full_tag_open' => '<ul class="pagination">',
+			'first_tag_open' => '<li>',
+			'first_link' => '<span class="icon-fast-backward"></span>',
+		    'first_tag_close' => '</li>',
+			'last_tag_open' => '<li>',
+			'last_link' => '<span class="icon-fast-forward"></span>',
+			'last_tag_close' => '</li>',
+			'next_tag_open' => '<li>',
+			'next_link' => '<span class="icon-step-forward"></span>',
+			'next_tag_close' => '</li>',
+			'prev_tag_open' => '<li>',
+			'prev_link' => '<span class="icon-step-backward"></span>',
+			'prev_tag_close' => '</li>',
+			'cur_tag_open' => '<li class="active"><a>',
+			'cur_tag_close' => '</a></li>',
+			'num_tag_open' => '<li>',
+			'num_tag_close' => '</li>',
+			'full_tag_close' => '</ul>',
+        );		
+		
+        $this->pagination->initialize($pagination_config);
+ 
+        $data['content'] = array(
+            'pagination' => $this->pagination,
+            'customform' => $customform,
+            'offset' => $offset
+        );
+ 
+        $this->load->view('adminpage', $data);
 	}
-	function test()
+
+	function delete($id)
 	{
-		echo "Test/customform";
-		die();
+		$data['view'] = 'delete';
+		$data['content'] = array('customformid' => $id);
+		
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('customformid', "Title", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$id = $this->input->post('customformid');
+			
+			$customform = new Customform();
+			$customform->where('id', $id)->where('user_id',$this->session->userdata('user_id'))
+			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        }
 	}
+	function deleteitem($custom_formid)
+	{
+		$id = $this->input->get('id');
+		
+		$customformfield = new CustomFormField();
+		$customformfield->where('id', $id)->where('custom_form_id',$custom_formid)
+			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+		return 0;	
+	}
+	
+	function create($id=0)
+	{
+		$data['view'] = 'create_edit';
+
+		$customform_edit = $customformfields=$customformfields_count="";
+		
+		if($id>0)
+		{
+			$customform_edit = new Customform();
+			$customform_edit->select('id,title,recievers,message')
+			->where('id',$id)->get();	
+			
+			$customformfields = new Customformfield();
+			$customformfields->select('id,custom_form_id,name,options,type,`order`,mandatory')
+			->order_by("order", "ASC")
+			->where(array('deleted_at' => NULL))
+			->where('custom_form_id',$id)->get();
+			
+			$customformfields_count = new Customformfield();
+			$customformfields_count = $customformfields_count->select('id')
+			->where(array('deleted_at' => NULL))
+			->where('custom_form_id',$id)->count();		
+		}
+		
+		$data['content'] = array('customform_edit' => $customform_edit,
+								'customformfields' => $customformfields,
+								'customformfields_count' => $customformfields_count);
+		
+		$this->load->view('adminmodalpage', $data);
+		$this->form_validation->set_rules('title', "Title", 'required');
+		$this->form_validation->set_rules('message', "Message", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$customform = new CustomForm();
+			if($id==0)
+			{			
+				$customform->title = $this->input->post('title');
+				$customform->message = $this->input->post('message');
+				$customform->recievers = $this->input->post('recievers');
+				$customform->user_id = $this->session->userdata('user_id');
+				$customform->updated_at = date("Y-m-d H:i:s");										
+				$customform->created_at = date("Y-m-d H:i:s");
+				$customform->save();
+				$id = $customform->id;
+			}
+			else{
+				$customform->where('id', $id)->update(array('title'=>$this->input->post('title'), 
+							'message'=>$this->input->post('message'), 
+							'recievers'=>$this->input->post('recievers'), 
+							'updated_at'=>date("Y-m-d H:i:s")));
+					
+				$c = new CustomFormField();
+				$c->where('custom_form_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
+			}
+			
+			if($this->input->post('pagecontentorder')!=""){
+					$this->saveFilds($this->input->post('pagecontentorder'),$this->input->post('count'),$id,$this->session->userdata('user_id'));
+				}	
+        	
+		}
+    }
+
+	public function saveFilds($pagecontentorder,$count,$customform_id,$user_id)
+	{
+		$params = explode(',', $pagecontentorder);
+		$order = 1;
+		for ($i=0; $i <= $count*4-1; $i=$i+4) {
+			 
+			$customformfield = new CustomFormField();
+			$customformfield -> name = $params[$i];
+			$customformfield -> mandatory = $params[$i+1];
+			$customformfield -> type = $params[$i+2];
+			$customformfield -> options = $params[$i+3];
+			$customformfield -> order = $order;
+			$customformfield -> custom_form_id = $customform_id;
+			$customformfield -> user_id = $user_id;	
+			$customformfield -> updated_at = date("Y-m-d H:i:s");										
+			$customformfield -> created_at = date("Y-m-d H:i:s");					
+			$customformfield -> save();	
+			$order++;
+		}
+	}
+	
 
 }

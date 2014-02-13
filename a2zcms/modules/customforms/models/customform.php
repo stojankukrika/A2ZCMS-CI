@@ -12,5 +12,7 @@ class Customform extends DataMapper {
 	{
 		parent::__construct();
 	}
+	
+	var $table = "custom_forms";
 			
 }
