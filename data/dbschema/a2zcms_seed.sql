@@ -48,7 +48,7 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (15, 'useravatheight', 'User avatar height', 'settings', '113', '113','text','required|integer'),
 (16, 'pageitem', 'Per page item', 'settings', '8', '8','text','required|integer'),
 (17, 'searchcode', 'Search code', 'search', '', '','textarea',''),
-(18, 'sitetheme', 'Site theme', 'settings', '', 'sitetheme','option','required'),
+(18, 'sitetheme', 'Site theme', 'settings', '', 'ASSETS_PATH_FULL','option','required'),
 (19, 'pageitemadmin','Per page item-Admin', 'settings', '10', '10','text','required|integer');
 
 --
