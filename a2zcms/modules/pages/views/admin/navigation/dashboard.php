@@ -1,7 +1,7 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Navigation group Management</h1>
+			<h1>Navigation Management</h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/pages/navigation_create")?>">

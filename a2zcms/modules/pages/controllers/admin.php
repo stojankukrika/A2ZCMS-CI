@@ -128,6 +128,7 @@ class Admin extends Administrator_Controller {
         }
 	}
 	
+	/*Navigation list*/
 	function navigation(){
 		$data['view'] = 'navigation/dashboard';
 		
@@ -259,6 +260,123 @@ class Admin extends Administrator_Controller {
 			$navigationlink->where('id', $id)
 			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
         }
+	}
+	
+	/*Pages*/
+	function index(){
+		$data['view'] = 'dashboard';
+		
+		$offset = (int)$this->uri->segment(4);
+        if (!($offset > 0)) {
+            $offset = 0;
+        }
+        $page = new Page();
+        $page->where(array('deleted_at' => NULL))
+			->select('id,title,status,voteup,votedown,hits,sidebar,created_at')
+            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
+
+        if ($offset > $page->paged->total_rows) {
+            $offset = floor($page->paged->total_rows / $this->session->userdata('pageitemadmin')) *
+                $this->session->userdata('pageitemadmin');
+        }
+ 
+        $pagination_config = array(
+            'base_url' => site_url('admin/pages/index/'),
+            'first_url' => site_url('admin/pages/index/0'),
+            'total_rows' => $page->paged->total_rows,
+            'per_page' => $this->session->userdata('pageitemadmin'),
+            'uri_segment' => 4,
+           	'full_tag_open' => '<ul class="pagination">',
+			'first_tag_open' => '<li>',
+			'first_link' => '<span class="icon-fast-backward"></span>',
+		    'first_tag_close' => '</li>',
+			'last_tag_open' => '<li>',
+			'last_link' => '<span class="icon-fast-forward"></span>',
+			'last_tag_close' => '</li>',
+			'next_tag_open' => '<li>',
+			'next_link' => '<span class="icon-step-forward"></span>',
+			'next_tag_close' => '</li>',
+			'prev_tag_open' => '<li>',
+			'prev_link' => '<span class="icon-step-backward"></span>',
+			'prev_tag_close' => '</li>',
+			'cur_tag_open' => '<li class="active"><a>',
+			'cur_tag_close' => '</a></li>',
+			'num_tag_open' => '<li>',
+			'num_tag_close' => '</li>',
+			'full_tag_close' => '</ul>',
+        );
+		
+		
+        $this->pagination->initialize($pagination_config);
+ 
+        $data['content'] = array(
+            'pagination' => $this->pagination,
+            'page' => $page,
+            'offset' => $offset
+        );
+ 
+        $this->load->view('adminpage', $data);
+	}
+	
+	function create($id=0)
+	{
+		$data['view'] = 'create_edit';
+
+		$page_edit = "";
+		
+		if($id>0)
+		{
+			$page_edit = new Page();
+			$page_edit->select('id,title')->where('id',$id)->get();			
+		}
+		
+		$data['content'] = array('page_edit' => $page_edit);
+		
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('title', "Title", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$page = new Page();
+			if($id==0){
+				$page->title = $this->input->post('title');	
+				$page->updated_at = date("Y-m-d H:i:s");										
+				$page->created_at = date("Y-m-d H:i:s");
+				$page->save();
+				$id = $page->id;
+			}
+			else {				
+				$page->where('id', $id)->update(array('title'=>$this->input->post('title'),
+							'updated_at'=>date("Y-m-d H:i:s")));
+			}
+        }
+    }
+	function delete($id)
+	{
+		$data['view'] = 'delete';
+		$data['content'] = array('pageid' => $id);
+		
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('pageid', "Page", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
+        	$id = $this->input->post('pageid');
+			
+			$page = new Page();
+			$page->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        }
+	}
+	
+	function change($id)
+	{
+		$page = new Page();
+		$page->where('id', $id)->get();
+		$page->where('id', $id)->update(array('status'=>($page -> status + 1) % 2,
+											'updated_at'=>date("Y-m-d H:i:s")));
+		
+		return redirect(base_url('admin/pages'));
+		
 	}
 
 }
