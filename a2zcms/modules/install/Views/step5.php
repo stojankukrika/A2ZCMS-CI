@@ -36,6 +36,18 @@
 			</div>
 	</div>
 	<div class="control-group">
+			<label class="control-label" for="per_page">Posts per page-Admin:<span class="required">*</span></label>
+			<div class="controls">
+				<select name="pageitemadmin" class="form-control">
+					<?php
+						for($i=1;$i<20;$i++) {
+						   echo '<option value="'.$i.'">'.$i.'</option>';
+						}
+					?>
+				</select>
+			</div>
+	</div>
+	<div class="control-group">
 	<div class="controls">
 		<input type="submit" name="submit" class="btn save" value="Finish" />
 	</div>

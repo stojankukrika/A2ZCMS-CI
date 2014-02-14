@@ -250,7 +250,8 @@ class Install extends CI_Controller {
         $this->form_validation->set_rules('title', 'Site Name', 'trim|required');
         $this->form_validation->set_rules('theme', 'Site theme', 'trim|required');
 		$this->form_validation->set_rules('per_page', 'Posts per page', 'trim|required');
-       
+      	$this->form_validation->set_rules('pageitemadmin', 'Posts per page-Admin', 'trim|required');
+		
         if ($this->form_validation->run())
         {
            
@@ -273,6 +274,7 @@ class Install extends CI_Controller {
                 $this->installer->update_site_name($this->input->post('title'));
                 $this->installer->update_pageitem($this->input->post('per_page'));
 				$this->installer->update_site_theme($this->input->post('theme'));
+				$this->installer->update_pageitemadmin($this->input->post('pageitemadmin'));
 								
                 redirect('install/complite');
             }
