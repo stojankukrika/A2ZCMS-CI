@@ -6,13 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Pages extends Website_Controller {
+class NavigationGroup extends DataMapper {
+
 	
 	function __construct()
 	{
 		parent::__construct();
-		
 	}
+	var $table = "navigation_groups";
 	
-
 }

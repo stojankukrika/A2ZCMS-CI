@@ -124,7 +124,7 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 -- Dumping data for table `pages`
 --
 
-INSERT INTO `pages` (`id`, `name`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `page_css`, `page_javascript`, `sidebar`, `showtitle`, `showvote`, `showdate`, `voteup`, `votedown`, `password`, `tags`, `hits`, `showtags`, `content`, `image`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `pages` (`id`, `title`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `page_css`, `page_javascript`, `sidebar`, `showtitle`, `showvote`, `showdate`, `voteup`, `votedown`, `password`, `tags`, `hits`, `showtags`, `content`, `image`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Home', 'home', NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 0, 0, '', 'tag1', 0, 1, '<div><h1>A2Z CMS 1.0</h1><p>Welcome to your very own A2Z CMS 1.1 installation.</p></div><div><p>Login into your profile and change this page and enjoy in A2ZCMS.</p><p>If you have any questions feel free to check the <a href="https://github.com/mrakodol/A2ZCMS/issues">Issues</a> at any time or create a new issue.</p><p>Enjoy A2Z CMS and welcome a board.</p><p>Kind Regards</p><p>Stojan Kukrika - A2Z CMS</p></div>', NULL, 1, NOW(), NOW(), NULL);
 
 
@@ -141,7 +141,7 @@ INSERT INTO `page_plugin_functions` (`id`, `page_id`, `plugin_function_id`, `ord
 -- Dumping data for table `navigation_groups`
 --
 
-INSERT INTO `navigation_groups` (`id`, `title`, `abbrev`, `showmenu`, `showfooter`, `showsidebar`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `navigation_groups` (`id`, `title`, `slug`, `showmenu`, `showfooter`, `showsidebar`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'Main menu', 'main-menu', 1, 0, 0, NOW(), NOW(), NULL);
 
 

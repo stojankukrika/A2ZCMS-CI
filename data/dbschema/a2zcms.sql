@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS `migrations` (
 CREATE TABLE IF NOT EXISTS `navigation_groups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `abbrev` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `showmenu` tinyint(1) NOT NULL,
   `showfooter` tinyint(1) NOT NULL,
   `showsidebar` tinyint(1) NOT NULL,
@@ -306,7 +306,7 @@ CREATE TABLE IF NOT EXISTS `navigation_links` (
 
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `meta_title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `meta_description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,

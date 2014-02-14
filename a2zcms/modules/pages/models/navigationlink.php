@@ -6,14 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Pages extends DataMapper {
+class NavigationLink extends DataMapper {
 
 	
 	function __construct()
 	{
 		parent::__construct();
-		
-		$this->table = 'pages';
 	}
+	var $table = "navigation_links";
 	
 }
