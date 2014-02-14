@@ -30,26 +30,33 @@ INSERT INTO `plugin_functions` (`id`, `title`, `plugin_id`, `function`, `params`
 -- Dumping data for table `settings`
 --
 
-INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defaultvalue`,`type`,`rule`) VALUES
-(1, 'updatetime','Update time', 'version', '1389785102', '1389785102','text',''),
-(2, 'offline', 'Offline', 'offline', 'No', 'Yes;No','radio',''),
-(3, 'version', 'Version', 'version', '1.0', '1.0','text',''),
-(4, 'offlinemessage', 'Offline message', 'offline', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.','textarea',''),
-(5, 'title', 'Title', 'general', 'A2Z CMS', 'A2Z CMS','text','required'),
-(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2013', 'A2Z CMS 2013','text','required'),
-(7, 'metadesc', 'Meta desc', 'metadata', '', '','textarea',''),
-(8, 'metakey', 'Meta key', 'metadata', '', '','textarea',''),
-(9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com','text',''),
-(10, 'analytics', 'Analytics', 'analitic', '', '','textarea',''),
-(11, 'email', 'Email', 'settings', 'admin@mail.com', '','text','required|valid_email'),
-(12, 'dateformat', 'Date format', 'settings', 'd.m.Y', 'd.m.Y','text','required'),
-(13, 'timeformat', 'Time format', 'settings', ' - H:i', 'h:i A','text','required'),
-(14, 'useravatwidth', 'User avatar width', 'settings', '150', '150','text','required|integer'),
-(15, 'useravatheight', 'User avatar height', 'settings', '113', '113','text','required|integer'),
-(16, 'pageitem', 'Per page item', 'settings', '8', '8','text','required|integer'),
-(17, 'searchcode', 'Search code', 'search', '', '','textarea',''),
-(18, 'sitetheme', 'Site theme', 'settings', '', 'ASSETS_PATH_FULL','option','required'),
-(19, 'pageitemadmin','Per page item-Admin', 'settings', '10', '10','text','required|integer');
+INSINSERT INTO `a2z_settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defaultvalue`, `type`, `rule`) VALUES
+(1, 'updatetime', 'Update time', 'version', '1389785102', '1389785102', 'text', ''),
+(2, 'offline', 'Offline', 'offline', 'No', 'Yes;No', 'radio', ''),
+(3, 'version', 'Version', 'version', '1.0', '1.0', 'text', ''),
+(4, 'offlinemessage', 'Offline message', 'offline', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.', 'textarea', ''),
+(5, 'title', 'Title', 'general', 'A2Z CMS-dev', 'A2Z CMS', 'text', 'required'),
+(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2013', 'A2Z CMS 2013', 'text', 'required'),
+(7, 'metadesc', 'Meta desc', 'metadata', '', '', 'textarea', ''),
+(8, 'metakey', 'Meta key', 'metadata', '', '', 'textarea', ''),
+(9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com', 'text', ''),
+(10, 'analytics', 'Analytics', 'analitic', '', '', 'textarea', ''),
+(11, 'email', 'Email', 'general', 'admin@mail.com', '', 'text', 'required|valid_email'),
+(12, 'dateformat', 'Date format', 'general', 'd.m.Y', 'd.m.Y', 'text', 'required'),
+(13, 'timeformat', 'Time format', 'general', ' - H:i', 'h:i A', 'text', 'required'),
+(14, 'useravatwidth', 'User avatar width', 'general', '150', '150', 'text', 'required|integer'),
+(15, 'useravatheight', 'User avatar height', 'general', '113', '113', 'text', 'required|integer'),
+(16, 'pageitem', 'Per page item', 'general', '8', '8', 'text', 'required|integer'),
+(17, 'searchcode', 'Search code', 'search', '', '', 'textarea', ''),
+(18, 'sitetheme', 'Site theme', 'general', 'a2z-default', 'ASSETS_PATH_FULL', 'option', 'required'),
+(19, 'pageitemadmin', 'Per page item-Admin', 'general', '10', '10', 'text', 'required|integer'),
+(20, 'passwordpolicy', 'Password policy', 'password', 'No', 'Yes;No', 'radio', ''),
+(21, 'minpasswordlength', 'Password length', 'password', '6', '6', 'text', ''),
+(22, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', ''),
+(23, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', ''),
+(24, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', ''),
+(25, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', ''),
+(26, 'maxconsecutiveidentchars', 'Consecutive identical characters', 'password', '0', '0', 'text', '');
 
 --
 -- Dumping data for table `migrations`

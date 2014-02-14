@@ -263,6 +263,12 @@ class Installer
         $this->db_query("UPDATE `" . $this->prefix . "settings` SET `value` = '" . $this->db_escape($pageitem) . "' WHERE `varname` = 'pageitem'");
     }
     
+    public function update_pageitemadmin($pageitem)
+    {
+        $this->db_query("UPDATE `" . $this->prefix . "settings` SET `value` = '" . $this->db_escape($pageitem) . "' WHERE `varname` = 'pageitemadmin'");
+    }   
+    
+    
     public function db_connect()
     {
         if (empty($this->driver))
