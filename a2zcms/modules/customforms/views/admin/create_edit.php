@@ -138,7 +138,6 @@
 		<input  id="options" type="text" name="options" value="">
 		<a class="btn btn-default btn-sm btn-small remove">
 			<span class="icon-trash">
-				<input class="remove" type="hidden" value="" name="remove">
 			</span>
 		</a>									
 	</li>
@@ -165,20 +164,22 @@ $('.remove').click(function(){
 	$(function() {
 		var formfild =$('#addfield').html();
 		$("#add").click(function(){
-			var count = $('#count').val();
+			var count = 0;
 			
-			count++;
+			count = parseInt( $('#count').val(), 10) + 1;;
 			
 			formfild = formfild.split('<li id="formf" class="ui-state-default" name="formf" value="formf">').join('<li id="formf'+count+'" class="ui-state-default" name="formf'+count+'" value="'+count+'" >');
 			formfild = formfild.split('<input id="name" value="" name="name" type="text">').join('<input id="name'+count+'" value="" name="name'+count+'" type="text">');
 			formfild = formfild.split('<select id="mandatory" name="mandatory">').join('<select id="mandatory'+count+'" name="mandatory'+count+'">');
 			formfild = formfild.split('<select id="type" name="type">').join('<select id="type'+count+'" name="type'+count+'">');
 			formfild = formfild.split('<input id="options" name="options" value="" type="text">').join('<input id="options'+count+'" name="options'+count+'" value="" type="text">');
-			formfild = formfild.split('<input class="remove" type="hidden" value="" name="remove">').join('<input class="remove" type="hidden" value="'+count+'" name="remove">');
+			formfild = formfild.split('<a class="btn btn-default btn-sm btn-small remove">').join('<a class="btn btn-default btn-sm btn-small remove id-'+count+'">');
 
 
 			$("#sortable1").append(formfild);
 			$('#count').val(count);
+			
+			$('.id-'+count).children().append('<input class="remove" type="hidden" name="remove" value="'+count+'">');
 			
 		})
 		$( "#sortable1" ).sortable();
