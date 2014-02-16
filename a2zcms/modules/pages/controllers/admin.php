@@ -324,13 +324,100 @@ class Admin extends Administrator_Controller {
 
 		$page_edit = "";
 		
+		$pluginfunction_content = new PluginFunction();	
+		$plugins = new Plugin();
+		
+		$pluginfunction_content->where('type','content')
+		->select('plugin_functions.id,plugin_functions.title, plugin_functions.params')
+		->get();
+		
+		foreach ($pluginfunction_content as $item) {
+			$plugins = new Plugin();
+			$plugins->select('name,function_id,function_grid')->where('id',$item->plugin_id)->get();
+			$function_id = $plugins->function_id;
+			$function_grid = $plugins->function_grid;
+			if($function_id!=NULL){
+				$item->function_id = modules::run($plugins->name.'/'.$plugins->name.'/'.$this->$function_id());
+			}
+			if($function_grid!=NULL){
+				$item->function_grid = modules::run($plugins->name.'/'.$plugins->name.'/'.$this->$function_grid());
+			}
+		}	
+				
+		$pluginfunction_slider = new PluginFunction();
+		$pluginfunction_slider->where('type','sidebar')
+		->select('plugin_functions.id,plugin_functions.title, plugin_functions.params')->get();
+		
 		if($id>0)
 		{
 			$page_edit = new Page();
-			$page_edit->select('id,title')->where('id',$id)->get();			
+			$page_edit->where('id',$id)->get();		
+			/* coppyed from A2Z CMS
+				/*select content plugins that added to page*/
+			/*$pluginfunction_content = PagePluginFunction::leftJoin('plugin_functions','plugin_functions.id','=','page_plugin_functions.plugin_function_id')
+									->leftJoin('plugins', 'plugins.id', '=', 'plugin_functions.plugin_id')
+									->whereRaw("(page_id  = '".$page->id."' OR page_id IS NULL)")
+									->where('plugin_functions.type','=','content')
+									->orderBy('page_plugin_functions.order','ASC')
+									->groupBy('plugin_functions.id')
+									->get(array('plugin_functions.id','page_plugin_functions.plugin_function_id',
+									'plugin_functions.title','page_plugin_functions.order','plugins.function_id','plugin_functions.function','plugin_functions.params','plugins.function_grid'));
+		
+			$pluginfunction_content_all = PluginFunction::leftJoin('plugins', 'plugins.id', '=', 'plugin_functions.plugin_id')
+									->where('type','=','content')->get(array('plugin_functions.title','plugins.function_id','plugin_functions.id as id','plugin_functions.function','plugin_functions.params','plugins.function_grid'));
+			
+			 /*add to view other content plugins that not in page*/
+			/*$tem = array();
+			foreach ($pluginfunction_content as $item) {
+				$temp[]=$item->function_id;
+			}
+			foreach ($pluginfunction_content_all as $item) {
+				if(!in_array($item->function_id,$temp))
+				$pluginfunction_content[]=$item;
+			}		
+			/*get other values for selected plugins*/
+			/*foreach ($pluginfunction_content as $key => $value) {
+				$function_id = $value['function_id'];
+				$function_grid = $value['function_grid'];
+				if($value['plugin_function_id']!=""){
+					$value['ids'] = PagePluginFunction::where('param','=','id')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+					$value['grids'] = PagePluginFunction::where('param','=','grid')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+					$value['sorts'] = PagePluginFunction::where('param','=','sort')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+					$value['limits'] = PagePluginFunction::where('param','=','limit')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+					$value['orders'] = PagePluginFunction::where('param','=','order')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+					}
+				if($function_id!=NULL){
+					$value['function_id'] = $this->$function_id();
+				}
+				if($function_grid!=NULL){
+					$value['function_grid'] = $this->$function_grid();
+				}
+			}
+			/*select sidebar plugins*/
+			/*$pluginfunction_slider = PagePluginFunction::leftJoin('plugin_functions','plugin_functions.id','=','page_plugin_functions.plugin_function_id')
+									->where('page_id','=',$page->id)
+									->where('plugin_functions.type','=','sidebar')
+									->groupBy('plugin_function_id')
+									->orderBy('page_plugin_functions.order','ASC')
+									->get(array('page_plugin_functions.plugin_function_id as id','page_plugin_functions.order','plugin_functions.title'));
+				
+			$pluginfunction_slider_all = PluginFunction::where('type','=','sidebar')->get();
+			
+			 /*add not added sidebar plugins*/
+			/*$tem = array();
+			foreach ($pluginfunction_slider as $item) {
+				$temp[]=$item->id;
+			}
+			foreach ($pluginfunction_slider_all as $item) {
+				if(!in_array($item->id,$temp))
+				$pluginfunction_slider[]=$item;
+			}*/
+			
 		}
 		
-		$data['content'] = array('page_edit' => $page_edit);
+		$data['content'] = array('page_edit' => $page_edit,
+								'pluginfunction_content'=> $pluginfunction_content,
+								'pluginfunction_slider' => $pluginfunction_slider);
 		
 		$this->load->view('adminmodalpage', $data);
 		
@@ -378,5 +465,125 @@ class Admin extends Administrator_Controller {
 		return redirect(base_url('admin/pages'));
 		
 	}
+	/* coppyed from A2Z CMS
+	public function saveData($pagesidebar="",$pagecontentorder,$pagecontent,$page_id)
+	{
+		if($pagesidebar!=""){
+				$order = 1;
+				foreach ($pagesidebar as $value) {
+					$params = PluginFunction::find($value)->params;
+					if($params!=NULL){
+						$params = explode(';', $params);
+						foreach ($params as $param) {
+							if($param!=""){
+								$param = explode(':', $param);
+								$pagepluginfunction = new PagePluginFunction;
+								$pagepluginfunction -> plugin_function_id = $value;
+								$pagepluginfunction -> order = $order;
+								$pagepluginfunction -> param = $param['0'];
+								if(strstr($param['1'], ',')){
+									$pagepluginfunction -> type = 'array';
+								}
+								else if(is_int($param['1'])){
+									$pagepluginfunction -> type = 'int';
+								}
+								else {
+									$pagepluginfunction -> type = 'string';
+								}
+								$pagepluginfunction -> value = $param['1'];
+								$pagepluginfunction -> page_id = $page_id;
+								$pagepluginfunction -> save();
+							}
+						}
+					}	
+				else {
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order;
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+					}				
+					$order ++;
+				}
+			}
+			$order2 = 1;
+			$items = explode(',', $pagecontentorder);
+				foreach ($items as $value) {
+					$params = "";
+					if(!empty($pagecontent[$value]['id'])){
+						foreach ($pagecontent[$value]['id'] as $value2) {
+							$params .= $value2.",";
+						}
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order2;
+						$pagepluginfunction -> param = 'id';
+						$pagepluginfunction -> type = 'array';
+						$pagepluginfunction -> value = $params;
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+												
+					}
+					if(!empty($pagecontent[$value]['grid'])){
+						foreach ($pagecontent[$value]['grid'] as $value2) {
+							$params .= $value2.",";
+						}
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order2;
+						$pagepluginfunction -> param = 'grid';
+						$pagepluginfunction -> type = 'array';
+						$pagepluginfunction -> value = $params;
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+					}
+					if(isset($pagecontent[$value]['sort'])){
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order2;
+						$pagepluginfunction -> param = 'sort';
+						$pagepluginfunction -> type = 'string';
+						$pagepluginfunction -> value = $pagecontent[$value]['sort'];
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+					}
+					if(isset($pagecontent[$value]['order'])){
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order2;
+						$pagepluginfunction -> param = 'order';
+						$pagepluginfunction -> type = 'string';
+						$pagepluginfunction -> value = $pagecontent[$value]['order'];
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+					}
+					if(isset($pagecontent[$value]['limit'])){
+						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction -> plugin_function_id = $value;
+						$pagepluginfunction -> order = $order2;
+						$pagepluginfunction -> param = 'limit';
+						$pagepluginfunction -> type = 'int';
+						$pagepluginfunction -> value = $pagecontent[$value]['limit'];
+						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> save();
+					}
+					if(empty($pagecontent[$value]['id']) && empty($pagecontent[$value]['grid']) && 
+						!isset($pagecontent[$value]['sort']) && !isset($pagecontent[$value]['order']) &&
+						!isset($pagecontent[$value]['limit']))
+						{
+							$pagepluginfunction = new PagePluginFunction;
+							$pagepluginfunction -> plugin_function_id = $value;
+							$pagepluginfunction -> order = $order2;
+							$pagepluginfunction -> param = '';
+							$pagepluginfunction -> type = '';
+							$pagepluginfunction -> value = '';
+							$pagepluginfunction -> page_id = $page_id;
+							$pagepluginfunction -> save();
+						}
+					
+					$order2 ++;
+				}
+	}*/	
+	
 
 }

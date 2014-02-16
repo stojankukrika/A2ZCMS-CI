@@ -3,14 +3,18 @@
 -- Dumping data for table `plugins`
 --
 
-INSERT INTO `plugins` (`id`, `content`, `function_id`, `function_grid`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Blog', 'getBlogId', 'getBlogGroupId', NOW(), NOW(), NULL),
-(2, 'Gallery', 'getGalleryId', NULL, NOW(), NOW(), NULL),
-(3, 'Custom form', 'getCustomFormId', NULL, NOW(), NOW(), NULL),
-(4, 'To-do list', NULL, NULL, NOW(), NOW(), NULL),
-(5, 'Pages', NULL, NULL, NOW(), NOW(), NULL),
-(6, 'Settings', NULL, NULL, NOW(), NOW(), NULL),
-(7, 'Users', NULL, NULL, NOW(), NOW(), NULL);
+INSERT INTO `plugins` (`id`, `name`,`content`, `function_id`, `function_grid`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 'blogs', 'Blog', 'getBlogId', 'getBlogGroupId', NOW(), NOW(), NULL),
+(2, 'galleries', 'Gallery', 'getGalleryId', NULL, NOW(), NOW(), NULL),
+(3, 'customforms', 'Custom form', 'getCustomFormId', NULL, NOW(), NOW(), NULL),
+(4, 'todolist' 'To-do list', NULL, NULL, NOW(), NOW(), NULL),
+(5, 'pages', 'Pages', NULL, NULL, NOW(), NOW(), NULL),
+(6, 'settings', 'Settings', NULL, NULL, NOW(), NOW(), NULL),
+(7, 'users', 'Users', NULL, NULL, NOW(), NOW(), NULL),
+(8, 'roles', 'Roles', NULL, NULL, NOW(), NOW(), NULL),
+(9, 'adminmenu', 'Admin menu', NULL, NULL, NOW(), NOW(), NULL),
+(10, 'home', 'Website home', NULL, NULL, NOW(), NOW(), NULL),
+(11, 'menu', 'Website menu', NULL, NULL, NOW(), NOW(), NULL);
 --
 -- Dumping data for table `plugin_functions`
 --
@@ -30,7 +34,7 @@ INSERT INTO `plugin_functions` (`id`, `title`, `plugin_id`, `function`, `params`
 -- Dumping data for table `settings`
 --
 
-INSINSERT INTO `a2z_settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defaultvalue`, `type`, `rule`) VALUES
+INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defaultvalue`, `type`, `rule`) VALUES
 (1, 'updatetime', 'Update time', 'version', '1389785102', '1389785102', 'text', ''),
 (2, 'offline', 'Offline', 'offline', 'No', 'Yes;No', 'radio', ''),
 (3, 'version', 'Version', 'version', '1.0', '1.0', 'text', ''),
