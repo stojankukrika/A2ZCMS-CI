@@ -6,12 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class PluginFunction extends DataMapper {
+class PagePluginFunction extends DataMapper {
 
 	
 	function __construct()
 	{
 		parent::__construct();
 	}
-	var $table = "plugin_functions";
+	var $table = "page_plugin_functions";
+	
 }

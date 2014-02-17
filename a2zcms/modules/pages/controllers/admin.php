@@ -346,28 +346,57 @@ class Admin extends Administrator_Controller {
 				
 		$pluginfunction_slider = new PluginFunction();
 		$pluginfunction_slider->where('type','sidebar')
-		->select('plugin_functions.id,plugin_functions.title, plugin_functions.params')->get();
+		->select('id,title, params')->get();
 		
 		if($id>0)
 		{
 			$page_edit = new Page();
 			$page_edit->where('id',$id)->get();		
-			/* coppyed from A2Z CMS
-				/*select content plugins that added to page*/
-			/*$pluginfunction_content = PagePluginFunction::leftJoin('plugin_functions','plugin_functions.id','=','page_plugin_functions.plugin_function_id')
-									->leftJoin('plugins', 'plugins.id', '=', 'plugin_functions.plugin_id')
-									->whereRaw("(page_id  = '".$page->id."' OR page_id IS NULL)")
-									->where('plugin_functions.type','=','content')
-									->orderBy('page_plugin_functions.order','ASC')
-									->groupBy('plugin_functions.id')
-									->get(array('plugin_functions.id','page_plugin_functions.plugin_function_id',
-									'plugin_functions.title','page_plugin_functions.order','plugins.function_id','plugin_functions.function','plugin_functions.params','plugins.function_grid'));
+			
+			$pluginfunction_content = new PagePluginFunction();
+			$pluginfunction_content	->select('plugin_function_id,order,param,type,value')
+									->where('page_id',$id)->order_by('order','ASC')->get();
+			
+			foreach($pluginfunction_content as $item)
+			{
+				$pluginfunction = new PluginFunction();
+				$pluginfunction->select('id,title,function,params,plugin_id')
+								->where('type','=','content')
+								->where('id',$item->plugin_function_id)
+								->group_by('id')->get();
+				
+				$item->id = $pluginfunction->id;
+				$item->title = $pluginfunction->title;
+				$item->function = $pluginfunction->function;
+				$item->params = $pluginfunction->params;
+				
+				$plugin = new Plugin();
+				$plugin->select('name,title,function_id,function_grid')
+						->where('id',$pluginfunction->plugin_id)
+						->get();
+						
+				$item->function_id = $pluginfunction->function_id;
+				$item->function_grid = $pluginfunction->function_grid;
+				$item->plugin_name = $pluginfunction->name;
+				$item->plugin_title = $pluginfunction->title;
+			}
+			
 		
-			$pluginfunction_content_all = PluginFunction::leftJoin('plugins', 'plugins.id', '=', 'plugin_functions.plugin_id')
-									->where('type','=','content')->get(array('plugin_functions.title','plugins.function_id','plugin_functions.id as id','plugin_functions.function','plugin_functions.params','plugins.function_grid'));
+			$pluginfunction_content_all = new PluginFunction();
+			$pluginfunction_content_all->select('title,id,function,params,plugin_id')
+										->where('type','content')->get();
+			foreach($pluginfunction_content_all as $item)
+			{
+				$plugins = new Plugin();
+				$plugins->select('function_id,function_grid')
+						->where('id',$pluginfunction_content_all->plugin_id)->get();
+				$item->function_id = $plugins->function_id;
+				$item->function_grid = $plugins->function_grid;				
+			}
+			
 			
 			 /*add to view other content plugins that not in page*/
-			/*$tem = array();
+			$tem = array();
 			foreach ($pluginfunction_content as $item) {
 				$temp[]=$item->function_id;
 			}
@@ -376,42 +405,65 @@ class Admin extends Administrator_Controller {
 				$pluginfunction_content[]=$item;
 			}		
 			/*get other values for selected plugins*/
-			/*foreach ($pluginfunction_content as $key => $value) {
-				$function_id = $value['function_id'];
-				$function_grid = $value['function_grid'];
-				if($value['plugin_function_id']!=""){
-					$value['ids'] = PagePluginFunction::where('param','=','id')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
-					$value['grids'] = PagePluginFunction::where('param','=','grid')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
-					$value['sorts'] = PagePluginFunction::where('param','=','sort')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
-					$value['limits'] = PagePluginFunction::where('param','=','limit')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
-					$value['orders'] = PagePluginFunction::where('param','=','order')->where('page_id','=',$page->id)->where('plugin_function_id','=',$value['plugin_function_id'])->pluck('value');
+			foreach ($pluginfunction_content as $item) {
+				$function_id = $item->function_id;
+				$function_grid = $item->function_grid;
+				if($item->plugin_function_id!=""){
+					$pluginfuction = new PagePluginFunction();
+					$item->ids = $pluginfuction->where('param','id')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();					
+					$item->grids = $pluginfuction->where('param','grid')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$item->sorts = $pluginfuction->where('param','sort')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$item->limits = $pluginfuction->where('param','sort')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$item->orders = $pluginfuction->where('param','order')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
 					}
 				if($function_id!=NULL){
-					$value['function_id'] = $this->$function_id();
+				$item->function_id = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$this->$function_id());
 				}
+				
 				if($function_grid!=NULL){
-					$value['function_grid'] = $this->$function_grid();
+					$item->function_grid = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$this->$function_grid());
 				}
 			}
 			/*select sidebar plugins*/
-			/*$pluginfunction_slider = PagePluginFunction::leftJoin('plugin_functions','plugin_functions.id','=','page_plugin_functions.plugin_function_id')
-									->where('page_id','=',$page->id)
-									->where('plugin_functions.type','=','sidebar')
-									->groupBy('plugin_function_id')
-									->orderBy('page_plugin_functions.order','ASC')
-									->get(array('page_plugin_functions.plugin_function_id as id','page_plugin_functions.order','plugin_functions.title'));
-				
-			$pluginfunction_slider_all = PluginFunction::where('type','=','sidebar')->get();
+			$pluginfunction_slider = new PagePluginFunction();
+			$pluginfunction_slider->where('page_id','=',$id)
+								->order_by('order','ASC')
+								->select('plugin_function_id,order')->get();
+			foreach ($pluginfunction_slider as $item) {
+				$pluginfunction = new PluginFunction();
+				$pluginfunction->where('type','sidebar')->where('id',$pluginfunction_slider->plugin_function_id)
+								->select('title')
+								->groupBy('plugin_function_id')->get();
+				$item->title = $pluginfunction->title;
+			}					
+			
+			$pluginfunction_slider_all = new PluginFunction();
+			$pluginfunction_slider_all ->where('type','sidebar')->get();
 			
 			 /*add not added sidebar plugins*/
-			/*$tem = array();
+			$tem = array();
 			foreach ($pluginfunction_slider as $item) {
 				$temp[]=$item->id;
 			}
 			foreach ($pluginfunction_slider_all as $item) {
 				if(!in_array($item->id,$temp))
-				$pluginfunction_slider[]=$item;
-			}*/
+				$pluginfunction_slider=$item;
+			}
 			
 		}
 		
@@ -465,19 +517,20 @@ class Admin extends Administrator_Controller {
 		return redirect(base_url('admin/pages'));
 		
 	}
-	/* coppyed from A2Z CMS
-	public function saveData($pagesidebar="",$pagecontentorder,$pagecontent,$page_id)
+	function saveData($pagesidebar="",$pagecontentorder,$pagecontent,$page_id)
 	{
 		if($pagesidebar!=""){
 				$order = 1;
 				foreach ($pagesidebar as $value) {
-					$params = PluginFunction::find($value)->params;
+					$plugin_function = new PluginFunction();
+					$plugin_function->where('id', $value)->get();
+					$params = $plugin_function->params;
 					if($params!=NULL){
 						$params = explode(';', $params);
 						foreach ($params as $param) {
 							if($param!=""){
 								$param = explode(':', $param);
-								$pagepluginfunction = new PagePluginFunction;
+								$pagepluginfunction = new PagePluginFunction();
 								$pagepluginfunction -> plugin_function_id = $value;
 								$pagepluginfunction -> order = $order;
 								$pagepluginfunction -> param = $param['0'];
@@ -497,7 +550,7 @@ class Admin extends Administrator_Controller {
 						}
 					}	
 				else {
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order;
 						$pagepluginfunction -> page_id = $page_id;
@@ -514,7 +567,7 @@ class Admin extends Administrator_Controller {
 						foreach ($pagecontent[$value]['id'] as $value2) {
 							$params .= $value2.",";
 						}
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'id';
@@ -528,7 +581,7 @@ class Admin extends Administrator_Controller {
 						foreach ($pagecontent[$value]['grid'] as $value2) {
 							$params .= $value2.",";
 						}
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'grid';
@@ -538,7 +591,7 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['sort'])){
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'sort';
@@ -548,7 +601,7 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['order'])){
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'order';
@@ -558,7 +611,7 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['limit'])){
-						$pagepluginfunction = new PagePluginFunction;
+						$pagepluginfunction = new PagePluginFunction();
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'limit';
@@ -571,7 +624,7 @@ class Admin extends Administrator_Controller {
 						!isset($pagecontent[$value]['sort']) && !isset($pagecontent[$value]['order']) &&
 						!isset($pagecontent[$value]['limit']))
 						{
-							$pagepluginfunction = new PagePluginFunction;
+							$pagepluginfunction = new PagePluginFunction();
 							$pagepluginfunction -> plugin_function_id = $value;
 							$pagepluginfunction -> order = $order2;
 							$pagepluginfunction -> param = '';
@@ -583,7 +636,7 @@ class Admin extends Administrator_Controller {
 					
 					$order2 ++;
 				}
-	}*/	
+	}
 	
 
 }
