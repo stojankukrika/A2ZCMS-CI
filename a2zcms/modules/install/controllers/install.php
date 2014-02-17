@@ -191,24 +191,25 @@ class Install extends CI_Controller {
         $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
 		$this->form_validation->set_rules('admin_password', 'Password', 'trim|required|min_length[5]');
         $this->form_validation->set_rules('confirm_admin_password', 'Confirm Password', 'trim|required|matches[admin_password]');
-      
+      	
+		
         if ($this->form_validation->run())
         {
-            $this->load->library('hash');
+	    	$database = $this->load->database('default', TRUE);				
+			$config['db']['hostname'] = $database->hostname;
+	        $config['db']['username'] = $database->username;
+	        $config['db']['password'] = $database->password;
+	        $config['db']['database'] = $database->database;
+	        $config['db']['prefix'] = $database->dbprefix;
+	        $config['db']['port'] = $database->port;
+			
+	        $this->load->library('installer', $config);	
+			$this->load->library('hash');
+				            
             try 
             {
-            	$database = $this->load->database('default', TRUE);				
-				$config['db']['hostname'] = $database->hostname;
-	            $config['db']['username'] = $database->username;
-	            $config['db']['password'] = $database->password;
-	            $config['db']['database'] = $database->database;
-	            $config['db']['prefix'] = $database->dbprefix;
-	            $config['db']['port'] = $database->port;
-				
-	            $this->load->library('installer', $config);	
-				
 				$this->installer->test_db_connection();                
-				$this->installer->db_connect();		   
+				$this->installer->db_connect();
 				
 				$admin_password = $this->hash->make($this->input->post('admin_password'));
 				$date_time = date('Y-m-d H:i:s');
@@ -217,14 +218,14 @@ class Install extends CI_Controller {
 					   'surname' => $this->input->post('last_name') ,
 					   'email' => $this->input->post('email'),
 					   'username' => $this->input->post('username') ,
-					   'avatar' => 'My Name' ,
+					   'avatar' => NULL ,
 					   'password' => $admin_password,					   
 					   'confirmation_code' => md5(microtime() . $this->input->post('admin_password')) ,
 					   'confirmed' => '1' ,
 					   'active' => '1',
 					   'last_login' => $date_time,
 					   'created_at' => $date_time,
-					   'updated_at' => NULL,
+					   'updated_at' => $date_time,
 					   'deleted_at' => NULL,
 					);
 										

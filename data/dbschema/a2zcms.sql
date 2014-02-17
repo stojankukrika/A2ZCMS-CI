@@ -413,8 +413,8 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 
 CREATE TABLE IF NOT EXISTS `plugins` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar( 255 ) COLLATE utf8_unicode_ci NOT NULLL,
-  `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar( 255 ) COLLATE utf8_unicode_ci NOT NULL,
+  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `function_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `function_grid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

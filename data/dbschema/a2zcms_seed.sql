@@ -3,11 +3,11 @@
 -- Dumping data for table `plugins`
 --
 
-INSERT INTO `plugins` (`id`, `name`,`content`, `function_id`, `function_grid`, `created_at`, `updated_at`, `deleted_at`) VALUES
+INSERT INTO `plugins` (`id`, `name`,`title`, `function_id`, `function_grid`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 'blogs', 'Blog', 'getBlogId', 'getBlogGroupId', NOW(), NOW(), NULL),
 (2, 'galleries', 'Gallery', 'getGalleryId', NULL, NOW(), NOW(), NULL),
 (3, 'customforms', 'Custom form', 'getCustomFormId', NULL, NOW(), NOW(), NULL),
-(4, 'todolist' 'To-do list', NULL, NULL, NOW(), NOW(), NULL),
+(4, 'todolist', 'To-do list', NULL, NULL, NOW(), NOW(), NULL),
 (5, 'pages', 'Pages', NULL, NULL, NOW(), NOW(), NULL),
 (6, 'settings', 'Settings', NULL, NULL, NOW(), NOW(), NULL),
 (7, 'users', 'Users', NULL, NULL, NOW(), NOW(), NULL),
@@ -15,6 +15,7 @@ INSERT INTO `plugins` (`id`, `name`,`content`, `function_id`, `function_grid`, `
 (9, 'adminmenu', 'Admin menu', NULL, NULL, NOW(), NOW(), NULL),
 (10, 'home', 'Website home', NULL, NULL, NOW(), NOW(), NULL),
 (11, 'menu', 'Website menu', NULL, NULL, NOW(), NOW(), NULL);
+
 --
 -- Dumping data for table `plugin_functions`
 --
@@ -40,7 +41,7 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (3, 'version', 'Version', 'version', '1.0', '1.0', 'text', ''),
 (4, 'offlinemessage', 'Offline message', 'offline', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.', 'textarea', ''),
 (5, 'title', 'Title', 'general', 'A2Z CMS-dev', 'A2Z CMS', 'text', 'required'),
-(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2013', 'A2Z CMS 2013', 'text', 'required'),
+(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2014', 'A2Z CMS 20134', 'text', 'required'),
 (7, 'metadesc', 'Meta desc', 'metadata', '', '', 'textarea', ''),
 (8, 'metakey', 'Meta key', 'metadata', '', '', 'textarea', ''),
 (9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com', 'text', ''),
@@ -136,7 +137,7 @@ INSERT INTO `migrations` (`migration`, `batch`) VALUES
 --
 
 INSERT INTO `pages` (`id`, `title`, `slug`, `meta_title`, `meta_description`, `meta_keywords`, `page_css`, `page_javascript`, `sidebar`, `showtitle`, `showvote`, `showdate`, `voteup`, `votedown`, `password`, `tags`, `hits`, `showtags`, `content`, `image`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Home', 'home', NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 0, 0, '', 'tag1', 0, 1, '<div><h1>A2Z CMS 1.0</h1><p>Welcome to your very own A2Z CMS 1.1 installation.</p></div><div><p>Login into your profile and change this page and enjoy in A2ZCMS.</p><p>If you have any questions feel free to check the <a href="https://github.com/mrakodol/A2ZCMS/issues">Issues</a> at any time or create a new issue.</p><p>Enjoy A2Z CMS and welcome a board.</p><p>Kind Regards</p><p>Stojan Kukrika - A2Z CMS</p></div>', NULL, 1, NOW(), NOW(), NULL);
+(1, 'Home', 'home', NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 0, 0, '', 'tag1', 0, 1, '<div><h1>A2Z CMS 1.0</h1><p>Welcome to your very own A2Z CMS 1.0 installation.</p></div><div><p>Login into your profile and change this page and enjoy in A2ZCMS.</p><p>If you have any questions feel free to check the <a href="https://github.com/mrakodol/A2ZCMS-CI/issues">Issues</a> at any time or create a new issue.</p><p>Enjoy A2Z CMS and welcome a board.</p><p>Kind Regards</p><p>Stojan Kukrika - A2Z CMS</p></div>', NULL, 1, NOW(), NOW(), NULL);
 
 
 --
