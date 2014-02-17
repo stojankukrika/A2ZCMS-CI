@@ -322,8 +322,9 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'create_edit';
 
-		$page_edit = "";
+		$page_edit = $pluginfunction_content_all = $pluginfunction_slider_all = "";
 		
+		if($id<=0){
 		$pluginfunction_content = new PluginFunction();	
 		$plugins = new Plugin();
 		
@@ -347,11 +348,12 @@ class Admin extends Administrator_Controller {
 		$pluginfunction_slider = new PluginFunction();
 		$pluginfunction_slider->where('type','sidebar')
 		->select('id,title, params')->get();
-		
-		if($id>0)
+		}
+		else
 		{
 			$page_edit = new Page();
 			$page_edit->where('id',$id)->get();		
+			/*select content plugins that added to page*/
 			
 			$pluginfunction_content = new PagePluginFunction();
 			$pluginfunction_content	->select('plugin_function_id,order,param,type,value')
@@ -396,13 +398,13 @@ class Admin extends Administrator_Controller {
 			
 			
 			 /*add to view other content plugins that not in page*/
-			$tem = array();
+			$temp = array();
 			foreach ($pluginfunction_content as $item) {
 				$temp[]=$item->function_id;
 			}
 			foreach ($pluginfunction_content_all as $item) {
 				if(!in_array($item->function_id,$temp))
-				$pluginfunction_content[]=$item;
+				$pluginfunction_content->$item;
 			}		
 			/*get other values for selected plugins*/
 			foreach ($pluginfunction_content as $item) {
@@ -414,18 +416,22 @@ class Admin extends Administrator_Controller {
 												->where('page_id',$id)
 												->where('plugin_function_id',$item->plugin_function_id)
 												->select('value')->get();					
+					$pluginfuction = new PagePluginFunction();
 					$item->grids = $pluginfuction->where('param','grid')
 												->where('page_id',$id)
 												->where('plugin_function_id',$item->plugin_function_id)
 												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
 					$item->sorts = $pluginfuction->where('param','sort')
 												->where('page_id',$id)
 												->where('plugin_function_id',$item->plugin_function_id)
 												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
 					$item->limits = $pluginfuction->where('param','sort')
 												->where('page_id',$id)
 												->where('plugin_function_id',$item->plugin_function_id)
 												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
 					$item->orders = $pluginfuction->where('param','order')
 												->where('page_id',$id)
 												->where('plugin_function_id',$item->plugin_function_id)
@@ -469,7 +475,9 @@ class Admin extends Administrator_Controller {
 		
 		$data['content'] = array('page_edit' => $page_edit,
 								'pluginfunction_content'=> $pluginfunction_content,
-								'pluginfunction_slider' => $pluginfunction_slider);
+								'pluginfunction_slider' => $pluginfunction_slider,
+								'pluginfunction_content_all'=>$pluginfunction_content_all,
+								'pluginfunction_slider_all' => $pluginfunction_slider_all);
 		
 		$this->load->view('adminmodalpage', $data);
 		
