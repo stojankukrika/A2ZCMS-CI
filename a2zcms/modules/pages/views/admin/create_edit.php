@@ -222,43 +222,45 @@
 								 $result .= '<li class="ui-state-default" name="pagecontent['.$item->id.']" value="'.$item->id.'">
 									'.$item->title.'
 									<div>';
-										if($item->sorts != "" || strpos($item->params,'sort') !== false){
+										if(isset($item->sorts) && $item->sorts != "" || strpos($item->params,'sort') !== false){
 										$result .= '<label class="control-label" for="sort">Sorting</label>
 											<select name="pagecontent['.$item->id.'][sort]" id="sort'.$item->id.'"> 
-											  <option value="ASC" '.(($item->sorts=="ASC")?"selected":"").'>Ascending</option>
-											  <option value="DESC" '.(($item->sorts=="DESC")?"selected":"").'>Descending</option>
+											  <option value="ASC" '.((!isset($item->sorts) || (isset($item->sorts) && $item->sorts=="ASC"))?"selected":"").'>Ascending</option>
+											  <option value="DESC" '.((isset($item->sorts) && $item->sorts=="DESC")?"selected":"").'>Descending</option>
 											</select>';
 										}
-										if($item->orders != "" || strpos($item->params,'order') !== false){
+										if(isset($item->orders) && $item->orders != "" || strpos($item->params,'order') !== false){
 										$result .= '<label class="control-label" for="order">Order</label>
 											<select name="pagecontent['.$item->id.'][order]" id="order'.$item->id.'"> 
-											  <option value="id" '. (($item->orders=="id")?"selected":"").'>ID</option>
-											  <option value="views" '.(($item->orders=="views")?"selected":"").'>Views</option>
+											  <option value="id" '. ((!isset($item->orders) || (isset($item->orders) && $item->orders=="id"))?"selected":"").'>ID</option>
+											  <option value="views" '.((isset($item->orders) && $item->orders=="views")?"selected":"").'>Views</option>
 											</select>';
 										}
-										if($item->limits != "" || strpos($item->params,'limit') !== false){
+										if(isset($item->limits) && $item->limits != "" || strpos($item->params,'limit') !== false){
 										$result .= '<label class="control-label" for="limit">Limit</label>
-											<input type="text" name="pagecontent['.$item->id.'][limit]" value="'.(($item->limits!="")?$item->limits:"0").'" id="limit'.$item->id.'">';
+											<input type="text" name="pagecontent['.$item->id.'][limit]" value="'.((isset($item->limits) && $item->limits!="")?$item->limits:"0").'" id="limit'.$item->id.'">';
 											}
-										if($item->ids != "" || strpos($item->params,'id') !== false){										
+										if(isset($item->ids) && $item->ids != "" || strpos($item->params,'id') !== false){										
 										$result .= '<div class="controls">
 											<label class="control-label" for="id">Items</label>
 											  <select id="id'.$item->id.'" name="pagecontent['.$item->id.'][id][]" class="form-control" multiple data-rel="chosen">';
 												if(!empty($item->function_id)){
 													foreach ($item->function_id as $id){
-														$result .= '<option value="'.$item->id.'" '. ((!empty($item->ids) && strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$item->ids.' '.$id->title.'</option>';
+														if($id->id!="")
+														$result .= '<option value="'.$id->id.'" '.((isset($item->ids) && strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$id->id.' '.$id->title.'</option>';
 													}
 												}
 											  $result .= '</select>
 											</div>';
 										}
-										if($item->grids != "" || strpos($item->params,'grid') !== false){							
+										if(isset($item->grids) && $item->grids != "" || strpos($item->params,'grid') !== false){							
 										$result .= '<div class="controls">
 											<label class="control-label" for="selectError1">Select groups</label>
 											  <select id="grid'.$item->id.'" name="pagecontent['.$item->id.'][grid][]" class="form-control" multiple data-rel="chosen">';
 												if(!empty($item->function_grid)){
 													foreach ($item->function_grid as $id){
-														$result .= '<option value="'.$item->id.'"'.((!empty($item->grids) &&  strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
+														if($id->id!="")
+														$result .= '<option value="'.$id->id.'"'.((isset($item->grids) && strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
 													}
 												}
 											  $result .= '</select>
@@ -273,7 +275,7 @@
 					  	<label class="control-label" for="sortable2">Sidebar Widgets</label><br>
 						<ul id="sortable2">';
 							foreach($content['pluginfunction_slider'] as $item){
-								 $result .= '<li class="ui-state-default"><input type="checkbox" '.(($item->order!='')?'checked':'') .' value="'.$item->id.'" name="pagesidebar[]"> '.$item->title.'</li>';
+								 $result .= '<li class="ui-state-default"><input type="checkbox" '.((isset($item->order) && $item->order!='')?'checked':'') .' value="'.$item->id.'" name="pagesidebar[]"> '.$item->title.'</li>';
 								 }
 						$result .= '</ul>
 					  </div>

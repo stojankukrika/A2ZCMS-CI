@@ -358,21 +358,20 @@ class Admin extends Administrator_Controller {
 			
 			$pluginfunction_content = $this->db->from('page_plugin_functions ppf')
 												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
-												->join('plugins p','p.id = pf.plugin_id' , 'left')
-												->where('page_id', NULL)
+												->join('plugins p','p.id = pf.plugin_id' ,'left')
+												->where('ppf.deleted_at', NULL)
 												->where('page_id', $id)
 												->where('pf.type','content')
 												->order_by('ppf.order','ASC')
 												->group_by('pf.id')
-												->select('pf.id, ppf.plugin_function_id, pf.title, ppf.order, p.function_id, pf.function, pf.params, p.function_grid')
+												->select('pf.id, ppf.plugin_function_id, p.name,pf.title, ppf.order, p.function_id, pf.function, pf.params, p.function_grid')
 												->get()->result();
-		
 			$pluginfunction_content_all =  $this->db->from('plugin_functions pf')
 													->join('plugins p', 'p.id = pf.plugin_id')
 													->where('type','content')
-													->select('pf.title, p.function_id, pf.id as plugin_function_id, pf.function, pf.params, p.function_grid')
+													->where('pf.deleted_at', NULL)
+													->select('pf.title, p.name, p.function_id, pf.id, pf.function, pf.params, p.function_grid')
 													->get()->result();
-			
 			 /*add to view other content plugins that not in page*/
 			$temp = array();
 				foreach ($pluginfunction_content as $item) {
@@ -384,59 +383,67 @@ class Admin extends Administrator_Controller {
 				$pluginfunction_content[]=$item;
 			}		
 			/*get other values for selected plugins*/
-			foreach ($pluginfunction_content as $value) {
-				if(!empty($value) && isset($value->function_id)){
-				$function_id = $value->function_id;
-				$function_grid = $value->function_grid;
-				if($value->plugin_function_id!=""){
-					
-					$value->ids =  $this->db->from('page_plugin_functions ppf')
+			foreach ($pluginfunction_content as $item) {
+				$function_id = $function_grid= "";
+				if(isset($item->function_id)){
+					$function_id = $item->function_id;
+				}
+				if(isset($item->function_grid)){
+					$function_grid = $item->function_grid;
+				}
+				if(isset($item->plugin_function_id)){					
+					$temp1 =  $this->db->from('page_plugin_functions ppf')
 													->where('param','id')
 													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->grids =  $this->db->from('page_plugin_functions ppf')
+													->where('ppf.deleted_at', NULL)
+													->where('plugin_function_id',$item->plugin_function_id)
+													->select('value')					
+													->get()->first_row();
+					if(!empty($temp1))
+					$item->ids = $temp1->value;
+					$temp1 =  $this->db->from('page_plugin_functions ppf')
 													->where('param','grid')
 													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
+													->where('ppf.deleted_at', NULL)
+													->where('plugin_function_id',$item->plugin_function_id)
 													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->sorts =  $this->db->from('page_plugin_functions ppf')
+													->get()->first_row();
+					if(!empty($temp1))
+					$item->grids = $temp1->value;
+					$temp1 =  $this->db->from('page_plugin_functions ppf')
 													->where('param','sort')
 													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
+													->where('ppf.deleted_at', NULL)
+													->where('plugin_function_id',$item->plugin_function_id)
 													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->limits =  $this->db->from('page_plugin_functions ppf')
+													->get()->first_row();
+					if(!empty($temp1))
+					$item->sorts = $temp1->value;
+					$temp1 =  $this->db->from('page_plugin_functions ppf')
 													->where('param','limit')
 													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
+													->where('ppf.deleted_at', NULL)
+													->where('plugin_function_id',$item->plugin_function_id)
 													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->orders =  $this->db->from('page_plugin_functions ppf')
+													->get()->first_row();
+					if(!empty($temp1))
+					$item->limits = $temp1->value;
+					$temp1 =  $this->db->from('page_plugin_functions ppf')
 													->where('param','order')
 													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
+													->where('ppf.deleted_at', NULL)
+													->where('plugin_function_id',$item->plugin_function_id)
 													->select('value')
-													->limit(1)
-													->get()->value;
+													->get()->first_row();
+					if(!empty($temp1))
+					$item->orders = $temp1->value;
 					}
 					if($function_id!=NULL){
-						$value->function_id = $this->$function_id();
+						$item->function_id = modules::run($item->name.'/'.$function_id);
 					}
 					if($function_grid!=NULL){
-						$value->function_grid = $this->$function_grid();
+						$item->function_grid = modules::run($item->name.'/'.$function_grid);
 					}
-				}
 			}
 			/*select sidebar plugins*/
 			
@@ -444,13 +451,15 @@ class Admin extends Administrator_Controller {
 												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
 												->where('page_id', $id)
 												->where('pf.type','sidebar')
+												->where('ppf.deleted_at', NULL)
 												->order_by('ppf.order','ASC')
 												->group_by('pf.id')
 												->select('pf.id, pf.title, ppf.order')
 												->get()->result();
-			
-			$pluginfunction_content_all =  $this->db->from('plugin_functions pf')
+													
+			$pluginfunction_slider_all =  $this->db->from('plugin_functions pf')
 													->where('type','sidebar')
+													->where('pf.deleted_at', NULL)
 													->select('pf.id, pf.title')
 													->get()->result();
 			
@@ -462,15 +471,13 @@ class Admin extends Administrator_Controller {
 			foreach ($pluginfunction_slider_all as $item) {
 				if(!in_array($item->id,$temp))
 				$pluginfunction_slider[]=$item;
-			}	
+			}
 		
 		}
 		
 		$data['content'] = array('page_edit' => $page_edit,
 								'pluginfunction_content'=> $pluginfunction_content,
-								'pluginfunction_slider' => $pluginfunction_slider,
-								'pluginfunction_content_all'=>$pluginfunction_content_all,
-								'pluginfunction_slider_all' => $pluginfunction_slider_all);
+								'pluginfunction_slider' => $pluginfunction_slider);
 		
 		$this->load->view('adminmodalpage', $data);
 		
@@ -645,7 +652,7 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'id';
 						$pagepluginfunction -> type = 'array';
-						$pagepluginfunction -> value = $params;
+						$pagepluginfunction -> value = rtrim($params, ",");
 						$pagepluginfunction -> page_id = $page_id;
 						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
 						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
@@ -661,7 +668,7 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> order = $order2;
 						$pagepluginfunction -> param = 'grid';
 						$pagepluginfunction -> type = 'array';
-						$pagepluginfunction -> value = $params;
+						$pagepluginfunction -> value = rtrim($params, ",");
 						$pagepluginfunction -> page_id = $page_id;
 						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
 						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");						
