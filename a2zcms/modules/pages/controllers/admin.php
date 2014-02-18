@@ -363,7 +363,7 @@ class Admin extends Administrator_Controller {
 			{
 				$pluginfunction = new PluginFunction();
 				$pluginfunction->select('id,title,function,params,plugin_id')
-								->where('type','=','content')
+								->where('type','content')
 								->where('id',$item->plugin_function_id)
 								->group_by('id')->get();
 				
@@ -438,37 +438,58 @@ class Admin extends Administrator_Controller {
 												->select('value')->get();
 					}
 				if($function_id!=NULL){
-				$item->function_id = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$function_id);
+				$item->function_id = modules::run($plugin->name.'/'.$function_id);
 				}
 				
 				if($function_grid!=NULL){
-					$item->function_grid = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$function_grid);
+					$item->function_grid = modules::run($plugin->name.'/'.$function_grid);
 				}
 			}
 			/*select sidebar plugins*/
-			$pluginfunction_slider = new PagePluginFunction();
-			$pluginfunction_slider->where('page_id','=',$id)
+			$pluginfunction_slider = new stdClass();
+			$pluginfunction_slider->items = array();
+			
+			$pagepluginfunction = new PagePluginFunction();
+			$pagepluginfunction->where('page_id',$id)
 								->order_by('order','ASC')
 								->select('plugin_function_id,order')->get();
-			foreach ($pluginfunction_slider as $item) {
+			
+							
+			foreach ($pagepluginfunction as $item) {
 				$pluginfunction = new PluginFunction();
-				$pluginfunction->where('type','sidebar')->where('id',$pluginfunction_slider->plugin_function_id)
+				$pluginfunction->where('type','sidebar')
+								->where('id',$item->plugin_function_id)
 								->select('title')
-								->groupBy('plugin_function_id')->get();
-				$item->title = $pluginfunction->title;
+								->limit(1)->get();
+				
+				if($pluginfunction->title!=""){					
+					
+					$items = new stdClass();
+					$items->title = $pluginfunction->title;
+					$items->id = $item->plugin_function_id;
+					$items->order =  $pagepluginfunction->order;
+					
+					$pluginfunction_slider->items[] = $items;					
+				}
 			}					
 			
 			$pluginfunction_slider_all = new PluginFunction();
 			$pluginfunction_slider_all ->where('type','sidebar')->get();
 			
 			 /*add not added sidebar plugins*/
-			$tem = array();
+			$temp = array();
 			foreach ($pluginfunction_slider as $item) {
-				$temp[]=$item->id;
+				foreach ($item as $temps) {
+				$id=$temps->id;
+				$title=$temps->title;
+				$order=$temps->order;
+				$temp[] = array('id'=>$id, 'title'=>$title, 'order'=>$order);
+				}
 			}
 			foreach ($pluginfunction_slider_all as $item) {
-				if(!in_array($item->id,$temp))
+				if(!in_array($item->id,$temp)){
 				$pluginfunction_slider=$item;
+				}
 			}
 			
 		}
