@@ -14,7 +14,8 @@ class Galleries extends Website_Controller{
 	/*function for plugins*/
 	function getGalleryId(){
 		$gallery = new Gallery();
-		return $gallery->select('id,title')->get();
+		$gallery->select('id,title')->get();
+		return array('gallery' =>$gallery);
 	}
 }
 ?>

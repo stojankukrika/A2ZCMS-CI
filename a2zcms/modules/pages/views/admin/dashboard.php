@@ -50,9 +50,5 @@
 	</div>
 </div>
 <script>
-	$(".iframe").colorbox({
-					iframe : true,
-					width : "50%",
-					height : "70%"
-				});
+	$(".iframe").colorbox({width:"50%", height:"80%", iframe:true});
 </script>

@@ -99,10 +99,10 @@
 				<div class="col-lg-12">
 					<?php
 						$radios = '';
-						$radios[] = (object) array('id' => 1, 'name' => 'Left');
-						$radios[] = (object) array('id' => 0, 'name' => 'Right');
+						$radios[] = (object) array('id' => 0, 'name' => 'Left');
+						$radios[] = (object) array('id' => 1, 'name' => 'Right');
 					
-						$this -> form_builder -> radio('sidebar', 'Sidebar Position', $radios, (isset($content['page_edit']->showtags))?$content['page_edit']->showtags:"1", 'form-control');							
+						$this -> form_builder -> radio('sidebar', 'Sidebar Position', $radios, (isset($content['page_edit']->sidebar))?$content['page_edit']->sidebar:"1", 'form-control');							
 					?>	
 				</div>
 			</div>
@@ -139,8 +139,8 @@
 			<div class="form-group">
 				<div class="col-md-12">
 					<?php
-					$options[] = (object) array('id' => '0', 'name' => 'Active');
-					$options[] = (object) array('id' => '1', 'name' => 'Inactive');
+					$options[] = (object) array('id' => '1', 'name' => 'Active');
+					$options[] = (object) array('id' => '0', 'name' => 'Inactive');
 					$this -> form_builder -> option('status', 'Status', $options, (isset($content['page_edit']->status))?$content['page_edit']->status:"", 'form-control');							
 					
 					?>
@@ -155,8 +155,8 @@
 			<!-- Meta Title -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="meta-title">Meta title</label>
-					<input class="form-control" type="text" name="meta_keywords" id="meta_keywords" value="<?=(isset($content['page_edit']->meta_keywords))?$content['page_edit']->meta_keywords:""?>" />
+					<label class="control-label" for="meta_title">Meta title</label>
+					<input class="form-control" type="text" name="meta_title" id="meta_title" value="<?=(isset($content['page_edit']->meta_title))?$content['page_edit']->meta_title:""?>" />
 				</div>
 			</div>
 			<!-- ./ meta title -->
@@ -164,7 +164,7 @@
 			<!-- Meta Description -->
 			<div class="form-group">
 				<div class="col-md-12 controls">
-					<label class="control-label" for="meta-description">Meta description</label>
+					<label class="control-label" for="meta_description">Meta description</label>
 					<input class="form-control" type="text" name="meta_description" id="meta_description" value="<?=(isset($content['page_edit']->meta_description))?$content['page_edit']->meta_description:""?>" />
 				</div>
 			</div>
@@ -173,7 +173,7 @@
 			<!-- Meta Keywords -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="meta-keywords">Meta Keywords</label>
+					<label class="control-label" for="meta_keywords">Meta Keywords</label>
 					<input class="form-control" type="text" name="meta_keywords" id="meta_keywords" value="<?=(isset($content['page_edit']->meta_keywords))?$content['page_edit']->meta_keywords:""?>" />
 				</div>
 			</div>
@@ -211,70 +211,76 @@
 		<div class="tab-pane" id="tab-grid">
 			<!-- Content -->
 			<?php
-				echo '<div id="grids">
+			$result = '';
+				$result .='<div id="grids">
 					<div class="row responsive-utilities-test hidden-on">
 					<div class="col-md-8 col-xs-8">
 						  	<label class="control-label" for="sortable1">Content</label><br>
 						<ul id="sortable1">
 							<input type="hidden" value="" name="pagecontentorder" id="pagecontentorder">';
 								foreach($content['pluginfunction_content'] as $item){
-								 echo '<li class="ui-state-default" name="pagecontent['.$item->id.']" value="'.$item->id.'">
+								 $result .= '<li class="ui-state-default" name="pagecontent['.$item->id.']" value="'.$item->id.'">
 									'.$item->title.'
 									<div>';
 										if($item->sorts != "" || strpos($item->params,'sort') !== false){
-										echo '<label class="control-label" for="sort">Sorting</label>
+										$result .= '<label class="control-label" for="sort">Sorting</label>
 											<select name="pagecontent['.$item->id.'][sort]" id="sort'.$item->id.'"> 
 											  <option value="ASC" '.(($item->sorts=="ASC")?"selected":"").'>Ascending</option>
 											  <option value="DESC" '.(($item->sorts=="DESC")?"selected":"").'>Descending</option>
 											</select>';
 										}
 										if($item->orders != "" || strpos($item->params,'order') !== false){
-										echo '<label class="control-label" for="order">Order</label>
+										$result .= '<label class="control-label" for="order">Order</label>
 											<select name="pagecontent['.$item->id.'][order]" id="order'.$item->id.'"> 
 											  <option value="id" '. (($item->orders=="id")?"selected":"").'>ID</option>
 											  <option value="views" '.(($item->orders=="views")?"selected":"").'>Views</option>
 											</select>';
 										}
 										if($item->limits != "" || strpos($item->params,'limit') !== false){
-										echo '<label class="control-label" for="limit">Limit</label>
+										$result .= '<label class="control-label" for="limit">Limit</label>
 											<input type="text" name="pagecontent['.$item->id.'][limit]" value="'.(($item->limits!="")?$item->limits:"0").'" id="limit'.$item->id.'">';
 											}
 										if($item->ids != "" || strpos($item->params,'id') !== false){										
-										echo '<div class="controls">
+										$result .= '<div class="controls">
 											<label class="control-label" for="id">Items</label>
 											  <select id="id'.$item->id.'" name="pagecontent['.$item->id.'][id][]" class="form-control" multiple data-rel="chosen">';
-												foreach ($item->function_id as $id){
-												echo '<option value="'.$item->id.'" '. ((strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$item->ids.' '.$id->title.'</option>';
+												if(!empty($item->function_id)){
+													foreach ($item->function_id as $id){
+														$result .= '<option value="'.$item->id.'" '. ((!empty($item->ids) && strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$item->ids.' '.$id->title.'</option>';
+													}
 												}
-											  echo '</select>
+											  $result .= '</select>
 											</div>';
 										}
 										if($item->grids != "" || strpos($item->params,'grid') !== false){							
-										echo '<div class="controls">
+										$result .= '<div class="controls">
 											<label class="control-label" for="selectError1">Select groups</label>
 											  <select id="grid'.$item->id.'" name="pagecontent['.$item->id.'][grid][]" class="form-control" multiple data-rel="chosen">';
-												foreach ($item->function_id as $id){
-												echo '<option value="'.$item->id.'"'.((strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
+												if(!empty($item->function_grid)){
+													foreach ($item->function_grid as $id){
+														$result .= '<option value="'.$item->id.'"'.((!empty($item->grids) &&  strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
+													}
 												}
-											  echo '</select>
+											  $result .= '</select>
 											</div>';
 										}										
-									 echo '</div>
+									 $result .= '</div>
 								</li>';
 								}
-						 echo '</ul>
+						 $result .= '</ul>
 					  </div>
 					  <div class="col-md-4 col-xs-4">
 					  	<label class="control-label" for="sortable2">Sidebar Widgets</label><br>
 						<ul id="sortable2">';
 							foreach($content['pluginfunction_slider'] as $item){
-								 echo '<li class="ui-state-default"><input type="checkbox" '.(($item->order!='')?'checked':'') .' value="'.$item->id.'" name="pagesidebar[]"> '.$item->title.'</li>';
+								 $result .= '<li class="ui-state-default"><input type="checkbox" '.(($item->order!='')?'checked':'') .' value="'.$item->id.'" name="pagesidebar[]"> '.$item->title.'</li>';
 								 }
-						echo '</ul>
+						$result .= '</ul>
 					  </div>
 					  </div>
 			</div>
 		</div>';
+		echo $result;
 	?>					
 				
 	</div>

@@ -33,11 +33,14 @@
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.dataTables.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/colorbox.css">
-		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery-ui-1.10.3.custom.css">		
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap-dataTables.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/fineuploader/fineuploader.css">
-		
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/summernote.css" >	
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/summernote-bs3.css" >				
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.tagit.css" >	
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.multiselect.css" >		
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
 		<!-- end: CSS -->
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
@@ -73,6 +76,10 @@
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.multiselect.js"></script>
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/tag-it.js"></script>
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/fineuploader/jquery.fineuploader-3.1.1.js"></script>
+		
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/prettify.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/summernote.js"></script>
+		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.multiselect.js"></script>
 		<!-- end: JavaScript-->
 	</head>
 	<body>

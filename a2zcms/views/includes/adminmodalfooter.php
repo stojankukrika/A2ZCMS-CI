@@ -1,5 +1,6 @@
  <script type="text/javascript">
 			$(function() {
+				$('textarea').summernote({height: 250});
 				$('form').submit(function(event) {
 					var form = $(this);
 					$.ajax({

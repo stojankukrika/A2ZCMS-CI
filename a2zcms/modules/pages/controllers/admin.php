@@ -323,31 +323,31 @@ class Admin extends Administrator_Controller {
 		$data['view'] = 'create_edit';
 
 		$page_edit = $pluginfunction_content_all = $pluginfunction_slider_all = "";
-		
+						
 		if($id<=0){
-		$pluginfunction_content = new PluginFunction();	
-		$plugins = new Plugin();
-		
-		$pluginfunction_content->where('type','content')
-		->select('plugin_functions.id,plugin_functions.title, plugin_functions.params')
-		->get();
-		
-		foreach ($pluginfunction_content as $item) {
+			$pluginfunction_content = new PluginFunction();	
 			$plugins = new Plugin();
-			$plugins->select('name,function_id,function_grid')->where('id',$item->plugin_id)->get();
-			$function_id = $plugins->function_id;
-			$function_grid = $plugins->function_grid;
-			if($function_id!=NULL){
-				$item->function_id = modules::run($plugins->name.'/'.$plugins->name.'/'.$this->$function_id());
-			}
-			if($function_grid!=NULL){
-				$item->function_grid = modules::run($plugins->name.'/'.$plugins->name.'/'.$this->$function_grid());
-			}
-		}	
-				
-		$pluginfunction_slider = new PluginFunction();
-		$pluginfunction_slider->where('type','sidebar')
-		->select('id,title, params')->get();
+			
+			$pluginfunction_content->where('type','content')
+			->select('id,title, params, plugin_id')
+			->get();
+			
+			foreach ($pluginfunction_content as $item) {
+				$plugin = new Plugin();
+				$plugin->select('name,function_id,function_grid')->where('id',$item->plugin_id)->get();
+				$function_id = $plugin->function_id;
+				$function_grid = $plugin->function_grid;
+				if($function_id!=NULL){
+					$item->function_id = modules::run($plugin->name.'/'.$function_id);
+				}
+				if($function_grid!=NULL){
+					$item->function_grid = modules::run($plugin->name.'/'.$function_grid);
+				}
+			}	
+					
+			$pluginfunction_slider = new PluginFunction();
+			$pluginfunction_slider->where('type','sidebar')
+			->select('id,title, params')->get();
 		}
 		else
 		{
@@ -356,7 +356,7 @@ class Admin extends Administrator_Controller {
 			/*select content plugins that added to page*/
 			
 			$pluginfunction_content = new PagePluginFunction();
-			$pluginfunction_content	->select('plugin_function_id,order,param,type,value')
+			$pluginfunction_content	->select('plugin_function_id,order,value')
 									->where('page_id',$id)->order_by('order','ASC')->get();
 			
 			foreach($pluginfunction_content as $item)
@@ -438,11 +438,11 @@ class Admin extends Administrator_Controller {
 												->select('value')->get();
 					}
 				if($function_id!=NULL){
-				$item->function_id = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$this->$function_id());
+				$item->function_id = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$function_id);
 				}
 				
 				if($function_grid!=NULL){
-					$item->function_grid = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$this->$function_grid());
+					$item->function_grid = modules::run($item->plugin_name.'/'.$item->plugin_name.'/'.$function_grid);
 				}
 			}
 			/*select sidebar plugins*/
@@ -487,6 +487,21 @@ class Admin extends Administrator_Controller {
         	$page = new Page();
 			if($id==0){
 				$page->title = $this->input->post('title');	
+				$page->slug = url_title( $this->input->post('title'), 'dash', true);
+				$page->meta_title = $this->input->post('meta_title');
+				$page->meta_description = $this->input->post('meta_description');
+				$page->meta_keywords = $this->input->post('meta_keywords');
+				$page->page_css = $this->input->post('page_css');
+				$page->page_javascript = $this->input->post('page_javascript');
+				$page->sidebar = $this->input->post('sidebar');
+				$page->showtitle = $this->input->post('showtitle');
+				$page->showvote = $this->input->post('showvote');
+				$page->showdate = $this->input->post('showdate');
+				$page->password = $this->input->post('password');
+				$page->tags = $this->input->post('tags');
+				$page->showtags = $this->input->post('showtags');
+				$page->content = $this->input->post('content');
+				$page->status = $this->input->post('status');
 				$page->updated_at = date("Y-m-d H:i:s");										
 				$page->created_at = date("Y-m-d H:i:s");
 				$page->save();
@@ -494,9 +509,62 @@ class Admin extends Administrator_Controller {
 			}
 			else {				
 				$page->where('id', $id)->update(array('title'=>$this->input->post('title'),
+							'slug' =>url_title( $this->input->post('title'), 'dash', true),
+							'meta_title' => $this->input->post('meta_title'),
+							'meta_description' => $this->input->post('meta_description'),
+							'meta_keywords' => $this->input->post('meta_keywords'),
+							'page_css' => $this->input->post('page_css'),
+							'page_javascript' => $this->input->post('page_javascript'),
+							'sidebar' => $this->input->post('sidebar'),
+							'showtitle' => $this->input->post('showtitle'),
+							'showvote' => $this->input->post('showvote'),
+							'showdate' => $this->input->post('showdate'),
+							'password' => $this->input->post('password'),
+							'tags' => $this->input->post('tags'),
+							'showtags' => $this->input->post('showtags'),
+							'content' => $this->input->post('content'),
+							'status' => $this->input->post('status'),
 							'updated_at'=>date("Y-m-d H:i:s")));
+							
+				$old = new PagePluginFunction();				
+				$old->where('page_id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			
 			}
+			$file='';
+			if($_FILES['image']['name']!=""){
+				$filename = $_FILES['image']['name'];
+				$file = sha1($filename.time()).'.'.pathinfo($filename, PATHINFO_EXTENSION);
+				$config['file_name'] = $file;
+				$config['upload_path'] = DATA_PATH.'/page/';
+				$config['allowed_types'] = 'gif|jpg|png';
+				$this->load->library('upload', $config);
+				$this->upload->do_upload('image');
+				
+				$config_manip['source_image'] = $config['upload_path'].$file;
+				$config_manip['new_image'] = DATA_PATH.'/page/thumbs';
+	            $config_manip['maintain_ratio'] = TRUE;
+			    $config_manip['create_thumb'] = TRUE;
+			    $config_manip['width'] = 150;
+			    $config_manip['quality'] = 100;
+				$config_manip['height'] = 100;
+			    $config_manip['thumb_marker'] = '_thumb';
+	            $this->load->library('image_lib', $config_manip);
+	            $this->image_lib->resize();
+			
+			}
+			if($file!=""){
+				$page->where('id', $id)->update(array('image'=>$file));
+			}
+			
+			
+			$pagesidebar = ($this->input->post('pagesidebar')!="")?$this->input->post('pagesidebar'):"";
+			$pagecontentorder = $this->input->post('pagecontentorder');
+			$pagecontent = $this->input->post('pagecontent');
+		
+			$this->SaveData($pagesidebar,$pagecontentorder, $pagecontent,$id);
         }
+
+		
     }
 	function delete($id)
 	{
@@ -553,6 +621,8 @@ class Admin extends Administrator_Controller {
 								}
 								$pagepluginfunction -> value = $param['1'];
 								$pagepluginfunction -> page_id = $page_id;
+								$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+								$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 								$pagepluginfunction -> save();
 							}
 						}
@@ -562,6 +632,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> plugin_function_id = $value;
 						$pagepluginfunction -> order = $order;
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 						$pagepluginfunction -> save();
 					}				
 					$order ++;
@@ -582,6 +654,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> type = 'array';
 						$pagepluginfunction -> value = $params;
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 						$pagepluginfunction -> save();
 												
 					}
@@ -596,6 +670,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> type = 'array';
 						$pagepluginfunction -> value = $params;
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");						
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['sort'])){
@@ -606,6 +682,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> type = 'string';
 						$pagepluginfunction -> value = $pagecontent[$value]['sort'];
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['order'])){
@@ -616,6 +694,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> type = 'string';
 						$pagepluginfunction -> value = $pagecontent[$value]['order'];
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 						$pagepluginfunction -> save();
 					}
 					if(isset($pagecontent[$value]['limit'])){
@@ -626,6 +706,8 @@ class Admin extends Administrator_Controller {
 						$pagepluginfunction -> type = 'int';
 						$pagepluginfunction -> value = $pagecontent[$value]['limit'];
 						$pagepluginfunction -> page_id = $page_id;
+						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 						$pagepluginfunction -> save();
 					}
 					if(empty($pagecontent[$value]['id']) && empty($pagecontent[$value]['grid']) && 
@@ -639,6 +721,8 @@ class Admin extends Administrator_Controller {
 							$pagepluginfunction -> type = '';
 							$pagepluginfunction -> value = '';
 							$pagepluginfunction -> page_id = $page_id;
+							$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
+							$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
 							$pagepluginfunction -> save();
 						}
 					

@@ -14,12 +14,14 @@ class Blogs extends Website_Controller{
 	/*function for plugins*/
 	function getBlogId(){
 		$blog = new Blog();
-		return $blog->select('id,title')->get();
+		$blog->select('id,title')->get();
+		return array('blog' =>$blog);
 	}
 	
 	function getBlogGroupId(){
 		$blog = new BlogCategory();
-		return $blog->select('id,title')->get();
+		$blog->select('id,title')->get();
+		return array('blog' =>$blog);
 	}
 		
 }

@@ -14,7 +14,8 @@ class Customforms extends Website_Controller{
 	/*function for plugins*/
 	function getCustomFormId(){
 		$customform = new Customform ();
-		return $customform->select('id,title')->get();
+		$customform->select('id,title')->get();
+		return array('customform' =>$customform);
 	}
 		
 }
