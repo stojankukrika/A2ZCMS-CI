@@ -355,115 +355,143 @@ class Admin extends Administrator_Controller {
 			$page_edit->where('id',$id)->get();		
 			/*select content plugins that added to page*/
 			
+			$pluginfunction_content = new PagePluginFunction();
+			$pluginfunction_content	->select('plugin_function_id,order,value')
+									->where('page_id',$id)->order_by('order','ASC')->get();
 			
-			$pluginfunction_content = $this->db->from('page_plugin_functions ppf')
-												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
-												->join('plugins p','p.id = pf.plugin_id' , 'left')
-												->where('page_id', NULL)
-												->where('page_id', $id)
-												->where('pf.type','content')
-												->order_by('ppf.order','ASC')
-												->group_by('pf.id')
-												->select('pf.id, ppf.plugin_function_id, pf.title, ppf.order, p.function_id, pf.function, pf.params, p.function_grid')
-												->get()->result();
+			foreach($pluginfunction_content as $item)
+			{
+				$pluginfunction = new PluginFunction();
+				$pluginfunction->select('id,title,function,params,plugin_id')
+								->where('type','content')
+								->where('id',$item->plugin_function_id)
+								->group_by('id')->get();
+				
+				$item->id = $pluginfunction->id;
+				$item->title = $pluginfunction->title;
+				$item->function = $pluginfunction->function;
+				$item->params = $pluginfunction->params;
+				
+				$plugin = new Plugin();
+				$plugin->select('name,title,function_id,function_grid')
+						->where('id',$pluginfunction->plugin_id)
+						->get();
+						
+				$item->function_id = $pluginfunction->function_id;
+				$item->function_grid = $pluginfunction->function_grid;
+				$item->plugin_name = $pluginfunction->name;
+				$item->plugin_title = $pluginfunction->title;
+			}
+			
 		
-			$pluginfunction_content_all =  $this->db->from('plugin_functions pf')
-													->join('plugins p', 'p.id = pf.plugin_id')
-													->where('type','content')
-													->select('pf.title, p.function_id, pf.id as plugin_function_id, pf.function, pf.params, p.function_grid')
-													->get()->result();
+			$pluginfunction_content_all = new PluginFunction();
+			$pluginfunction_content_all->select('title,id,function,params,plugin_id')
+										->where('type','content')->get();
+			foreach($pluginfunction_content_all as $item)
+			{
+				$plugins = new Plugin();
+				$plugins->select('function_id,function_grid')
+						->where('id',$pluginfunction_content_all->plugin_id)->get();
+				$item->function_id = $plugins->function_id;
+				$item->function_grid = $plugins->function_grid;				
+			}
+			
 			
 			 /*add to view other content plugins that not in page*/
 			$temp = array();
-				foreach ($pluginfunction_content as $item) {
-					if(!empty($item->function_id))
-					$temp[]=$item->function_id;
-				}
+			foreach ($pluginfunction_content as $item) {
+				$temp[]=$item->function_id;
+			}
 			foreach ($pluginfunction_content_all as $item) {
-				if(!empty($item->function_id) && !in_array($item->function_id,$temp))
-				$pluginfunction_content[]=$item;
+				if(!in_array($item->function_id,$temp))
+				$pluginfunction_content->$item;
 			}		
 			/*get other values for selected plugins*/
-			foreach ($pluginfunction_content as $value) {
-				if(!empty($value) && isset($value->function_id)){
-				$function_id = $value->function_id;
-				$function_grid = $value->function_grid;
-				if($value->plugin_function_id!=""){
-					
-					$value->ids =  $this->db->from('page_plugin_functions ppf')
-													->where('param','id')
-													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->grids =  $this->db->from('page_plugin_functions ppf')
-													->where('param','grid')
-													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->sorts =  $this->db->from('page_plugin_functions ppf')
-													->where('param','sort')
-													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->limits =  $this->db->from('page_plugin_functions ppf')
-													->where('param','limit')
-													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
-					
-					$value->orders =  $this->db->from('page_plugin_functions ppf')
-													->where('param','order')
-													->where('page_id',$id)
-													->where('plugin_function_id',$value->plugin_function_id)
-													->select('value')
-													->limit(1)
-													->get()->value;
+			foreach ($pluginfunction_content as $item) {
+				$function_id = $item->function_id;
+				$function_grid = $item->function_grid;
+				if($item->plugin_function_id!=""){
+					$pluginfuction = new PagePluginFunction();
+					$item->ids = $pluginfuction->where('param','id')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();					
+					$pluginfuction = new PagePluginFunction();
+					$item->grids = $pluginfuction->where('param','grid')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
+					$item->sorts = $pluginfuction->where('param','sort')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
+					$item->limits = $pluginfuction->where('param','sort')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
+					$pluginfuction = new PagePluginFunction();
+					$item->orders = $pluginfuction->where('param','order')
+												->where('page_id',$id)
+												->where('plugin_function_id',$item->plugin_function_id)
+												->select('value')->get();
 					}
-					if($function_id!=NULL){
-						$value->function_id = $this->$function_id();
-					}
-					if($function_grid!=NULL){
-						$value->function_grid = $this->$function_grid();
-					}
+				if($function_id!=NULL){
+				$item->function_id = modules::run($plugin->name.'/'.$function_id);
+				}
+				
+				if($function_grid!=NULL){
+					$item->function_grid = modules::run($plugin->name.'/'.$function_grid);
 				}
 			}
 			/*select sidebar plugins*/
+			$pluginfunction_slider = new stdClass();
+			$pluginfunction_slider->items = array();
 			
-			$pluginfunction_slider = $this->db->from('page_plugin_functions ppf')
-												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
-												->where('page_id', $id)
-												->where('pf.type','sidebar')
-												->order_by('ppf.order','ASC')
-												->group_by('pf.id')
-												->select('pf.id, pf.title, ppf.order')
-												->get()->result();
+			$pagepluginfunction = new PagePluginFunction();
+			$pagepluginfunction->where('page_id',$id)
+								->order_by('order','ASC')
+								->select('plugin_function_id,order')->get();
 			
-			$pluginfunction_content_all =  $this->db->from('plugin_functions pf')
-													->where('type','sidebar')
-													->select('pf.id, pf.title')
-													->get()->result();
+							
+			foreach ($pagepluginfunction as $item) {
+				$pluginfunction = new PluginFunction();
+				$pluginfunction->where('type','sidebar')
+								->where('id',$item->plugin_function_id)
+								->select('title')
+								->limit(1)->get();
+				
+				if($pluginfunction->title!=""){					
+					
+					$items = new stdClass();
+					$items->title = $pluginfunction->title;
+					$items->id = $item->plugin_function_id;
+					$items->order =  $pagepluginfunction->order;
+					
+					$pluginfunction_slider->items[] = $items;					
+				}
+			}					
+			
+			$pluginfunction_slider_all = new PluginFunction();
+			$pluginfunction_slider_all ->where('type','sidebar')->get();
 			
 			 /*add not added sidebar plugins*/
 			$temp = array();
 			foreach ($pluginfunction_slider as $item) {
-				$temp[]=$item->id;
+				foreach ($item as $temps) {
+				$id=$temps->id;
+				$title=$temps->title;
+				$order=$temps->order;
+				$temp[] = array('id'=>$id, 'title'=>$title, 'order'=>$order);
+				}
 			}
 			foreach ($pluginfunction_slider_all as $item) {
-				if(!in_array($item->id,$temp))
-				$pluginfunction_slider[]=$item;
-			}	
-		
+				if(!in_array($item->id,$temp)){
+				$pluginfunction_slider=$item;
+				}
+			}
+			
 		}
 		
 		$data['content'] = array('page_edit' => $page_edit,
