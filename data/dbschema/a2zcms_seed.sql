@@ -56,12 +56,11 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (18, 'sitetheme', 'Site theme', 'general', 'a2z-default', 'ASSETS_PATH_FULL', 'option', 'required'),
 (19, 'pageitemadmin', 'Per page item-Admin', 'general', '10', '10', 'text', 'required|integer'),
 (20, 'passwordpolicy', 'Password policy', 'password', 'No', 'Yes;No', 'radio', ''),
-(21, 'minpasswordlength', 'Password length', 'password', '6', '6', 'text', ''),
-(22, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', ''),
-(23, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', ''),
-(24, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', ''),
-(25, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', ''),
-(26, 'maxconsecutiveidentchars', 'Consecutive identical characters', 'password', '0', '0', 'text', '');
+(21, 'minpasswordlength', 'Password length', 'password', '6', '6', 'text', 'integer'),
+(22, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', 'integer'),
+(23, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', 'integer'),
+(24, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', 'integer'),
+(25, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', 'integer');
 
 --
 -- Dumping data for table `migrations`
