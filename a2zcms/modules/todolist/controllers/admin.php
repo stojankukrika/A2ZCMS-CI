@@ -142,84 +142,94 @@ class Admin extends Administrator_Controller {
 	function install()
 	{
 		$database = $this->load->database('default', TRUE);				
-		
-		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."todolists` (
-				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-				  `user_id` int(10) unsigned NOT NULL,
-				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-				  `content` text COLLATE utf8_unicode_ci NOT NULL,
-				  `finished` decimal(5,2) NOT NULL,
-				  `work_done` tinyint(1) NOT NULL,
-				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-				  `deleted_at` timestamp NULL DEFAULT NULL,
-				  PRIMARY KEY (`id`),
-				  KEY `todolist_user_id_foreign` (`user_id`)
-				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
-		$this->db->query($query);
-		
-		$query2 = "ALTER TABLE `".$database->dbprefix."todolists`
-				  ADD CONSTRAINT `todolist_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`);";
-		$this->db->query($query2);
-		
-		/*add to plugins*/
-		$data = array(
-					   'name' => 'todolist' ,
-					   'title' => 'To-do list' ,
-					   'function_id' => NULL,
-					   'function_grid' => NULL,
-					   'can_uninstall' => '1',
-					   'pluginversion' => '1.0',
-					   'active' => '1',
-					   'created_at' => date("Y-m-d H:i:s"),
-					   'updated_at' => date("Y-m-d H:i:s"),
-					   'deleted_at' => NULL
-					   );
-		$this->db->insert('plugins', $data);
-		
-		/*add to admin root navigation*/
-		$data2 = array(
-					   'plugin_id' => $this->db->insert_id() ,
-					   'icon' => 'icon-bell' ,
-					   'order' => 0,
-					   'created_at' => date("Y-m-d H:i:s"),
-					   'updated_at' => date("Y-m-d H:i:s"),
-					   'deleted_at' => NULL
-					   );
-		$this->db->insert('admin_navigations', $data2);
-		
-		/*add plugin permission*/
-		$data3 = array(
-					   'name' => 'manage_todolists' ,
-					   'display_name' => 'Manage todolists' ,
-					   'is_admin' => '1',
-					   'created_at' => date("Y-m-d H:i:s"),
-					   'updated_at' => date("Y-m-d H:i:s"),
-					   'deleted_at' => NULL
-					   );
-		$this->db->insert('permissions', $data3);
+		$data['view'] = 'install';
+		$data['content'] = array();
+		if (!empty($_POST))
+		{
+			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."todolists` (
+					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+					  `user_id` int(10) unsigned NOT NULL,
+					  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `content` text COLLATE utf8_unicode_ci NOT NULL,
+					  `finished` decimal(5,2) NOT NULL,
+					  `work_done` tinyint(1) NOT NULL,
+					  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `deleted_at` timestamp NULL DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `todolist_user_id_foreign` (`user_id`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+			$this->db->query($query);
 			
-		return redirect(base_url('admin/plugins'));
+			$query2 = "ALTER TABLE `".$database->dbprefix."todolists`
+					  ADD CONSTRAINT `todolist_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`);";
+			$this->db->query($query2);
+			
+			/*add to plugins*/
+			$data = array(
+						   'name' => 'todolist' ,
+						   'title' => 'To-do list' ,
+						   'function_id' => NULL,
+						   'function_grid' => NULL,
+						   'can_uninstall' => '1',
+						   'pluginversion' => '1.0',
+						   'active' => '1',
+						   'created_at' => date("Y-m-d H:i:s"),
+						   'updated_at' => date("Y-m-d H:i:s"),
+						   'deleted_at' => NULL
+						   );
+			$this->db->insert('plugins', $data);
+			
+			/*add to admin root navigation*/
+			$data2 = array(
+						   'plugin_id' => $this->db->insert_id() ,
+						   'icon' => 'icon-bell' ,
+						   'order' => 0,
+						   'created_at' => date("Y-m-d H:i:s"),
+						   'updated_at' => date("Y-m-d H:i:s"),
+						   'deleted_at' => NULL
+						   );
+			$this->db->insert('admin_navigations', $data2);
+			
+			/*add plugin permission*/
+			$data3 = array(
+						   'name' => 'manage_todolists' ,
+						   'display_name' => 'Manage todolists' ,
+						   'is_admin' => '1',
+						   'created_at' => date("Y-m-d H:i:s"),
+						   'updated_at' => date("Y-m-d H:i:s"),
+						   'deleted_at' => NULL
+						   );
+			$this->db->insert('permissions', $data3);
+		}
+		
 	}
 	/*Uninstall*/
 	function uninstall()
 	{
 		$database = $this->load->database('default', TRUE);						
-
-		$permission = $this->db->select('id')
-					->from('permissions')
-					->where('name','manage_todolists')->get()->first_row();
-
-		$this->db->delete('permission_role', array('id' => $permission->id)); 
-		
-		/*delete plugin*/
-		$this->db->delete('plugins', array('name' =>'todolist')); 
-		
-		/*drop todolists tables*/
-		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."todolists`";
-		$this->db->query($query);
-		
-		return redirect(base_url('admin/plugins'));
+		$data['view'] = 'uninstall';
+		$data['content'] = array();
+		if (!empty($_POST))
+		{
+			$permission = $this->db->select('id')
+						->from('permissions')
+						->where('name','manage_todolists')->get()->first_row();
+	
+			$this->db->delete('permission_role', array('id' => $permission->id)); 
+			
+			/*delete permissions*/
+			$names = array('manage_todolists');
+			$this->db->where_in('name', $names);
+			$this->db->delete('permissions');
+			
+			/*delete plugin*/
+			$this->db->delete('plugins', array('name' =>'todolist')); 
+			
+			/*drop todolists tables*/
+			$query = "DROP TABLE IF EXISTS `".$database->dbprefix."todolists`";
+			$this->db->query($query);
+		}
 	}
 	
 

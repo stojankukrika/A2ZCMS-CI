@@ -729,6 +729,4 @@ class Admin extends Administrator_Controller {
 					$order2 ++;
 				}
 	}
-	
-
 }

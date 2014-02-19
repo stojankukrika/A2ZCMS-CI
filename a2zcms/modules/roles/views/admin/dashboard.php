@@ -47,7 +47,7 @@
 <script>
 	$(".iframe").colorbox({
 					iframe : true,
-					width : "80%",
+					width : "50%",
 					height : "70%"
 				});
 </script>
