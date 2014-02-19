@@ -11,6 +11,7 @@
 		<!-- General tab -->
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
+			<input class="form-control" type="hidden" name="plugin" id="plugin" value="blogs" />
 			<div class="form-group">
 				<div class="col-md-10">
 					<label>Do you want do uninstall this plugin?</label>				

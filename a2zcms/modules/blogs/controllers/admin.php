@@ -487,8 +487,11 @@ class Admin extends Administrator_Controller {
 		$database = $this->load->database('default', TRUE);	
 		$data['view'] = 'install';
 		$data['content'] = array();
-		if (!empty($_POST))
-		{
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('plugin', "plugin", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {
 			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blogs` (
 					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 					  `user_id` int(10) unsigned NOT NULL,
@@ -684,8 +687,11 @@ class Admin extends Administrator_Controller {
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'uninstall';
 		$data['content'] = array();
-		if (!empty($_POST))
-		{		
+		$this->load->view('adminmodalpage', $data);
+		
+		$this->form_validation->set_rules('plugin', "plugin", 'required');
+	   	if ($this->form_validation->run() == TRUE)
+        {		
 			/*delete permissions from roles*/
 			$permission = $this->db->select('id')
 						->from('permissions')
