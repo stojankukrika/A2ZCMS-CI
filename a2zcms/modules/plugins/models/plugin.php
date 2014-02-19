@@ -6,17 +6,13 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Admin extends Administrator_Controller {
+class Plugin extends DataMapper {
 
+	
 	function __construct()
 	{
 		parent::__construct();
 	}
+	var $table = "plugins";
 	
-	function index()
-	{
-		echo "Index/Admin menu";
-		die();
-	}
-
 }

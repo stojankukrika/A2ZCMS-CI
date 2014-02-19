@@ -18,84 +18,6 @@ CREATE TABLE IF NOT EXISTS `assigned_roles` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `blogs`
---
-
-CREATE TABLE IF NOT EXISTS `blogs` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `voteup` int(10) unsigned NOT NULL DEFAULT '0',
-  `votedown` int(10) unsigned NOT NULL DEFAULT '0',
-  `hits` int(10) unsigned NOT NULL DEFAULT '0',
-  `start_publish` date NOT NULL,
-  `end_publish` date DEFAULT NULL,
-  `resource_link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `blogs_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `blog_blog_categorys`
---
-
-CREATE TABLE IF NOT EXISTS `blog_blog_categorys` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `blog_id` int(10) unsigned NOT NULL,
-  `blog_category_id` int(10) unsigned NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `blog_blog_categorys_blog_id_index` (`blog_id`),
-  KEY `blog_blog_categorys_blog_category_id_index` (`blog_category_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `blog_categories`
---
-
-CREATE TABLE IF NOT EXISTS `blog_categories` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `blog_comments`
---
-
-CREATE TABLE IF NOT EXISTS `blog_comments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `blog_id` int(10) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `blog_comments_user_id_foreign` (`user_id`),
-  KEY `blog_comments_blog_id_foreign` (`blog_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `content_votes`
 --
 
@@ -110,112 +32,6 @@ CREATE TABLE IF NOT EXISTS `content_votes` (
   `deleted_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `content_votes_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `custom_forms`
---
-
-CREATE TABLE IF NOT EXISTS `custom_forms` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `recievers` text COLLATE utf8_unicode_ci,
-  `message` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `custom_forms_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `custom_form_fields`
---
-
-CREATE TABLE IF NOT EXISTS `custom_form_fields` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `custom_form_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `options` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `type` int(11) NOT NULL,
-  `order` int(11) NOT NULL,
-  `mandatory` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `custom_form_fields_custom_form_id_index` (`custom_form_id`),
-  KEY `custom_form_fields_user_id_index` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `galleries`
---
-
-CREATE TABLE IF NOT EXISTS `galleries` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `views` int(10) unsigned NOT NULL DEFAULT '0',
-  `folderid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `start_publish` date NOT NULL,
-  `end_publish` date DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `gallery_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `gallery_images`
---
-
-CREATE TABLE IF NOT EXISTS `gallery_images` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `gallery_id` int(10) unsigned NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `voteup` int(10) unsigned NOT NULL DEFAULT '0',
-  `votedown` int(10) unsigned NOT NULL DEFAULT '0',
-  `hits` int(10) unsigned NOT NULL DEFAULT '0',
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `gallery_images_gallery_id_foreign` (`gallery_id`),
-  KEY `gallery_images_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `gallery_images_comments`
---
-
-CREATE TABLE IF NOT EXISTS `gallery_images_comments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `gallery_id` int(10) unsigned NOT NULL,
-  `gallery_image_id` int(10) unsigned NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `gallery_images_comments_user_id_foreign` (`user_id`),
-  KEY `gallery_images_comments_gallery_id_foreign` (`gallery_id`),
-  KEY `gallery_images_comments_gallery_image_id_foreign` (`gallery_image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -240,15 +56,6 @@ CREATE TABLE IF NOT EXISTS `messages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
-
---
--- Table structure for table `migrations`
---
-
-CREATE TABLE IF NOT EXISTS `migrations` (
-  `migration` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Table structure for table `navigation_groups`
@@ -417,6 +224,9 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `function_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `function_grid` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `can_uninstall` tinyint(1) DEFAULT 1,
+  `pluginversion` varchar(5) DEFAULT NULL,
+  `active` tinyint(1) unsigned NOT NULL DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `deleted_at` timestamp NULL DEFAULT NULL,
@@ -498,26 +308,6 @@ CREATE TABLE IF NOT EXISTS `tags` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `todolists`
---
-
-CREATE TABLE IF NOT EXISTS `todolists` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `content` text COLLATE utf8_unicode_ci NOT NULL,
-  `finished` decimal(5,2) NOT NULL,
-  `work_done` tinyint(1) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `todolist_user_id_foreign` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -565,9 +355,7 @@ CREATE TABLE IF NOT EXISTS `user_login_historys` (
 CREATE TABLE IF NOT EXISTS `admin_navigations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `plugin_id` int(10) unsigned NOT NULL,
-  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `icon` VARCHAR( 50 ) NOT NULL,
-  `url` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `order` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -606,64 +394,11 @@ ALTER TABLE `assigned_roles`
   ADD CONSTRAINT `assigned_roles_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
--- Constraints for table `blogs`
---
-ALTER TABLE `blogs`
-  ADD CONSTRAINT `blogs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `blog_blog_categorys`
---
-ALTER TABLE `blog_blog_categorys`
-  ADD CONSTRAINT `blog_blog_categorys_blog_category_id_foreign` FOREIGN KEY (`blog_category_id`) REFERENCES `blog_categories` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `blog_blog_categorys_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `blog_comments`
---
-ALTER TABLE `blog_comments`
-  ADD CONSTRAINT `blog_comments_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `blogs` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `blog_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
 -- Constraints for table `content_votes`
 --
 ALTER TABLE `content_votes`
   ADD CONSTRAINT `content_votes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
---
--- Constraints for table `custom_forms`
---
-ALTER TABLE `custom_forms`
-  ADD CONSTRAINT `custom_forms_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `custom_form_fields`
---
-ALTER TABLE `custom_form_fields`
-  ADD CONSTRAINT `custom_form_fields_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `custom_form_fields_custom_form_id_foreign` FOREIGN KEY (`custom_form_id`) REFERENCES `custom_forms` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `galleries`
---
-ALTER TABLE `galleries`
-  ADD CONSTRAINT `gallery_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `gallery_images`
---
-ALTER TABLE `gallery_images`
-  ADD CONSTRAINT `gallery_images_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gallery_images_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `galleries` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `gallery_images_comments`
---
-ALTER TABLE `gallery_images_comments`
-  ADD CONSTRAINT `gallery_images_comments_gallery_image_id_foreign` FOREIGN KEY (`gallery_image_id`) REFERENCES `gallery_images` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gallery_images_comments_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `galleries` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `gallery_images_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `messages`
@@ -699,13 +434,6 @@ ALTER TABLE `permission_role`
 --
 ALTER TABLE `tags`
   ADD CONSTRAINT `tags_plugin_id_foreign` FOREIGN KEY (`plugin_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `todolists`
---
-ALTER TABLE `todolists`
-  ADD CONSTRAINT `todolist_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
 --
 -- Constraints for table `user_login_historys`
 --

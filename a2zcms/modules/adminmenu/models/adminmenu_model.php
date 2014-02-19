@@ -9,11 +9,12 @@ class Adminmenu_model extends CI_Model{
 	
 	function menu_admin(){
 
-		$mainadminmenu = new Admin_navigation();
-		$mainadminmenu->select('id, title, icon, url, order')
-					->where(array('deleted_at' => NULL))
-					->order_by("order", "asc")
-					->get();
+		$mainadminmenu = $this->db->select('an.id, p.title, an.icon, p.name as url, an.order')
+				->from('admin_navigations an')
+				->join('plugins p','p.id=an.plugin_id')
+				->order_by('ISNULL(an.order), an.order','ASC')
+				->where(array('an.deleted_at' => NULL))->get()->result();
+		
 		foreach ($mainadminmenu as $item) {
 			$mainadminsubmenu = new Admin_subnavigation();
 			$mainadminsubmenu->select('id,admin_navigation_id,title,icon,  url, order')
@@ -24,11 +25,8 @@ class Adminmenu_model extends CI_Model{
 					->get();
 					if(!empty($mainadminsubmenu->id)){
 						$item->adminsubmenu = $mainadminsubmenu;
-					}
-			
-		}
-		
-				
+					}			
+		}	
 		return array('mainadminmenu' =>$mainadminmenu);
 	}		
 }

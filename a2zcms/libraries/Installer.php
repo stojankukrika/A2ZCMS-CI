@@ -243,10 +243,10 @@ class Installer
 	public function import_admin($data)
 	{
 		$this->db_query("INSERT INTO `" . $this->prefix . "users` 
-						(name,surname,email,username,avatar,password,confirmation_code,confirmed,active,last_login,created_at,updated_at,deleted_at)
+						(name,surname,email,username,avatar,password,confirmation_code,confirmed,active,last_login,created_at,updated_at)
 						VALUES ('" . $data['name'] . "','" . $data['surname'] . "','" . $data['email'] . "','" . $data['username'] . "',
 						'NULL','" . $data['password'] . "','" . $data['confirmation_code'] . "','" . $data['confirmed'] . "'
-						,'" . $data['active'] . "','" . $data['last_login'] . "','" . $data['created_at'] . "','" . $data['updated_at'] . "','NULL')");
+						,'" . $data['active'] . "','" . $data['last_login'] . "','" . $data['created_at'] . "','" . $data['updated_at'] . "')");
 	}
     public function update_site_name($site_name)
     {

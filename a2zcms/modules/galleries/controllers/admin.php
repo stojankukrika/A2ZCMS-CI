@@ -436,4 +436,306 @@ class Admin extends Administrator_Controller {
 		$this->load->view('adminmodalpage', $data);
 		
 	}
+	
+	
+	/*Install*/
+	function install()
+	{
+		$database = $this->load->database('default', TRUE);	
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."galleries` (
+					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+					  `user_id` int(10) unsigned NOT NULL,
+					  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `views` int(10) unsigned NOT NULL DEFAULT '0',
+					  `folderid` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `start_publish` date NOT NULL,
+					  `end_publish` date DEFAULT NULL,
+					  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `deleted_at` timestamp NULL DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `gallery_user_id_foreign` (`user_id`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."gallery_images` (
+					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+					  `gallery_id` int(10) unsigned NOT NULL,
+					  `user_id` int(10) unsigned NOT NULL,
+					  `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+					  `voteup` int(10) unsigned NOT NULL DEFAULT '0',
+					  `votedown` int(10) unsigned NOT NULL DEFAULT '0',
+					  `hits` int(10) unsigned NOT NULL DEFAULT '0',
+					  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `deleted_at` timestamp NULL DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `gallery_images_gallery_id_foreign` (`gallery_id`),
+					  KEY `gallery_images_user_id_foreign` (`user_id`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."gallery_images_comments` (
+					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+					  `user_id` int(10) unsigned NOT NULL,
+					  `gallery_id` int(10) unsigned NOT NULL,
+					  `gallery_image_id` int(10) unsigned NOT NULL,
+					  `content` text COLLATE utf8_unicode_ci NOT NULL,
+					  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+					  `deleted_at` timestamp NULL DEFAULT NULL,
+					  PRIMARY KEY (`id`),
+					  KEY `gallery_images_comments_user_id_foreign` (`user_id`),
+					  KEY `gallery_images_comments_gallery_id_foreign` (`gallery_id`),
+					  KEY `gallery_images_comments_gallery_image_id_foreign` (`gallery_image_id`)
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."galleries`
+					  ADD CONSTRAINT `gallery_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`);";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."gallery_images`
+					  ADD CONSTRAINT `gallery_images_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE,
+					  ADD CONSTRAINT `gallery_images_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `".$database->dbprefix."galleries` (`id`) ON DELETE CASCADE;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."gallery_images_comments`
+					  ADD CONSTRAINT `gallery_images_comments_gallery_image_id_foreign` FOREIGN KEY (`gallery_image_id`) REFERENCES `".$database->dbprefix."gallery_images` (`id`) ON DELETE CASCADE,
+					  ADD CONSTRAINT `gallery_images_comments_gallery_id_foreign` FOREIGN KEY (`gallery_id`) REFERENCES `".$database->dbprefix."galleries` (`id`) ON DELETE CASCADE,
+					  ADD CONSTRAINT `gallery_images_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE;";
+		$this->db->query($query);
+		
+		if (!is_dir(CMS_ROOT .'../data/gallery')) {
+		    mkdir(CMS_ROOT .'../data/gallery', 0777, TRUE);		
+		}	
+		/*add to plugins*/
+		$data = array(
+					   'name' => 'galleries' ,
+					   'title' => 'Gallery' ,
+					   'function_id' => 'getGalleryId',
+					   'function_grid' => NULL,
+					   'can_uninstall' => '1',
+					   'pluginversion' => '1.0',
+					   'active' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugins', $data);
+		$plugin_id = $this->db->insert_id();
+		
+		/*add to admin root navigation*/
+		$data = array(
+					   'plugin_id' => $this->db->insert_id() ,
+					   'icon' => 'icon-camera' ,
+					   'order' => 0,
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_navigations', $data);
+		$admin_navigation_id = $this->db->insert_id();
+		
+		/*add to admin subnavigation*/
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Gallery images' ,
+					   'url' => 'galleries/galleryimages',
+					   'icon' => 'icon-rss',
+					   'order' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+		
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Galleries' ,
+					   'url' => 'galleries',
+					   'icon' => 'icon-camera-retro',
+					   'order' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+		
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Gallery comments' ,
+					   'url' => 'galleries/galleryimagecomments',
+					   'icon' => 'icon-comments-alt',
+					   'order' => '3',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+		
+		/*add plugin permission*/
+		$data = array(
+					   'name' => 'manage_galleries' ,
+					   'display_name' => 'Manage galleries' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'manage_gallery_images' ,
+					   'display_name' => 'Manage gallery images' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'manage_gallery_imagecomments' ,
+					   'display_name' => 'Manage gallery image comments' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'post_gallery_comment' ,
+					   'display_name' => 'Post gallery comment' ,
+					   'is_admin' => '0',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'post_image_vote' ,
+					   'display_name' => 'Post image vote' ,
+					   'is_admin' => '0',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		/*add plugin function*/
+		$data = array(
+					   'title' => 'New gallerys' ,
+					   'plugin_id' => $plugin_id ,
+					   'function' => 'newGallerys',
+					   'params' => 'sort:asc;order:id;limit:5;',
+					   'type' => 'sidebar',					   
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugin_functions', $data);
+		
+		$data = array(
+					   'title' => 'New gallerys' ,
+					   'plugin_id' => $plugin_id ,
+					   'function' => 'showGallery',
+					   'params' => 'id;sort;order;limit;',
+					   'type' => 'content',					   
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugin_functions', $data);
+						
+		return redirect(base_url('admin/plugins'));
+	}
+	/*Uninstall*/
+	function uninstall()
+	{
+		$database = $this->load->database('default', TRUE);				
+		
+		/*delete permissions from roles*/	
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_gallery_images')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_gallery_imagecomments')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','post_gallery_comment')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','post_image_vote')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_galleries')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		/*delete permissions*/
+		$this->db->delete('permissions', array('name' => 'manage_gallery_images', 
+												'name' => 'manage_gallery_imagecomments', 
+												'name' => 'post_gallery_comment', 
+												'name' => 'post_image_vote', 
+												'name' => 'manage_galleries' )); 	
+		
+		/*delete plugin functions from pages*/
+		$plugin_id = $this->db->select('id')
+					->from('plugins')
+					->where('name','galleries')->get()->first_row();
+		
+		$plugins = $this->db->select('id')
+					->from('plugin_functions')
+					->where('plugin_id',$plugin_id->id)->get()->result();
+					
+		foreach ($plugins as $item) {
+				$data = array(
+		               'deleted_at' => date("Y-m-d H:i:s")
+		            );
+		
+				$this->db->where('plugin_function_id', $item->id);
+				$this->db->update('page_plugin_functions', $data); 
+		}		
+		
+		/*delete plugin functions*/			
+		$this->db->delete('plugin_functions', array('plugin_id' => $plugin_id->id)); 
+		
+		/*delete plugin*/
+		$this->db->delete('plugins', array('id' => $plugin_id->id)); 
+				
+		/*drop gallery tables*/
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."gallery_images_comments`";
+		$this->db->query($query);
+		
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."gallery_images`";
+		$this->db->query($query);
+		
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."galleries`";
+		$this->db->query($query);
+		
+		
+		if (!is_readable(CMS_ROOT .'../data/gallery')) {
+		    unlink(CMS_ROOT .'../data/gallery', 0777, TRUE);		
+		}			
+		
+		return redirect(base_url('admin/plugins'));
+	}
+	
 }

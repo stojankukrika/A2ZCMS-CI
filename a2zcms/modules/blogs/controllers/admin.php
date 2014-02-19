@@ -480,4 +480,273 @@ class Admin extends Administrator_Controller {
 			}			
         }
     }
+	
+	/*Install*/
+	function install()
+	{
+		$database = $this->load->database('default', TRUE);	
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blogs` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `user_id` int(10) unsigned NOT NULL,
+				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `slug` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `content` text COLLATE utf8_unicode_ci NOT NULL,
+				  `voteup` int(10) unsigned NOT NULL DEFAULT '0',
+				  `votedown` int(10) unsigned NOT NULL DEFAULT '0',
+				  `hits` int(10) unsigned NOT NULL DEFAULT '0',
+				  `start_publish` date NOT NULL,
+				  `end_publish` date DEFAULT NULL,
+				  `resource_link` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+				  `image` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `blogs_user_id_foreign` (`user_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blog_blog_categorys` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `blog_id` int(10) unsigned NOT NULL,
+				  `blog_category_id` int(10) unsigned NOT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `blog_blog_categorys_blog_id_index` (`blog_id`),
+				  KEY `blog_blog_categorys_blog_category_id_index` (`blog_category_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blog_categories` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blog_comments` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `user_id` int(10) unsigned NOT NULL,
+				  `blog_id` int(10) unsigned NOT NULL,
+				  `content` text COLLATE utf8_unicode_ci NOT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `blog_comments_user_id_foreign` (`user_id`),
+				  KEY `blog_comments_blog_id_foreign` (`blog_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."blogs`
+				  ADD CONSTRAINT `blogs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`);";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."blog_blog_categorys`
+				  ADD CONSTRAINT `blog_blog_categorys_blog_category_id_foreign` FOREIGN KEY (`blog_category_id`) REFERENCES `".$database->dbprefix."blog_categories` (`id`) ON DELETE CASCADE,
+				  ADD CONSTRAINT `blog_blog_categorys_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `".$database->dbprefix."blogs` (`id`) ON DELETE CASCADE;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."blog_comments`
+				  ADD CONSTRAINT `blog_comments_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `".$database->dbprefix."blogs` (`id`) ON DELETE CASCADE,
+				  ADD CONSTRAINT `blog_comments_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE;";			
+		$this->db->query($query);
+		
+		if (!is_dir(CMS_ROOT .'../data/blog')) {
+		    mkdir(CMS_ROOT .'../data/blog', 0777, TRUE);		
+		}	
+		if (!is_dir(CMS_ROOT .'../data/blog/thumbs')) {
+		    mkdir(CMS_ROOT .'../data/blog/thumbs', 0777, TRUE);		
+		}
+		
+		/*add to plugins*/
+		$data = array(
+					   'name' => 'blogs' ,
+					   'title' => 'Blog' ,
+					   'function_id' => 'getBlogId', 
+					   'function_grid' => 'getBlogGroupId',
+					   'can_uninstall' => '1',
+					   'pluginversion' => '1.0',
+					   'active' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugins', $data);
+		$plugin_id = $this->db->insert_id();
+		
+		/*add to admin root navigation*/
+		$data = array(
+					   'plugin_id' => $plugin_id ,
+					   'icon' => 'icon-external-link' ,
+					   'order' => 0,
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_navigations', $data);
+		$admin_navigation_id = $this->db->insert_id();
+		
+		/*add plugin permission*/
+		$data = array(
+					   'name' => 'manage_blogs' ,
+					   'display_name' => 'Manage blogs' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'manage_blog_categris' ,
+					   'display_name' => 'Manage blog categris' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		$data = array(
+					   'name' => 'post_blog_comment' ,
+					   'display_name' => 'Post blog comment' ,
+					   'is_admin' => '0',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		/*add plugin function*/
+		$data = array(
+					   'title' => 'New blogs' ,
+					   'plugin_id' => $plugin_id,
+					   'function' => 'newBlogs',
+					   'params' => 'sort:asc;order:id;limit:5;',
+					   'type' => 'sidebar',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugin_functions', $data);
+		
+		
+		/*add admin subnavigation*/
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Blog categorys' ,
+					   'url' => 'blogs/blogcategorys',
+					   'icon' => 'icon-rss',
+					   'order' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+		
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Blog' ,
+					   'url' => 'blogs',
+					   'icon' => 'icon-book',
+					   'order' => '2',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+		
+		$data = array(
+					   'admin_navigation_id' => $admin_navigation_id ,
+					   'title' => 'Blog comments' ,
+					   'url' => 'blogs/blogcomments',
+					   'icon' => 'icon-comment-alt',
+					   'order' => '3',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_subnavigations', $data);
+						
+		return redirect(base_url('admin/plugins'));
+	}
+	/*Uninstall*/
+	function uninstall()
+	{
+		$database = $this->load->database('default', TRUE);				
+				
+		/*delete permissions from roles*/
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_blogs')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_blog_categris')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','post_blog_comment')->get()->first_row();
+
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		/*delete permissions*/
+		$this->db->delete('permissions', array('name' => 'manage_blogs', 
+												'name' => 'manage_blog_categris', 
+												'name' => 'post_blog_comment' )); 
+		
+		/*delete plugin functions from pages*/
+		$plugin_id = $this->db->select('id')
+					->from('plugins')
+					->where('name','blogs')->get()->first_row();
+		
+		$plugins = $this->db->select('id')
+					->from('plugin_functions')
+					->where('plugin_id',$plugin_id->id)->get()->result();
+					
+		foreach ($plugins as $item) {
+				$data = array(
+		               'deleted_at' => date("Y-m-d H:i:s")
+		            );		
+				$this->db->where('plugin_function_id', $item->id);
+				$this->db->update('page_plugin_functions', $data); 
+		}		
+		
+		/*delete plugin functions*/			
+		$this->db->delete('plugin_functions', array('plugin_id' => $plugin_id->id)); 
+		
+		/*delete plugin*/
+		$this->db->delete('plugins', array('id' => $plugin_id->id)); 
+				
+		/*drop blog tables*/
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_comments`";
+		$this->db->query($query);
+		
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_blog_categorys`";
+		$this->db->query($query);
+		
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_categories`";
+		$this->db->query($query);
+				
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blogs`";
+		$this->db->query($query);
+		
+		if (!is_readable(CMS_ROOT .'../data/blog')) {
+		    unlink(CMS_ROOT .'../data/blog', 0777, TRUE);		
+		}		
+		
+		return redirect(base_url('admin/plugins'));
+	}
+	
 }

@@ -184,5 +184,162 @@ class Admin extends Administrator_Controller {
 		}
 	}
 	
-
+	
+	/*Install*/
+	function install()
+	{
+		$database = $this->load->database('default', TRUE);				
+		$config['db']['hostname'] = $database->hostname;
+        $config['db']['username'] = $database->username;
+        $config['db']['password'] = $database->password;
+        $config['db']['database'] = $database->database;
+        $config['db']['prefix'] = $database->dbprefix;
+        $config['db']['port'] = $database->port;
+		
+       $database = $this->load->database('default', TRUE);	
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."custom_forms` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `user_id` int(10) unsigned NOT NULL,
+				  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `recievers` text COLLATE utf8_unicode_ci,
+				  `message` text COLLATE utf8_unicode_ci NOT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `custom_forms_user_id_index` (`user_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."custom_form_fields` (
+				  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+				  `custom_form_id` int(10) unsigned NOT NULL,
+				  `user_id` int(10) unsigned NOT NULL,
+				  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `options` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+				  `type` int(11) NOT NULL,
+				  `order` int(11) NOT NULL,
+				  `mandatory` tinyint(1) NOT NULL,
+				  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+				  `deleted_at` timestamp NULL DEFAULT NULL,
+				  PRIMARY KEY (`id`),
+				  KEY `custom_form_fields_custom_form_id_index` (`custom_form_id`),
+				  KEY `custom_form_fields_user_id_index` (`user_id`)
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."custom_forms`
+				  ADD CONSTRAINT `custom_forms_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE;";
+		$this->db->query($query);
+		
+		$query = "ALTER TABLE `".$database->dbprefix."custom_form_fields`
+				  ADD CONSTRAINT `custom_form_fields_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE,
+				  ADD CONSTRAINT `custom_form_fields_custom_form_id_foreign` FOREIGN KEY (`custom_form_id`) REFERENCES `".$database->dbprefix."custom_forms` (`id`) ON DELETE CASCADE;";
+		$this->db->query($query);
+		
+		/*add to plugins*/
+		$data = array(
+					   'name' => 'customforms' ,
+					   'title' => 'Custom form' ,
+					   'function_id' => 'getCustomFormId',
+					   'function_grid' => NULL,
+					   'can_uninstall' => '1',
+					   'pluginversion' => '1.0',
+					   'active' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugins', $data);
+		$plugin_id = $this->db->insert_id();
+		
+		/*add to admin root navigation*/
+		$data = array(
+					   'plugin_id' => $plugin_id ,
+					   'icon' => 'icon-list-alt' ,
+					   'order' => 0,
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('admin_navigations', $data);
+		
+		/*add plugin permission*/
+		$data = array(
+					   'name' => 'manage_customform' ,
+					   'display_name' => 'Manage custom forms' ,
+					   'is_admin' => '1',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('permissions', $data);
+		
+		/*add plugin function*/
+		$data = array(
+					   'title' => 'Display custom form' ,
+					   'plugin_id' => $plugin_id,
+					   'function' => 'showCustomFormId',
+					   'params' => 'id;',
+					   'type' => 'content',
+					   'created_at' => date("Y-m-d H:i:s"),
+					   'updated_at' => date("Y-m-d H:i:s"),
+					   'deleted_at' => NULL
+					   );
+		$this->db->insert('plugin_functions', $data);
+				
+		return redirect(base_url('admin/plugins'));
+	}
+	/*Uninstall*/
+	function uninstall()
+	{
+		$database = $this->load->database('default', TRUE);				
+				
+		/*delete permissions from roles*/	
+		$permission = $this->db->select('id')
+					->from('permissions')
+					->where('name','manage_customform')->get()->first_row();
+					
+		$this->db->delete('permission_role', array('id' => $permission->id)); 
+		
+		/*delete permissions*/
+		$this->db->delete('permissions', array('name' => 'manage_customform')); 
+		
+		/*delete plugin functions from pages*/
+		$plugin_id = $this->db->select('id')
+					->from('plugins')
+					->where('name','customforms')->get()->first_row();
+		
+		$plugins = $this->db->select('id')
+					->from('plugin_functions')
+					->where('plugin_id',$plugin_id->id)->get()->result();
+					
+		foreach ($plugins as $item) {
+				$data = array(
+		               'deleted_at' => date("Y-m-d H:i:s")
+		            );
+		
+				$this->db->where('plugin_function_id', $item->id);
+				$this->db->update('page_plugin_functions', $data); 
+		}		
+		
+		/*delete plugin functions*/			
+		$this->db->delete('plugin_functions', array('plugin_id' => $plugin_id->id)); 
+		
+		/*delete plugin*/
+		$this->db->delete('plugins', array('id' => $plugin_id->id)); 
+		
+		/*drop custom_form tables*/
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."custom_form_fields`";
+		$this->db->query($query);
+		
+		$query = "DROP TABLE IF EXISTS `".$database->dbprefix."custom_forms`";
+		$this->db->query($query);
+		
+		
+		return redirect(base_url('admin/plugins'));
+	}
+	
 }

@@ -8,14 +8,7 @@ class Install extends CI_Controller {
 	public $errors = array();
     public $writable_dirs = array(
         'data/avatar' => FALSE,
-        'data/blog' => FALSE,
-        'data/customform' => FALSE,
-        'data/gallery' => FALSE,
         'data/page' => FALSE,
-    );
-    public $writable_subdirs = array(
-        'data/blog/thumbs' => FALSE,
-        'data/page/thumbs' => FALSE,
     );
 	
 	public function index()
@@ -46,7 +39,7 @@ class Install extends CI_Controller {
             $this->errors[] =  CMS_ROOT . 'config/database.php is not writable.';
         }
 
-        $writable_dirs = array_merge($this->writable_dirs, $this->writable_subdirs);
+        $writable_dirs = $this->writable_dirs;
         foreach ($writable_dirs as $path => $is_writable)
         {
             if ( ! $is_writable)
@@ -112,15 +105,6 @@ class Install extends CI_Controller {
         {
             $this->writable_dirs[$path] = is_writable(CMS_ROOT .'../'. $path);
         }
-
-        foreach ($this->writable_subdirs as $path => $is_writable)
-        {
-            if ( ! file_exists(CMS_ROOT .'../'. $path) || (file_exists(CMS_ROOT .'../'.$path) && is_writable(CMS_ROOT .'../'. $path)))
-            {
-                unset($this->writable_subdirs[$path]);
-            }
-        }
-
         if ($this->input->post())
         {
             if ($this->validate())
@@ -129,7 +113,7 @@ class Install extends CI_Controller {
             }
         }
 
-        $data['writable_dirs'] = array_merge($this->writable_dirs, $this->writable_subdirs);
+        $data['writable_dirs'] = $this->writable_dirs;
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step2', $data, TRUE);
         $data['title'] = "Installer | Step 2 of 5";
