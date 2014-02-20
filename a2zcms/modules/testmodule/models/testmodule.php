@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Testmodule extends DataMapper {
+class Testmodule extends CI_Model {
 	
 	function __construct()
 	{

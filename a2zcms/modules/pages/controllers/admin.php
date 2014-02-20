@@ -11,6 +11,8 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model(array("Model_navigation_group","Model_navigation_link","Model_page_plugin_function",
+								"Model_page","Model_plugin_function","Model_plugin"));
 	}
 	
 	/*navigation group*/
@@ -21,21 +23,13 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $navigationgroup = new NavigationGroup();
-        $navigationgroup->where(array('deleted_at' => NULL))
-			->select('id,title,slug,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
 		
-		
-        if ($offset > $navigationgroup->paged->total_rows) {
-            $offset = floor($navigationgroup->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
+        $navigationgroup = $this->Model_navigation_group->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
  
         $pagination_config = array(
             'base_url' => site_url('admin/pages/navigationgroups/'),
             'first_url' => site_url('admin/pages/navigationgroups/0'),
-            'total_rows' => $navigationgroup->paged->total_rows,
+            'total_rows' => $this->Model_navigation_group->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -63,8 +57,7 @@ class Admin extends Administrator_Controller {
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'navigationgroup' => $navigationgroup,
-            'offset' => $offset
+            'navigationgroup' => $navigationgroup
         );
  
         $this->load->view('adminpage', $data);
@@ -77,9 +70,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$navigationgroup_edit = new NavigationGroup();
-			$navigationgroup_edit->select('id,title,slug,showmenu,showfooter,showsidebar,created_at')
-			->where('id',$id)->get();			
+			$navigationgroup_edit = $this->Model_navigation_group->select($id);			
 		}
 		
 		$data['content'] = array('navigationgroup_edit' => $navigationgroup_edit);
@@ -89,24 +80,22 @@ class Admin extends Administrator_Controller {
 		$this->form_validation->set_rules('title', "Title", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$navigationgroup = new NavigationGroup();
-			if($id==0){
-				$navigationgroup->title = $this->input->post('title');
-				$navigationgroup->slug = url_title($this->input->post('title'), 'dash', true);
-				$navigationgroup->showmenu = $this->input->post('showmenu');
-				$navigationgroup->showfooter = $this->input->post('showfooter');
-				$navigationgroup->showsidebar = $this->input->post('showsidebar');
-				$navigationgroup->updated_at = date("Y-m-d H:i:s");										
-				$navigationgroup->created_at = date("Y-m-d H:i:s");		
-				$navigationgroup -> save();
+        	if($id==0){
+				$this->Model_navigation_group->insert(array('title'=>$this->input->post('title'),
+														'slug' => url_title($this->input->post('title'), 'dash', true),
+														'showmenu' => $this->input->post('showmenu'),
+														'showfooter' => $this->input->post('showfooter'),
+														'showsidebar' => $this->input->post('showsidebar'),														
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
-			else {				
-				$navigationgroup->where('id', $id)->update(array('title'=>$this->input->post('title'),
+			else {
+				$this->Model_navigation_group->update(array('title'=>$this->input->post('title'),
 							'slug' => url_title($this->input->post('title'), 'dash', true),
 							'showmenu' => $this->input->post('showmenu'),
 							'showfooter' => $this->input->post('showfooter'),
 							'showsidebar' =>$this->input->post('showsidebar'),
-							'updated_at'=>date("Y-m-d H:i:s")));
+							'updated_at'=>date("Y-m-d H:i:s")),$id);
 			}
         }
     }
@@ -121,10 +110,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('navigationgroupid');
-			
-			$navigationgroup = new NavigationGroup();
-			$navigationgroup->where('id', $id)
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_navigation_group->delete($id);
         }
 	}
 	
@@ -132,23 +118,8 @@ class Admin extends Administrator_Controller {
 	function navigation(){
 		$data['view'] = 'navigation/dashboard';
 		
-        $navigation = new NavigationLink();
-        $navigation->where(array('deleted_at' => NULL))
-			->select('id,title,link_type,page_id,navigation_group_id,created_at')
-			->order_by('position','ASC')
-			->get();
+		$navigation = $this->Model_navigation_link->getall();
 		
-		foreach ($navigation as $item) {
-			
- 			$navigationgroup = new NavigationGroup();		
-			$navigationgroup->where('id', $item->page_id)->select('title')->get();
-			$item->navigationgroup = $navigationgroup->title;
-			
-			$page = new Page();		
-			$page->where('id', $item->navigation_group_id)->select('title')->get();
-			$item->page = $page->title;
-			
-		 }
         $data['content'] = array(
             'navigation' => $navigation
         );
@@ -163,9 +134,9 @@ class Admin extends Administrator_Controller {
 		foreach ($items as $value) {
 			if ($value != '') {
 				
-				$navigation_edit = new NavigationLink();
-				$navigation_edit->where('id', $value)->update(array('position'=>$order));
-				
+				$this->Model_navigation_link->update(array('position'=>$order,
+													'updated_at' => date("Y-m-d H:i:s")),$id);
+
 				$order++;
 			}
 		}
@@ -177,28 +148,19 @@ class Admin extends Administrator_Controller {
 		$navigation_edit = "";
 		$navigation_parent = "";
 		
-		$pagelist = new Page();
-		$pagelist->select('title,id')->where(array('deleted_at' => NULL))->get();
-				
-		$navigationGroupList = new NavigationGroup();
-		$navigationGroupList->select('title,id')->where(array('deleted_at' => NULL))->get();
-				
+		$pagelist = $this->Model_page->getall();
+		
+		$navigationGroupList = $this->Model_navigation_group->getall();
 		
 		if($id>0)
 		{
-			$navigation_edit = new NavigationLink();
-			$navigation_edit->select('id,title,parent,link_type,page_id,url,uri,navigation_group_id,target,restricted_to,class')
-			->where('id',$id)->get();
+			$navigation_edit = $this->Model_navigation_link->select($id);
 			
-			$navigation_parent = new NavigationLink();			
-			$navigation_parent = $navigation_parent->where('id <>', $id)
-			->where(array('deleted_at' => NULL))->select('title,id')->get();
+			$navigation_parent = $this->Model_navigation_link->selectallparent($id);
 				
 		}
 		else {
-			$navigation_parent = new NavigationLink();			
-			$navigation_parent = $navigation_parent->where(array('deleted_at' => NULL))
-			->select('title,id')->get();
+			$navigation_parent = $this->Model_navigation_link->getall();
 		}
 		
 		$data['content'] = array('navigation_edit' => $navigation_edit,
@@ -214,33 +176,31 @@ class Admin extends Administrator_Controller {
 		
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$navigation = new NavigationLink();
 			if($id==0){
-				$navigation->title = $this->input->post('title');
-				$navigation->link_type = $this->input->post('link_type');	
-				$navigation->parent = ($this->input->post('parent') != '') ? $this->input->post('parent') : NULL;	
-				$navigation->page_id = $this->input->post('page_id');	
-				$navigation->url = $this->input->post('url');	
-				$navigation->uri = $this->input->post('uri');	
-				$navigation->navigation_group_id = $this->input->post('navigation_group_id');	
-				$navigation->target = $this->input->post('target');	
-				$navigation->class = $this->input->post('class');
-				$navigation->updated_at = date("Y-m-d H:i:s");										
-				$navigation->created_at = date("Y-m-d H:i:s");
-				$navigation->save();				
+        		$this->Model_navigation_link->insert(array('title'=>$this->input->post('title'),
+														'link_type' => $this->session->userdata('link_type'),
+														'parent' => ($this->input->post('parent') != '') ? $this->input->post('parent') : NULL,
+														'page_id' => $this->input->post('page_id'),
+														'url' => $this->input->post('url'),														
+														'uri' => $this->input->post('uri'),	
+														'navigation_group_id' => $this->input->post('navigation_group_id'),	
+														'target' => $this->input->post('target'),	
+														'class' => $this->input->post('class'),																										
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
-			else {				
-				$navigation->where('id', $id)->update(
-						array('title'=>$this->input->post('title'), 
-							'link_type'=>$this->input->post('link_type'), 
-							'parent'=>($this->input->post('parent') != '') ? $this->input->post('parent') : NULL, 
-							'page_id'=>$this->input->post('page_id'), 
-							'url'=>$this->input->post('url'), 
-							'uri'=>$this->input->post('uri'), 
-							'navigation_group_id'=>$this->input->post('navigation_group_id'), 
-							'target'=>$this->input->post('target'), 
-							'class'=>$this->input->post('class'),							
-							'updated_at'=>date("Y-m-d H:i:s")));
+			else {
+				
+				$this->Model_navigation_link->update(array('title'=>$this->input->post('title'), 
+													'link_type'=>$this->input->post('link_type'), 
+													'parent'=>($this->input->post('parent') != '') ? $this->input->post('parent') : NULL, 
+													'page_id'=>$this->input->post('page_id'), 
+													'url'=>$this->input->post('url'), 
+													'uri'=>$this->input->post('uri'), 
+													'navigation_group_id'=>$this->input->post('navigation_group_id'), 
+													'target'=>$this->input->post('target'), 
+													'class'=>$this->input->post('class'),							
+													'updated_at'=>date("Y-m-d H:i:s")),$id);
 			}
         }
     }
@@ -256,9 +216,7 @@ class Admin extends Administrator_Controller {
         {
         	$id = $this->input->post('navigationlinkid');
 			
-			$navigationlink = new NavigationLink();
-			$navigationlink->where('id', $id)
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_navigation_link->delete($id);
         }
 	}
 	
@@ -270,20 +228,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $page = new Page();
-        $page->where(array('deleted_at' => NULL))
-			->select('id,title,status,voteup,votedown,hits,sidebar,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $page->paged->total_rows) {
-            $offset = floor($page->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+		$page = $this->Model_page->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+		 
         $pagination_config = array(
             'base_url' => site_url('admin/pages/index/'),
             'first_url' => site_url('admin/pages/index/0'),
-            'total_rows' => $page->paged->total_rows,
+            'total_rows' => $this->Model_page->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -305,14 +255,12 @@ class Admin extends Administrator_Controller {
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
         );
-		
-		
+				
         $this->pagination->initialize($pagination_config);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'page' => $page,
-            'offset' => $offset
+            'page' => $page
         );
  
         $this->load->view('adminpage', $data);
@@ -325,16 +273,9 @@ class Admin extends Administrator_Controller {
 		$page_edit = $pluginfunction_content_all = $pluginfunction_slider_all = "";
 						
 		if($id<=0){
-			$pluginfunction_content = new PluginFunction();	
-			$plugins = new Plugin();
-			
-			$pluginfunction_content->where('type','content')
-			->select('id,title, params, plugin_id')
-			->get();
+			$pluginfunction_content = $this->Model_page_plugin_function->contentpluginfunction();
 			
 			foreach ($pluginfunction_content as $item) {
-				$plugin = new Plugin();
-				$plugin->select('name,function_id,function_grid')->where('id',$item->plugin_id)->get();
 				$function_id = $plugin->function_id;
 				$function_grid = $plugin->function_grid;
 				if($function_id!=NULL){
@@ -344,34 +285,18 @@ class Admin extends Administrator_Controller {
 					$item->function_grid = modules::run($plugin->name.'/'.$function_grid);
 				}
 			}	
-					
-			$pluginfunction_slider = new PluginFunction();
-			$pluginfunction_slider->where('type','sidebar')
-			->select('id,title, params')->get();
+			$pluginfunction_slider = $this->Model_page_plugin_function->sidepluginfunction();
 		}
 		else
 		{
-			$page_edit = new Page();
-			$page_edit->where('id',$id)->get();		
+			$page_edit = $this->Model_page->select($id);
+
 			/*select content plugins that added to page*/
 			
 			
-			$pluginfunction_content = $this->db->from('page_plugin_functions ppf')
-												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
-												->join('plugins p','p.id = pf.plugin_id' ,'left')
-												->where('ppf.deleted_at', NULL)
-												->where('page_id', $id)
-												->where('pf.type','content')
-												->order_by('ppf.order','ASC')
-												->group_by('pf.id')
-												->select('pf.id, ppf.plugin_function_id, p.name,pf.title, ppf.order, p.function_id, pf.function, pf.params, p.function_grid')
-												->get()->result();
-			$pluginfunction_content_all =  $this->db->from('plugin_functions pf')
-													->join('plugins p', 'p.id = pf.plugin_id')
-													->where('type','content')
-													->where('pf.deleted_at', NULL)
-													->select('pf.title, p.name, p.function_id, pf.id, pf.function, pf.params, p.function_grid')
-													->get()->result();
+			$pluginfunction_content = $this->Model_page_plugin_function->contentpluginfunctionpage($id);
+			$pluginfunction_content_all =  $this->Model_page_plugin_function->contentpluginfunction();
+			
 			 /*add to view other content plugins that not in page*/
 			$temp = array();
 				foreach ($pluginfunction_content as $item) {
@@ -392,49 +317,19 @@ class Admin extends Administrator_Controller {
 					$function_grid = $item->function_grid;
 				}
 				if(isset($item->plugin_function_id)){					
-					$temp1 =  $this->db->from('page_plugin_functions ppf')
-													->where('param','id')
-													->where('page_id',$id)
-													->where('ppf.deleted_at', NULL)
-													->where('plugin_function_id',$item->plugin_function_id)
-													->select('value')					
-													->get()->first_row();
+					$temp1 =  $this->Model_page_plugin_function->contentparamitem('id',$id,$item->plugin_function_id);
 					if(!empty($temp1))
 					$item->ids = $temp1->value;
-					$temp1 =  $this->db->from('page_plugin_functions ppf')
-													->where('param','grid')
-													->where('page_id',$id)
-													->where('ppf.deleted_at', NULL)
-													->where('plugin_function_id',$item->plugin_function_id)
-													->select('value')
-													->get()->first_row();
+					$temp1 =  $this->Model_page_plugin_function->contentparamitem('grid',$id,$item->plugin_function_id);
 					if(!empty($temp1))
 					$item->grids = $temp1->value;
-					$temp1 =  $this->db->from('page_plugin_functions ppf')
-													->where('param','sort')
-													->where('page_id',$id)
-													->where('ppf.deleted_at', NULL)
-													->where('plugin_function_id',$item->plugin_function_id)
-													->select('value')
-													->get()->first_row();
+					$temp1 =  $this->Model_page_plugin_function->contentparamitem('sort',$id,$item->plugin_function_id);
 					if(!empty($temp1))
 					$item->sorts = $temp1->value;
-					$temp1 =  $this->db->from('page_plugin_functions ppf')
-													->where('param','limit')
-													->where('page_id',$id)
-													->where('ppf.deleted_at', NULL)
-													->where('plugin_function_id',$item->plugin_function_id)
-													->select('value')
-													->get()->first_row();
+					$temp1 =  $this->Model_page_plugin_function->contentparamitem('limit',$id,$item->plugin_function_id);
 					if(!empty($temp1))
 					$item->limits = $temp1->value;
-					$temp1 =  $this->db->from('page_plugin_functions ppf')
-													->where('param','order')
-													->where('page_id',$id)
-													->where('ppf.deleted_at', NULL)
-													->where('plugin_function_id',$item->plugin_function_id)
-													->select('value')
-													->get()->first_row();
+					$temp1 =  $this->Model_page_plugin_function->contentparamitem('order',$id,$item->plugin_function_id);
 					if(!empty($temp1))
 					$item->orders = $temp1->value;
 					}
@@ -447,21 +342,9 @@ class Admin extends Administrator_Controller {
 			}
 			/*select sidebar plugins*/
 			
-			$pluginfunction_slider = $this->db->from('page_plugin_functions ppf')
-												->join('plugin_functions pf','pf.id = ppf.plugin_function_id' ,'left')
-												->where('page_id', $id)
-												->where('pf.type','sidebar')
-												->where('ppf.deleted_at', NULL)
-												->order_by('ppf.order','ASC')
-												->group_by('pf.id')
-												->select('pf.id, pf.title, ppf.order')
-												->get()->result();
+			$pluginfunction_slider = $this->Model_page_plugin_function->sidepluginfunctionpage($id);
 													
-			$pluginfunction_slider_all =  $this->db->from('plugin_functions pf')
-													->where('type','sidebar')
-													->where('pf.deleted_at', NULL)
-													->select('pf.id, pf.title')
-													->get()->result();
+			$pluginfunction_slider_all =  $this->Model_page_plugin_function->sidepluginfunction();
 			
 			 /*add not added sidebar plugins*/
 			$temp = array();
@@ -483,51 +366,47 @@ class Admin extends Administrator_Controller {
 		
 		$this->form_validation->set_rules('title', "Title", 'required');
 	   	if ($this->form_validation->run() == TRUE)
-        {
-        	$page = new Page();
+        {        	
 			if($id==0){
-				$page->title = $this->input->post('title');	
-				$page->slug = url_title( $this->input->post('title'), 'dash', true);
-				$page->meta_title = $this->input->post('meta_title');
-				$page->meta_description = $this->input->post('meta_description');
-				$page->meta_keywords = $this->input->post('meta_keywords');
-				$page->page_css = $this->input->post('page_css');
-				$page->page_javascript = $this->input->post('page_javascript');
-				$page->sidebar = $this->input->post('sidebar');
-				$page->showtitle = $this->input->post('showtitle');
-				$page->showvote = $this->input->post('showvote');
-				$page->showdate = $this->input->post('showdate');
-				$page->password = $this->input->post('password');
-				$page->tags = $this->input->post('tags');
-				$page->showtags = $this->input->post('showtags');
-				$page->content = $this->input->post('content');
-				$page->status = $this->input->post('status');
-				$page->updated_at = date("Y-m-d H:i:s");										
-				$page->created_at = date("Y-m-d H:i:s");
-				$page->save();
-				$id = $page->id;
+				$id = $this->Model_page->insert(array('title'=>$this->input->post('title'),
+												'slug' => url_title( $this->input->post('title'), 'dash', true),
+												'meta_title' => $this->input->post('meta_title'),
+												'meta_description' => $this->input->post('meta_description'),
+												'meta_keywords' => $this->input->post('meta_keywords'),	
+												'page_css' => $this->input->post('page_css'),	
+												'page_javascript' => $this->input->post('page_javascript'),	
+												'sidebar' => $this->input->post('sidebar'),	
+												'showtitle' => $this->input->post('showtitle'),	
+												'showvote' => $this->input->post('showvote'),	
+												'showdate' => $this->input->post('showdate'),	
+												'password' => $this->input->post('password'),	
+												'tags' => $this->input->post('tags'),	
+												'showtags' => $this->input->post('showtags'),	
+												'content' => $this->input->post('content'),	
+												'status' => $this->input->post('status'),																									
+												'updated_at' => date("Y-m-d H:i:s"),
+												'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {				
-				$page->where('id', $id)->update(array('title'=>$this->input->post('title'),
-							'slug' =>url_title( $this->input->post('title'), 'dash', true),
-							'meta_title' => $this->input->post('meta_title'),
-							'meta_description' => $this->input->post('meta_description'),
-							'meta_keywords' => $this->input->post('meta_keywords'),
-							'page_css' => $this->input->post('page_css'),
-							'page_javascript' => $this->input->post('page_javascript'),
-							'sidebar' => $this->input->post('sidebar'),
-							'showtitle' => $this->input->post('showtitle'),
-							'showvote' => $this->input->post('showvote'),
-							'showdate' => $this->input->post('showdate'),
-							'password' => $this->input->post('password'),
-							'tags' => $this->input->post('tags'),
-							'showtags' => $this->input->post('showtags'),
-							'content' => $this->input->post('content'),
-							'status' => $this->input->post('status'),
-							'updated_at'=>date("Y-m-d H:i:s")));
+				$this->Model_page->update(array('title'=>$this->input->post('title'),
+												'slug' => url_title( $this->input->post('title'), 'dash', true),
+												'meta_title' => $this->input->post('meta_title'),
+												'meta_description' => $this->input->post('meta_description'),
+												'meta_keywords' => $this->input->post('meta_keywords'),	
+												'page_css' => $this->input->post('page_css'),	
+												'page_javascript' => $this->input->post('page_javascript'),	
+												'sidebar' => $this->input->post('sidebar'),	
+												'showtitle' => $this->input->post('showtitle'),	
+												'showvote' => $this->input->post('showvote'),	
+												'showdate' => $this->input->post('showdate'),	
+												'password' => $this->input->post('password'),	
+												'tags' => $this->input->post('tags'),	
+												'showtags' => $this->input->post('showtags'),	
+												'content' => $this->input->post('content'),	
+												'status' => $this->input->post('status'),																									
+												'updated_at' => date("Y-m-d H:i:s")),$id);
 							
-				$old = new PagePluginFunction();				
-				$old->where('page_id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+				$this->Model_page_plugin_function->delete($id);
 			
 			}
 			$file='';
@@ -553,9 +432,8 @@ class Admin extends Administrator_Controller {
 			
 			}
 			if($file!=""){
-				$page->where('id', $id)->update(array('image'=>$file));
+				$this->Model_page->update(array('image'=>$file),$id);
 			}
-			
 			
 			$pagesidebar = ($this->input->post('pagesidebar')!="")?$this->input->post('pagesidebar'):"";
 			$pagecontentorder = $this->input->post('pagecontentorder');
@@ -563,7 +441,6 @@ class Admin extends Administrator_Controller {
 		
 			$this->SaveData($pagesidebar,$pagecontentorder, $pagecontent,$id);
         }
-
 		
     }
 	function delete($id)
@@ -577,18 +454,15 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('pageid');
-			
-			$page = new Page();
-			$page->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_page->delete($id);
         }
 	}
 	
 	function change($id)
-	{
-		$page = new Page();
-		$page->where('id', $id)->get();
-		$page->where('id', $id)->update(array('status'=>($page -> status + 1) % 2,
-											'updated_at'=>date("Y-m-d H:i:s")));
+	{		
+		$page =$this->Model_page->select($id);
+		$this->Model_page->update(array('status'=>($page -> status + 1) % 2,
+											'updated_at'=>date("Y-m-d H:i:s")),$id);
 		
 		return redirect(base_url('admin/pages'));
 		
@@ -606,35 +480,26 @@ class Admin extends Administrator_Controller {
 						foreach ($params as $param) {
 							if($param!=""){
 								$param = explode(':', $param);
-								$pagepluginfunction = new PagePluginFunction();
-								$pagepluginfunction -> plugin_function_id = $value;
-								$pagepluginfunction -> order = $order;
-								$pagepluginfunction -> param = $param['0'];
-								if(strstr($param['1'], ',')){
-									$pagepluginfunction -> type = 'array';
-								}
-								else if(is_int($param['1'])){
-									$pagepluginfunction -> type = 'int';
-								}
-								else {
-									$pagepluginfunction -> type = 'string';
-								}
-								$pagepluginfunction -> value = $param['1'];
-								$pagepluginfunction -> page_id = $page_id;
-								$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-								$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-								$pagepluginfunction -> save();
+									$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order,
+															'param' => $param['0'],
+															'type' => (strstr($param['1'], ','))?'array':(is_int($param['1']))?'int':'string',
+															'value' => $param['1'],	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 							}
 						}
 					}	
 				else {
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order;
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-						$pagepluginfunction -> save();
+					$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order,
+															'param' => $param['0'],
+															'page_id' => $page_id,
+															'value' => $param['1'],	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));															
 					}				
 					$order ++;
 				}
@@ -647,83 +512,77 @@ class Admin extends Administrator_Controller {
 						foreach ($pagecontent[$value]['id'] as $value2) {
 							$params .= $value2.",";
 						}
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order2;
-						$pagepluginfunction -> param = 'id';
-						$pagepluginfunction -> type = 'array';
-						$pagepluginfunction -> value = rtrim($params, ",");
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-						$pagepluginfunction -> save();
+						$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => 'id',
+															'type' => 'array',
+															'page_id' => $page_id,
+															'value' => rtrim($params, ","),	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 												
 					}
 					if(!empty($pagecontent[$value]['grid'])){
 						foreach ($pagecontent[$value]['grid'] as $value2) {
 							$params .= $value2.",";
 						}
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order2;
-						$pagepluginfunction -> param = 'grid';
-						$pagepluginfunction -> type = 'array';
-						$pagepluginfunction -> value = rtrim($params, ",");
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");						
-						$pagepluginfunction -> save();
+					$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => 'grid',
+															'type' => 'array',
+															'page_id' => $page_id,
+															'value' => rtrim($params, ","),	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 					}
 					if(isset($pagecontent[$value]['sort'])){
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order2;
-						$pagepluginfunction -> param = 'sort';
-						$pagepluginfunction -> type = 'string';
-						$pagepluginfunction -> value = $pagecontent[$value]['sort'];
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-						$pagepluginfunction -> save();
+						$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => 'sort',
+															'type' => 'string',
+															'page_id' => $page_id,
+															'value' => $pagecontent[$value]['sort'],	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 					}
 					if(isset($pagecontent[$value]['order'])){
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order2;
-						$pagepluginfunction -> param = 'order';
-						$pagepluginfunction -> type = 'string';
-						$pagepluginfunction -> value = $pagecontent[$value]['order'];
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-						$pagepluginfunction -> save();
+						$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => 'order',
+															'type' => 'string',
+															'page_id' => $page_id,
+															'value' => $pagecontent[$value]['order'],	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 					}
 					if(isset($pagecontent[$value]['limit'])){
-						$pagepluginfunction = new PagePluginFunction();
-						$pagepluginfunction -> plugin_function_id = $value;
-						$pagepluginfunction -> order = $order2;
-						$pagepluginfunction -> param = 'limit';
-						$pagepluginfunction -> type = 'int';
-						$pagepluginfunction -> value = $pagecontent[$value]['limit'];
-						$pagepluginfunction -> page_id = $page_id;
-						$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-						$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-						$pagepluginfunction -> save();
+						$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => 'limit',
+															'type' => 'int',
+															'page_id' => $page_id,
+															'value' => $pagecontent[$value]['limit'],	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 					}
 					if(empty($pagecontent[$value]['id']) && empty($pagecontent[$value]['grid']) && 
 						!isset($pagecontent[$value]['sort']) && !isset($pagecontent[$value]['order']) &&
 						!isset($pagecontent[$value]['limit']))
 						{
-							$pagepluginfunction = new PagePluginFunction();
-							$pagepluginfunction -> plugin_function_id = $value;
-							$pagepluginfunction -> order = $order2;
-							$pagepluginfunction -> param = '';
-							$pagepluginfunction -> type = '';
-							$pagepluginfunction -> value = '';
-							$pagepluginfunction -> page_id = $page_id;
-							$pagepluginfunction -> updated_at = date("Y-m-d H:i:s");										
-							$pagepluginfunction -> created_at = date("Y-m-d H:i:s");
-							$pagepluginfunction -> save();
+							$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+															'order' => $order2,
+															'param' => '',
+															'type' => '',
+															'page_id' => $page_id,
+															'value' => '',	
+															'page_id' => $page_id,	
+															'updated_at' => date("Y-m-d H:i:s"),
+															'created_at' => date("Y-m-d H:i:s")));
 						}
 					
 					$order2 ++;

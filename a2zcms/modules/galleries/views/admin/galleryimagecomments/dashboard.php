@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>Galleries image comments</h1>
 		</div>
-		<?php if ($content['galleryimagecomment']->result_count() > 0) { ?>
+		<?php if (!empty($content['galleryimagecomment'])) { ?>
    
     <table class="table table-hover">
 		<thead>

@@ -9,7 +9,7 @@ class Admin extends Administrator_Controller{
 	
 	function __construct(){
 		parent::__construct();		
-		$this->load->model("user");					
+		$this->load->model(array("Model_user", "Model_assigned_role","Model_role","Model_user_login_history"));					
 	}
 	
 	function index(){
@@ -19,21 +19,12 @@ class Admin extends Administrator_Controller{
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $users = new User();
-		
-        $users->where(array('deleted_at' => NULL))
-			->select('id,name,surname,email,username,confirmed,active,last_login,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $users->paged->total_rows) {
-            $offset = floor($users->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+		$users = $this->Model_user->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+        
         $pagination_config = array(
             'base_url' => site_url('admin/users/index/'),
             'first_url' => site_url('admin/users/index/0'),
-            'total_rows' => $users->paged->total_rows,
+            'total_rows' => $this->Model_user->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -61,8 +52,7 @@ class Admin extends Administrator_Controller{
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'users' => $users,
-            'offset' => $offset
+            'users' => $users
         );
  
         $this->load->view('adminpage', $data);
@@ -77,28 +67,12 @@ class Admin extends Administrator_Controller{
             $offset = 0;
         }
 		
-		$assignedrole = new AssignedRole();
-		$assignedrole->select('user_id')->where(array('deleted_at' => NULL))->where('role_id',$role_id)->get();
-		$userroles = array();
-		
-		foreach ($assignedrole as $item) {
-			$userroles[]=$item->user_id;
-		}
-		
-        $users = new User();		
-        $users->where(array('deleted_at' => NULL))->where_in('id',$userroles)
-			->select('id,name,surname,email,username,confirmed,active,last_login,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $users->paged->total_rows) {
-            $offset = floor($users->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
+		$users = $this->Model_user->fetch_paging_role($this->session->userdata('pageitemadmin'),$offset,$role_id);
  
         $pagination_config = array(
             'base_url' => site_url('admin/users/listusersforrole/'.$role_id.'/'),
             'first_url' => site_url('admin/users/listusersforrole/'.$role_id.'/0'),
-            'total_rows' => $users->paged->total_rows,
+            'total_rows' => $this->Model_user->total_rows_role($role_id),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 5,
            	'full_tag_open' => '<ul class="pagination">',
@@ -126,8 +100,7 @@ class Admin extends Administrator_Controller{
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'users' => $users,
-            'offset' => $offset
+            'users' => $users
         );
  
         $this->load->view('adminpage', $data);
@@ -148,21 +121,12 @@ class Admin extends Administrator_Controller{
 			$validation_email ='';
 			$validation_username = '';
 			
-			$user = new User();
-			$user_edit = $user->select('id,name,surname,email,username,confirmed,active,created_at') 
-							->where('id',$id)
-							->where(array('deleted_at' => NULL))
-							->get();
+			$user_edit = $this->Model_user->select($id);
 							
-			$assignedrole = new AssignedRole();
-			$assignedrole->select('role_id') 
-							->where('user_id',$id)
-							->where(array('deleted_at' => NULL))
-							->get();
+			$assignedrole = $this->Model_assigned_role->selectuser($id);
 		}
 		
-		$roles = new Role();
-		$roles->select('id,name')->where(array('deleted_at' => NULL))->get();
+		$roles = $this->Model_role->getall($id);
 							
 		$data['content'] = array('user_edit' => $user_edit, 
 								'assignedrole' =>$assignedrole,
@@ -181,50 +145,40 @@ class Admin extends Administrator_Controller{
         {
         	$this->load->library('hash');
 			
-        	$user = new User();
 			if($id==0){
-				$user->name = $this->input->post('name');
-				$user->surname = $this->input->post('surname');
-				$user->email = $this->input->post('email');
-				$user->username = $this->input->post('username');
-				$user->password = $this->hash->make($this->input->post('password'));
-				$user->confirm_password= $this->hash->make($this->input->post('password'));									
-				$user->confirmation_code = rand(9999, 99999999);
-				$user->confirmed =  1;
-				$user->active = $this->input->post('active');			
-				$user->updated_at = date("Y-m-d H:i:s");										
-				$user->created_at = date("Y-m-d H:i:s");
-				$user->save();
-				$id = $user->id;
+				$this->Model_user->insert(array('name'=>$this->input->post('name'),
+												'surname'=>$this->input->post('surname'),
+												'email'=>$this->input->post('email'),
+												'username'=>$this->input->post('username'),
+												'password'=>$this->hash->make($this->input->post('password')),
+												'confirmation_code'=>rand(9999, 99999999),
+												'confirmed'=>1,
+												'active'=>$this->input->post('active'),												
+												'updated_at' => date("Y-m-d H:i:s"),
+												'created_at' => date("Y-m-d H:i:s")));
 			}
-			else {				
-				$user->where('id',$id)
-						->update(array(
-									'name'=>$this->input->post('name'), 
-									'surname'=>$this->input->post('surname'), 
-									'active'=>$this->input->post('active'),
-									'updated_at'=>date("Y-m-d H:i:s")));
-				
-				$user = new User();					
+			else {
+				$this->Model_user->update(array('name'=>$this->input->post('name'), 
+												'surname'=>$this->input->post('surname'), 
+												'active'=>$this->input->post('active'),
+												'updated_at'=>date("Y-m-d H:i:s")),$id);
 				if($this->input->post('password')!="")
 				{
-					$user->where('id', $id)->update(array(
-									'password'=>$this->hash->make($this->input->post('password'))));
+					$this->Model_user->update(array('password'=> $this->hash->make($this->input->post('password')), 
+												'updated_at'=>date("Y-m-d H:i:s")),$id);
 				}
+				$this->Model_assigned_role->deleteuser($id);
 				
-				$ar = new AssignedRole();
-				$ar->where('user_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
-			}
+			}	
+			
 			$roles = $this->input->post('roles');
 			if(!empty($roles)){
 				foreach($roles as $key => $role_id)
 		        {
-		        	$ar = new AssignedRole();
-		        	$ar->role_id = $role_id;
-					$ar->user_id = $id;
-					$ar->created_at = date("Y-m-d H:i:s");
-					$ar->updated_at = date("Y-m-d H:i:s");
-					$ar->save();			
+		        	$this->Model_assigned_role->insert(array('role_id'=>$role_id,
+												'user_id'=>$id,												
+												'updated_at' => date("Y-m-d H:i:s"),
+												'created_at' => date("Y-m-d H:i:s")));
 		        }
 			}
         }
@@ -238,25 +192,14 @@ class Admin extends Administrator_Controller{
             $offset = 0;
         }
 		
-        $userlogins = new UserLoginHistorys();		
-        $userlogins->where(array('deleted_at' => NULL))->where('user_id',$id)
-			->select('created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
+        $userlogins = $this->Model_user_login_history->fetch_paging_user($this->session->userdata('pageitemadmin'),$offset,$id);
 
-        if ($offset > $userlogins->paged->total_rows) {
-            $offset = floor($userlogins->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 		$user = new User();
-		$user ->select('id,name,surname') 
-								->where('id',$id)
-								->where(array('deleted_at' => NULL))
-								->get();
+        $user =  $this->Model_user->select($id);
 								
         $pagination_config = array(
             'base_url' => site_url('admin/users/listlogins/'.$id.'/'),
             'first_url' => site_url('admin/users/listlogins/'.$id.'/0'),
-            'total_rows' => $userlogins->paged->total_rows,
+            'total_rows' => $this->Model_user_login_history->total_rows_user($id),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 5,
            	'full_tag_open' => '<ul class="pagination">',
@@ -285,8 +228,7 @@ class Admin extends Administrator_Controller{
         $data['content'] = array(
             'pagination' => $this->pagination,
             'userlogins' => $userlogins,
-            'user' => $user,
-            'offset' => $offset
+            'user' => $user
         );
  
         $this->load->view('adminpage', $data);
@@ -302,9 +244,7 @@ class Admin extends Administrator_Controller{
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('userid');
-			
-			$user = new User();
-			$user->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        	$this->Model_user->delete($id);
         }
 	}
 		

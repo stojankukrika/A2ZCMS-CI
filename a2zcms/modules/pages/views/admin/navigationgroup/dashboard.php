@@ -7,7 +7,7 @@
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/pages/navigationgroups_create")?>">
 				<span class="icon-plus-sign icon-white"></span> Create</a>
 		</div>
-		<?php if ($content['navigationgroup']->result_count() > 0) { ?>
+		<?php if (!empty($content['navigationgroup'])) { ?>
    
     <table class="table table-hover">
 		<thead>

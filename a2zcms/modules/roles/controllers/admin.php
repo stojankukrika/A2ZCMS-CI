@@ -9,8 +9,7 @@ class Admin extends Administrator_Controller{
 	
 	function __construct(){
 		parent::__construct();	
-		$this->load->model("role");
-		$this->load->model("permission");					
+		$this->load->model(array("Model_assigned_role","Model_permission","Model_permission_role","Model_role"));
 	}
 	
 	function index(){
@@ -20,26 +19,12 @@ class Admin extends Administrator_Controller{
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $role = new Role();
+		$role = $this->Model_role->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
 		
-        $role->where(array('deleted_at' => NULL))
-			->select('id,name,is_admin,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
- 		
- 		foreach ($role as $item) {
- 			$assignedrole = new AssignedRole();		
-			$assignedrole->where('role_id', $item->id);
-			$item->countusers = $assignedrole->count();
-		 }
-        if ($offset > $role->paged->total_rows) {
-            $offset = floor($role->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
         $pagination_config = array(
             'base_url' => site_url('admin/roles/index/'),
             'first_url' => site_url('admin/roles/index/0'),
-            'total_rows' => $role->paged->total_rows,
+            'total_rows' => $this->Model_role->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -60,15 +45,13 @@ class Admin extends Administrator_Controller{
 			'num_tag_open' => '<li>',
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
-        );
-		
+        );	
 		
         $this->pagination->initialize($pagination_config);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'role' => $role,
-            'offset' => $offset
+            'role' => $role
         );
  
         $this->load->view('adminpage', $data);
@@ -78,33 +61,20 @@ class Admin extends Administrator_Controller{
 	{
 		$data['view'] = 'create_edit';
 
-		$permission = new Permission();
-		$permissionsAdmin = $permission
-								->select('id,name,display_name,is_admin') 
-								->where('is_admin','1')
-								->where(array('deleted_at' => NULL))
-								->get();
+		$permission = $this->Model_role->getallisadmin('1');
 								
-		$permission = new Permission();
-		$permissionsUser = $permission
-								->select('id,name,display_name,is_admin') 
-								->where('is_admin','0')
-								->where(array('deleted_at' => NULL))
-								->get();
+		$permission = $this->Model_role->getallisadmin('0');
 					
 		$permisionsadd = "";
 		$rolename = "";
 		
 		if($id>0)
 		{
-			$role = new Role();
-			$role->select('name')->where('id',$id)->get();
+			$role = $this->Model_role->select($id);
 			$rolename = $role->name;
 			
-			$permisions = new PermissionRole();
-			$permisions->select('permission_id')->where('role_id',$id)->where(array('deleted_at' => NULL))->get();
-			$permisionsadd = $permisions;
-			
+			$permisions = $this->Model_permission_role->selectrole($id);
+			$permisionsadd = $permisions;			
 		}
 		
 		$data['content'] = array('permissionsUser' => $permissionsUser, 
@@ -121,12 +91,7 @@ class Admin extends Administrator_Controller{
 			$permissions = $this->input->post('permission');
 			$is_admin = 0;
 			
-			$permission = new Permission();
-			$permissionsAdmin = $permission
-								->select('id,name,display_name,is_admin') 
-								->where('is_admin','1')
-								->where(array('deleted_at' => NULL))
-								->get();
+			$permissionsAdmin  = $this->Model_role->getallisadmin('1');
 								
 			foreach ($permissionsAdmin as $perm){
 					if(!empty($permissions)){
@@ -139,32 +104,27 @@ class Admin extends Administrator_Controller{
 					}
 				}
 			
-			$role = new Role();
 			if($id==0){
-				$role->name = $name;
-				$role->is_admin = $is_admin;	
-				$role->updated_at = date("Y-m-d H:i:s");										
-				$role->created_at = date("Y-m-d H:i:s");
-				$role->save();
-				$id = $role->id;
+				
+				$id = $this->Model_role->insert(array('name'=>$name,
+														'is_admin'=>$is_admin,
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {
+				$this->Model_role->update(array('name'=>$name,
+														'is_admin'=>$is_admin,
+														'updated_at' => date("Y-m-d H:i:s")),$id);
 				
-				$role->where('id', $id)->update(array('name'=>$name, 'is_admin'=>$is_admin, 
-							'updated_at'=>date("Y-m-d H:i:s")));
-				
-				$p = new PermissionRole();
-				$p->where('role_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
+				$this->Model_permission_role->delete($id);
 			}
 			if(!empty($permissions)){
 				foreach($permissions as $key => $permission_id)
 		        {
-		        	$permissionrole = new PermissionRole();
-		        	$permissionrole->permission_id = $permission_id;
-					$permissionrole->role_id = $id;
-					$permissionrole->created_at = date("Y-m-d H:i:s");
-					$permissionrole->updated_at = date("Y-m-d H:i:s");
-					$permissionrole->save();				
+		        	$this->Model_permission_role->insert(array('permission_id'=>$permission_id,
+												'role_id'=> $id,
+												'updated_at' => date("Y-m-d H:i:s"),
+												'created_at' => date("Y-m-d H:i:s")));				
 		        }
 			}
         }
@@ -181,8 +141,7 @@ class Admin extends Administrator_Controller{
         {
         	$id = $this->input->post('roleid');
 			
-			$role = new Role();
-			$role->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_role->delete($id);
         }
 	}
 }

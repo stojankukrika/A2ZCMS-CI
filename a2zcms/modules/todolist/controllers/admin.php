@@ -11,6 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model(array("Model_todolist"));
 	}
 	
 	function index(){
@@ -20,20 +21,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $todolist = new Todolist();
-        $todolist->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
-			->select('id,title,finished,work_done,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $todolist->paged->total_rows) {
-            $offset = floor($todolist->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
+        $todolist = $this->Model_todolist->fetch_paging($this->session->userdata('pageitemadmin'),$offset,$this->session->userdata('user_id'));
  
         $pagination_config = array(
             'base_url' => site_url('admin/todolist/index/'),
             'first_url' => site_url('admin/todolist/index/0'),
-            'total_rows' => $todolist->paged->total_rows,
+            'total_rows' => $this->Model_todolist->total_rows($this->session->userdata('user_id')),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -54,15 +47,13 @@ class Admin extends Administrator_Controller {
 			'num_tag_open' => '<li>',
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
-        );
-		
+        );	
 		
         $this->pagination->initialize($pagination_config);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'todolist' => $todolist,
-            'offset' => $offset
+            'todolist' => $todolist
         );
  
         $this->load->view('adminpage', $data);
@@ -76,8 +67,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$todolist_edit = new Todolist();
-			$todolist_edit->select('id,title,content,finished,work_done,created_at')->where('id',$id)->get();			
+			$todolist_edit = $this->Model_todolist->select($id);			
 		}
 		
 		$data['content'] = array('todolist_edit' => $todolist_edit);
@@ -88,24 +78,21 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$work_done = ($this->input->post('finished')==100.00)?'1':'0';       	
-			$todolist = new Todolist();
 			if($id==0){
-				$todolist->user_id = $this->session->userdata('user_id');
-				$todolist->title = $this->input->post('title');	
-				$todolist->content = $this->input->post('content');
-				$todolist->finished = $this->input->post('finished');
-				$todolist->work_done = $work_done;
-				$todolist->updated_at = date("Y-m-d H:i:s");										
-				$todolist->created_at = date("Y-m-d H:i:s");
-				$todolist->save();
-				$id = $todolist->id;
+				$id = $this->Model_todolist->insert(array('title'=>$this->input->post('title'),
+														'user_id' =>$this->session->userdata('user_id'),
+														'content' => $this->input->post('content'),
+														'finished' => $this->input->post('finished'),
+														'work_done' => $work_done,
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
-			else {				
-				$todolist->where('id', $id)->update(array('title'=>$this->input->post('title'), 
-							'content'=>$this->input->post('content'), 
-							'finished'=>$this->input->post('finished'), 
-							'work_done'=>$work_done, 
-							'updated_at'=>date("Y-m-d H:i:s")));
+			else {
+				$this->Model_todolist->update(array('title'=>$this->input->post('title'), 
+														'content'=>$this->input->post('content'), 
+														'finished'=>$this->input->post('finished'), 
+														'work_done'=>$work_done, 
+														'updated_at'=>date("Y-m-d H:i:s")),$id);
 			}
         }
     }
@@ -120,19 +107,15 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('todolistid');
-			
-			$todolist = new Todolist();
-			$todolist->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_todolist->delete($id);
         }
 	}
 	function change($id) {				
-		$todolist_edit = new Todolist();
-		$todolist_edit->select('finished,work_done')->where('id',$id)->get();		
+		$todolist_edit = $this->Model_todolist->select($id);
 		
-		$todolist = new Todolist();			
-		$todolist->where('id', $id)->update(array('finished'=>(($todolist_edit -> work_done + 1) % 2) *100.00, 
-							'work_done'=>($todolist_edit -> work_done + 1) % 2, 
-							'updated_at'=>date("Y-m-d H:i:s")));
+		$this->Model_todolist->update(array('finished'=>(($todolist_edit -> work_done + 1) % 2) *100.00, 				
+												'work_done'=>($todolist_edit -> work_done + 1) % 2, 
+												'updated_at'=>date("Y-m-d H:i:s")),$id);
 		return redirect(base_url('admin/todolist'));
 
 	}

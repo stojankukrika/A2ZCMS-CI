@@ -10,7 +10,8 @@ class Admin extends Administrator_Controller {
 
 	function __construct()
 	{
-		parent::__construct();
+		parent::__construct();	
+		$this->load->model(array("Model_custom_form","Model_custom_form_field"));
 	}
 	
 	function index(){
@@ -20,26 +21,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $customform = new Customform();
-        $customform->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
-			->select('id,title,recievers,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-		
-		foreach ($customform as $item) {
- 			$customformfield = new Customformfield();		
-			$customformfield->where('custom_form_id', $item->id)->where(array('deleted_at' => NULL));
-			$item->countfields = $customformfield->count();			
-		 }
-		
-        if ($offset > $customform->paged->total_rows) {
-            $offset = floor($customform->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
+        $customform = $this->Model_custom_form->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
  
         $pagination_config = array(
             'base_url' => site_url('admin/customforms/index/'),
             'first_url' => site_url('admin/customforms/index/0'),
-            'total_rows' => $customform->paged->total_rows,
+            'total_rows' => $this->Model_custom_form->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -66,8 +53,7 @@ class Admin extends Administrator_Controller {
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'customform' => $customform,
-            'offset' => $offset
+            'customform' => $customform
         );
  
         $this->load->view('adminpage', $data);
@@ -84,19 +70,13 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('customformid');
-			
-			$customform = new Customform();
-			$customform->where('id', $id)->where('user_id',$this->session->userdata('user_id'))
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_custom_form->delete($id);
         }
 	}
 	function deleteitem($custom_formid)
 	{
-		$id = $this->input->get('id');
-		
-		$customformfield = new CustomFormField();
-		$customformfield->where('id', $id)->where('custom_form_id',$custom_formid)
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+		$id = $this->input->get('id');		
+		$this->Model_custom_form_field->delete($id);
 		return 0;	
 	}
 	
@@ -108,20 +88,11 @@ class Admin extends Administrator_Controller {
 		$customformfields_count=0;
 		if($id>0)
 		{
-			$customform_edit = new Customform();
-			$customform_edit->select('id,title,recievers,message')
-			->where('id',$id)->get();	
+			$customform_edit = $this->Model_custom_form->select($id);
 			
-			$customformfields = new Customformfield();
-			$customformfields->select('id,custom_form_id,name,options,type,`order`,mandatory')
-			->order_by("order", "ASC")
-			->where(array('deleted_at' => NULL))
-			->where('custom_form_id',$id)->get();
-			
-			$customformfields_count = new Customformfield();
-			$customformfields_count = $customformfields_count->select('id')
-			->where(array('deleted_at' => NULL))
-			->where('custom_form_id',$id)->count();		
+			$customformfields = $this->Model_custom_form_field->selectorder('order', $id);
+						
+			$customformfields_count = $this->Model_custom_form_field->electcount($id);		
 		}
 		
 		$data['content'] = array('customform_edit' => $customform_edit,
@@ -133,26 +104,22 @@ class Admin extends Administrator_Controller {
 		$this->form_validation->set_rules('message', "Message", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$customform = new CustomForm();
 			if($id==0)
-			{			
-				$customform->title = $this->input->post('title');
-				$customform->message = $this->input->post('message');
-				$customform->recievers = $this->input->post('recievers');
-				$customform->user_id = $this->session->userdata('user_id');
-				$customform->updated_at = date("Y-m-d H:i:s");										
-				$customform->created_at = date("Y-m-d H:i:s");
-				$customform->save();
-				$id = $customform->id;
+			{
+				$id = $this->Model_custom_form->insert(array('title'=>$this->input->post('title'),
+														'message' => $this->input->post('message'),
+														'recievers' => $this->input->post('recievers'),
+														'user_id' => $this->session->userdata('user_id'),
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else{
-				$customform->where('id', $id)->update(array('title'=>$this->input->post('title'), 
-							'message'=>$this->input->post('message'), 
-							'recievers'=>$this->input->post('recievers'), 
-							'updated_at'=>date("Y-m-d H:i:s")));
-					
-				$c = new CustomFormField();
-				$c->where('custom_form_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
+				$this->Model_custom_form->update(array('title'=>$this->input->post('title'),
+														'message'=>$this->input->post('message'), 
+														'recievers'=>$this->input->post('recievers'), 
+														'updated_at' => date("Y-m-d H:i:s")),$id);
+									
+				$this->Model_custom_form_field->deletefomid($id);
 			}
 			
 			if($this->input->post('pagecontentorder')!=""){
@@ -168,17 +135,15 @@ class Admin extends Administrator_Controller {
 		$order = 1;
 		for ($i=0; $i <= $count*4-1; $i=$i+4) {
 			if($params[$i]!=""){
-				$customformfield = new CustomFormField();
-				$customformfield -> name = $params[$i];
-				$customformfield -> mandatory = $params[$i+1];
-				$customformfield -> type = $params[$i+2];
-				$customformfield -> options = $params[$i+3];
-				$customformfield -> order = $order;
-				$customformfield -> custom_form_id = $customform_id;
-				$customformfield -> user_id = $user_id;	
-				$customformfield -> updated_at = date("Y-m-d H:i:s");										
-				$customformfield -> created_at = date("Y-m-d H:i:s");					
-				$customformfield -> save();	
+				$this->Model_custom_form_field->insert(array('name'=>$params[$i],
+														'mandatory'=>$params[$i+1],
+														'type'=>$params[$i+2],
+														'options'=>$params[$i+3],
+														'order'=>$order,
+														'custom_form_id'=>$customform_id,
+														'user_id'=>$user_id,
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
 			$order++;
 		}

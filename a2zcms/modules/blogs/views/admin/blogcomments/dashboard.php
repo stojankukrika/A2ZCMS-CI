@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>List of blog comments</h1>
 		</div>
-		<?php if ($content['blogcomments']->result_count() > 0) { ?>
+		<?php if (!empty($content['blogcomments'])) { ?>
 			   
 		<table class="table table-hover">
 			<thead>

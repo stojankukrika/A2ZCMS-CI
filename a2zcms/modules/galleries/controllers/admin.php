@@ -11,6 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model(array("Model_gallery","Model_gallery_image","Model_gallery_image_comment"));
 	}
 	
 	function index(){
@@ -20,31 +21,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $gallery = new Gallery();
-        $gallery->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
-			->select('id,title,views,folderid,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
+		$gallery = $this->Model_gallery->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
 		
-		foreach ($gallery as $item) {
- 			$comments = new GalleryImageComment();		
-			$comments->where('gallery_id', $item->id)->where(array('deleted_at' => NULL));
-			$item->countcomments = $comments->count();
-			
-			$images = new GalleryImage();		
-			$images->where('gallery_id', $item->id)->where(array('deleted_at' => NULL));
-			$item->countimages = $images->count();
-			
-		 }
-		
-        if ($offset > $gallery->paged->total_rows) {
-            $offset = floor($gallery->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
         $pagination_config = array(
             'base_url' => site_url('admin/galleries/index/'),
             'first_url' => site_url('admin/galleries/index/0'),
-            'total_rows' => $gallery->paged->total_rows,
+            'total_rows' => $this->Model_gallery->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -72,8 +54,7 @@ class Admin extends Administrator_Controller {
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'gallery' => $gallery,
-            'offset' => $offset
+            'gallery' => $gallery
         );
  
         $this->load->view('adminpage', $data);
@@ -86,9 +67,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$gallery_edit = new Gallery();
-			$gallery_edit->select('id,title,views,folderid,start_publish,end_publish,created_at')
-			->where('id',$id)->get();			
+			$gallery_edit = $this->Model_gallery->select($id);		
 		}
 		
 		$data['content'] = array('gallery_edit' => $gallery_edit);
@@ -101,29 +80,27 @@ class Admin extends Administrator_Controller {
         	$start_publish = ($this->input->post('start_publish')=='')?date('Y-m-d') : $this->input->post('start_publish');
 			$end_publish = ($this->input->post('end_publish')=='')?null : $this->input->post('end_publish');
 			
-			$gallery = new Gallery();
 			if($id==0){
-				$gallery->user_id = $this->session->userdata('user_id');
-				$gallery->title = $this->input->post('title');	
-				$gallery->start_publish = $start_publish;
-				$gallery->end_publish = $end_publish;
-				$gallery->folderid = sha1($gallery -> title . $gallery -> start_publish);
-				$gallery->updated_at = date("Y-m-d H:i:s");										
-				$gallery->created_at = date("Y-m-d H:i:s");
-				if ($gallery->save()) {
-					if (!is_dir(DATA_PATH.'/gallery/'.$gallery->folderid)) {
-					    mkdir(DATA_PATH.'/gallery/' . $gallery->folderid, 0777, TRUE);						
-					}
-					if (!is_dir(DATA_PATH.'/gallery/'.$gallery->folderid.'/thumbs')) {
-					    mkdir(DATA_PATH.'/gallery/' . $gallery->folderid.'/thumbs', 0777, TRUE);						
-					}
+				$folderid = sha1($this->input->post('title') . $gallery -> start_publish);
+				$this->Model_gallery->insert(array('title'=>$this->input->post('title'),
+														'user_id' => $this->session->userdata('user_id'),
+														'start_publish' => $start_publish,
+														'end_publish' => $end_publish,
+														'folderid' => $folderid,														
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
+				if (!is_dir(DATA_PATH.'/gallery/'.$folderid)) {
+				    mkdir(DATA_PATH.'/gallery/' . $folderid, 0777, TRUE);						
+				}
+				if (!is_dir(DATA_PATH.'/gallery/'.$folderid.'/thumbs')) {
+				    mkdir(DATA_PATH.'/gallery/' . $folderid.'/thumbs', 0777, TRUE);						
 				}
 			}
-			else {				
-				$gallery->where('id', $id)->update(array('title'=>$this->input->post('title'), 
-							'start_publish'=>$start_publish, 
-							'end_publish'=>$end_publish, 
-							'updated_at'=>date("Y-m-d H:i:s")));
+			else {
+				$this->Model_gallery->update(array('title'=>$this->input->post('title'),
+													'start_publish'=>$start_publish,
+													'end_publish'=>$end_publish,
+													'updated_at' => date("Y-m-d H:i:s")),$id);
 			}
         }
     }
@@ -138,10 +115,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('galleryid');
-			
-			$gallery = new Gallery();
-			$gallery->where('id', $id)->where('user_id',$this->session->userdata('user_id'))
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_gallery->delete($id);
         }
 	}
 	
@@ -149,8 +123,7 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'upload';
 		
-		$gallery = new Gallery();
-		$gallery->select('title')->where('id',$id)->get();
+		$gallery = $this->Model_gallery->select($id);
 		$data['content'] = array('gid' => $id,'title'=>$gallery->title);
 		
 		$this->load->view('adminmodalpage', $data);
@@ -159,8 +132,7 @@ class Admin extends Administrator_Controller {
 	{
 		   	$id = $this->input->get('gid');
 			
-        	$gallery = new Gallery();
-			$gallery->select('folderid')->where('id',$id)->get();
+        	$gallery = $this->Model_gallery->select($id);
 
 			$path = DATA_PATH.'/gallery/'. $gallery -> folderid;
 			Fineuploader::init($path);
@@ -171,15 +143,12 @@ class Admin extends Administrator_Controller {
 			$extension = $info -> getExtension();
 
 			$name = sha1($name . $gallery -> folderid . time()) . '.' . $extension;
-
-			$galleryimage = new GalleryImage();
-			$galleryimage->gallery_id = $id;
-			$galleryimage->content = $name;
-			$galleryimage->user_id = $this->session->userdata('user_id');
-			$galleryimage->updated_at = date("Y-m-d H:i:s");										
-			$galleryimage->created_at = date("Y-m-d H:i:s");
-			$galleryimage->save();
-
+			
+			$this->Model_gallery_image->insert(array('gallery_id'=>$id,
+														'content' => $name,
+														'user_id' => $this->session->userdata('user_id'),							
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			Fineuploader::upload($name);
 
 			$path2 = DATA_PATH.'/gallery/' . $gallery -> folderid . '/thumbs/';
@@ -191,8 +160,7 @@ class Admin extends Administrator_Controller {
 			echo json_encode($upload_success);
 	}
 
-	/*Gallery comments*/
-	
+	/*Gallery comments*/	
 	function galleryimagecomments(){
 		$data['view'] = 'galleryimagecomments/dashboard';
 		
@@ -200,20 +168,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $galleryimagecomment = new GalleryImageComment();
-        $galleryimagecomment->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
-			->select('id,content,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-		
-        if ($offset > $galleryimagecomment->paged->total_rows) {
-            $offset = floor($galleryimagecomment->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+		$galleryimagecomment = $this->Model_gallery_image_comment->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+ 	 
         $pagination_config = array(
             'base_url' => site_url('admin/galleries/index/'),
             'first_url' => site_url('admin/galleries/index/0'),
-            'total_rows' => $galleryimagecomment->paged->total_rows,
+            'total_rows' => $this->Model_gallery_image_comment->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -241,8 +201,7 @@ class Admin extends Administrator_Controller {
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'galleryimagecomment' => $galleryimagecomment,
-            'offset' => $offset
+            'galleryimagecomment' => $galleryimagecomment
         );
  
         $this->load->view('adminpage', $data);
@@ -255,26 +214,14 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $galleryimagecomment = new GalleryImageComment();
-        $galleryimagecomment->where(array('deleted_at' => NULL))
-        	->where('gallery_id',$gallery_id)
-			->where('user_id',$this->session->userdata('user_id'))
-			->select('id,content,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-		
-		$gallery = new Gallery();
-        $gallery->where('id',$gallery_id)
-			->select('title')->get();
-			
-        if ($offset > $galleryimagecomment->paged->total_rows) {
-            $offset = floor($galleryimagecomment->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+		$galleryimagecomment = $this->Model_gallery_image_comment->fetch_paging_gallery($this->session->userdata('pageitemadmin'),$offset,$gallery_id);
+ 	 
+ 		$gallery = $this->Model_gallery->select($gallery_id);
+		 
         $pagination_config = array(
             'base_url' => site_url('admin/galleries/listcomments/'.$gallery_id.'/'),
             'first_url' => site_url('admin/galleries/listcomments/'.$gallery_id.'/0'),
-            'total_rows' => $galleryimagecomment->paged->total_rows,
+            'total_rows' => $this->Model_gallery_image_comment->total_rows_gallery($gallery_id),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 5,
            	'full_tag_open' => '<ul class="pagination">',
@@ -295,15 +242,13 @@ class Admin extends Administrator_Controller {
 			'num_tag_open' => '<li>',
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
-        );
-		
+        );		
 		
         $this->pagination->initialize($pagination_config);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
             'galleryimagecomment' => $galleryimagecomment,
-            'offset' => $offset,
             'gallery' => $gallery,
         );
  
@@ -318,9 +263,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$gallerycomment_edit = new GalleryImageComment();
-			$gallerycomment_edit->select('id,content,created_at')
-			->where('id',$id)->get();			
+			$gallerycomment_edit = $this->Model_gallery_comment->select($id);			
 		}
 		
 		$data['content'] = array('gallerycomment_edit' => $gallerycomment_edit);
@@ -330,9 +273,8 @@ class Admin extends Administrator_Controller {
 		$this->form_validation->set_rules('content', "Content", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$gallerycomment = new GalleryImageComment();
-			$gallerycomment->where('id', $id)->update(array('content'=>$this->input->post('content'),
-							'updated_at'=>date("Y-m-d H:i:s")));
+        	$this->Model_gallery_image_comment->update(array('content'=>$this->input->post('content'),
+													'updated_at' => date("Y-m-d H:i:s")),$id);
 		}
     }
 	function galleryimagecomments_delete($id)
@@ -346,10 +288,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('gallerycommentid');
-			
-			$gallerycomment = new GalleryImageComment();
-			$gallerycomment->where('id', $id)->where('user_id',$this->session->userdata('user_id'))
-			->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_gallery_image_comment->delete($id);
         }
 	}
 	
@@ -358,10 +297,7 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'galleryimages/dashboard';
 
-		$gallery = new Gallery();
-    	$gallery->where('user_id',$this->session->userdata('user_id'))
-				->where(array('deleted_at' => NULL))
-				->select('id,title')->get();
+		$gallery = $this->Model_gallery->getall();
  
         $data['content'] = array(
             'gallery' => $gallery,
@@ -374,8 +310,8 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('galleryimageid');
-			$galleryimage = new GalleryImage();
-			$galleryimage->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        	
+			$this->Model_gallery_image->delete($id);
         }
 	}
 	
@@ -383,10 +319,7 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'galleryimages/listimages';
 
-		$gallery = new Gallery();
-    	$gallery->where('user_id',$this->session->userdata('user_id'))
-				->where(array('deleted_at' => NULL))->where('id',$id)
-				->select('id,title')->get();
+		$gallery = $this->Model_gallery->select($id);
  
         $data['content'] = array(
             'gallery' => $gallery,
@@ -399,21 +332,15 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('galleryimageid');
-			$galleryimage = new GalleryImage();
-			$galleryimage->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_gallery_image->delete($id);
         }
 	}
 	
 	function imageforgallery($id)
 	{
-		$galleryimages = new GalleryImage();
-		$galleryimages->select('id,content,voteup,votedown,hits')
-						->where(array('deleted_at' => NULL))
-						->where('gallery_id',$id)->get();
+		$galleryimages = $this->Model_gallery_image->selectgalery($id);
 		
-		$gallery = new Gallery();
-		$gallery->select('id,folderid')
-						->where('id',$id)->get();
+		$gallery = $this->Model_gallery->select($id);
 						
 		$images = array();
 		foreach ($galleryimages as $galleryimage) {

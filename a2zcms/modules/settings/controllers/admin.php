@@ -11,18 +11,17 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model("settings");
+		$this->load->model("Model_settings");
 	}
 	
 	function index()
 	{
 		$data['view'] = 'settings';
-		$s = $this->settings->getSettigns();
-		$data['content'] = $s;
+		$settings = $this->Model_settings->getSettigns();
+		$data['content'] = $settings;
 		$this->load->view('adminpage', $data);
 		
-			$settings_role = new Settings();
-			$settings_role->where('rule !=', '')->get();
+			$settings_role = $this->Model_settings->getSettignsRule();
 			foreach ($settings_role as $item) {
 				$this->form_validation->set_rules($item->varname, $item->vartitle, $item->rule);
 	      	}
@@ -32,8 +31,7 @@ class Admin extends Administrator_Controller {
 	        	$settings = $this->input->post();
 				foreach($settings as $name => $data)
 		        {
-		        	$settings_update = new Settings();
-					$settings_update->where('varname',$name)->update('value', $data);
+		        	$settings_update = $this->Model_settings->update($name,$data);
 		        }
 				redirect($this->uri->uri_string());
 	        }

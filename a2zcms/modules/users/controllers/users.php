@@ -9,7 +9,7 @@ class Users extends Website_Controller{
 	
 	function __construct(){
 		parent::__construct();		
-		$this->load->model('user');		
+		$this->load->model('Model_user');		
 	
 	}
 	function login(){
@@ -19,18 +19,14 @@ class Users extends Website_Controller{
 		}
 		
 		if($_POST){
-			
-	        $u = new User();
-	        $u->username = $this->input->post('username');
-	        $u->password = $this->input->post('password');
-					
-			  if ($u->login())
+			  if ($u = $this->Model_user->login($this->input->post('username'),$this->input->post('password')))
 		        {
+		        	$user = $this->Model_user->selectuser($this->input->post('username'));
 		        	$data = array(
-		        	'user_id' => $u->id,
-					'username' => $u->username,
-					'name' => $u->name,
-					'surname' => $u->surname,
+		        	'user_id' => $user->id,
+					'username' => $user->username,
+					'name' => $user->name,
+					'surname' => $user->surname,
 					'logged_in' => true,
 					'admin_logged_in' => true,
 					);
@@ -39,7 +35,7 @@ class Users extends Website_Controller{
 		        }
 		        else
 		        {
-		            echo '<p>' . $u->error->login . '</p>';
+		            echo '<p>Wrong username or password!</p>';
 		        }
 		}
 		$data['main_content'] = 'index';
@@ -57,57 +53,32 @@ class Users extends Website_Controller{
 		if($_POST){
 			$this->load->library('hash');
 			
-			$u = new User();
-			$u->name = $this->input->post('name');
-	        $u->surname = $this->input->post('surname');
-			$u->username = $this->input->post('username');
-	        $u->password = $this->hash->make($this->input->post('password'));
-	        $u->confirm_password = $this->hash->make($this->input->post('confirm_password'));
-	        $u->email = $this->input->post('email');
-			$u->confirmation_code = rand(9999, 99999999);
-			$u->confirmed = 0;
-			$u->active = 1;
-			  if ($u->save())
-		        {
-		            echo 'div class="col-xs-12 col-sm-6 col-lg-8"><br>
+			if($this->input->post('password')!="" && $this->input->post('password')!=$this->input->post('confirm_password'))
+			{
+				$this->Model_user->insert(array('name'=>$this->input->post('name'),
+											'surname'=>$this->input->post('surname'),
+											'username'=>$this->input->post('username'),
+											'password'=>$this->hash->make($this->input->post('password')),
+											'confirm_password'=>$this->hash->make($this->input->post('confirm_password')),
+											'email'=>$this->input->post('email'),
+											'confirmation_code'=>rand(9999, 99999999),
+											'confirmed'=>0,
+											'active'=>1,
+											'updated_at' => date("Y-m-d H:i:s")));
+	        	echo 'div class="col-xs-12 col-sm-6 col-lg-8"><br>
 						<div class="row">You have successfully registered</p></div></div>';
-		        }
-		        else
-		        {
-		            echo 'div class="col-xs-12 col-sm-6 col-lg-8"><br>
-						<div class="row">' . $u->error->string . '</p></div></div>';
-		        }
+	        }
+	        else
+	        {
+	            echo 'div class="col-xs-12 col-sm-6 col-lg-8"><br>
+					<div class="row">Password not equal</p></div></div>';
+	        }
 		}		
 		$data['main_content'] = 'register';
 		$this->load->view('page', $data);
 		
 	}
-	function account(){
-		//Redirect
-		$this->_member_area();
-		
-		if($_POST){
-			$userdata = new stdClass();
-			$userdata->user_nicename 	= $this->input->post('nickname');
-			$userdata->user_email 		= $this->input->post('email');
-			$userdata->user_pass		= md5($this->input->post('password'));
-			
-			$insert = $this->user_model->update($this->session->userdata('userid'), $userdata);
-			
-			if($insert){
-				$data['message'] = "Updated succesfully";
-				$data['user'] = $this->user_model->user_by_id($this->session->userdata('userid'));
-				$data['main_content'] = 'account';
-				$this->load->view('page', $data);
-			}
-			return;
-		}
-		
-		$data['user'] = $this->user_model->user_by_id($this->session->userdata('userid'));
-		$data['main_content'] = 'account';
-		$this->load->view('page', $data);
-		
-	}
+	
 
 	function _member_area(){
 		if($this->_is_logged_in()){
@@ -125,11 +96,7 @@ class Users extends Website_Controller{
 	
 	function userdata(){
 		if($this->_is_logged_in()){
-			$user = new User();
-			$user->select('id, name, surname, username,email');
-			$user->where('username', $this->session->userdata('username'));
-			$user->get(1);
-			return $user;
+			return $this->Model_user->select($this->session->userdata('user_id'));
 		}else{
 			return false;
 		}

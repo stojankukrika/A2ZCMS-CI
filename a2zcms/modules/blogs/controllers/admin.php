@@ -11,6 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->model(array("Model_blog","Model_blogcategory","Model_blog_blog_category","Model_blogcomment"));
 	}
 	/*Blog categories*/
 	function blogcategorys()
@@ -21,21 +22,10 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $blogcategories = new BlogCategory();
-		
-        $blogcategories->where(array('deleted_at' => NULL))
-			->select('id,title,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $blogcategories->paged->total_rows) {
-            $offset = floor($blogcategories->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/blogcategorys/'),
             'first_url' => site_url('admin/blogs/blogcategorys/0'),
-            'total_rows' => $blogcategories->paged->total_rows,
+            'total_rows' => $this->Model_blogcategory->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -56,17 +46,15 @@ class Admin extends Administrator_Controller {
 			'num_tag_open' => '<li>',
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
-        );
-		
-		
+        );		
         $this->pagination->initialize($pagination_config);
+		$blogcategories = $this->Model_blogcategory->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
             'blogcategories' => $blogcategories,
             'offset' => $offset
-        );
- 
+        ); 
         $this->load->view('adminpage', $data);
 	}
 	function blogcategorys_delete($id)
@@ -79,10 +67,8 @@ class Admin extends Administrator_Controller {
 		$this->form_validation->set_rules('blogcategoryid', "blogcategoryid", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$id = $this->input->post('blogcategoryid');
-			
-			$blogcategory = new BlogCategory();
-			$blogcategory->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+        	$id = $this->input->post('blogcategoryid');			
+			$this->Model_blogcategory->delete($id);
         }
 	}
 	
@@ -94,8 +80,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$blogcategory_edit = new BlogCategory();
-			$blogcategory_edit->select('title')->where('id',$id)->get();
+			$blogcategory_edit = $this->Model_blogcategory->select($id);
 		}
 		
 		$data['content'] = array('blogcategory_edit' => $blogcategory_edit);
@@ -107,16 +92,13 @@ class Admin extends Administrator_Controller {
         {
 			$blogcategory = new BlogCategory();
 			if($id==0){
-				$blogcategory->title = $this->input->post('title');
-				$blogcategory->updated_at = date("Y-m-d H:i:s");										
-				$blogcategory->created_at = date("Y-m-d H:i:s");
-				$blogcategory->save();
-				$id = $blogcategory->id;
+				$this->Model_blogcategory->insert(array('title'=>$this->input->post('title'),
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {
-				
-				$blogcategory->where('id', $id)->update(array('title'=>$this->input->post('title'), 
-							'updated_at'=>date("Y-m-d H:i:s")));
+				$this->Model_blogcategory->update(array('title'=>$this->input->post('title'),
+														'updated_at' => date("Y-m-d H:i:s")),$id);
 			}			
         }
     }
@@ -130,28 +112,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $blogs = new Blog();
-		
-        $blogs->where(array('deleted_at' => NULL))->where('user_id',$this->session->userdata('user_id'))
-			->select('id,title,voteup,votedown,hits,start_publish,end_publish,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-		
-		foreach ($blogs as $item) {
- 			$blogs->countcomments = 0;
- 			$blogcomment = new BlogComment();		
-			$blogcomment->where('blog_id', $item->id);
-			$item->countcomments = $blogcomment->count();
-		 }
-		
-        if ($offset > $blogs->paged->total_rows) {
-            $offset = floor($blogs->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+       	$blogs = $this->Model_blog->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+ 	
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/index/'),
             'first_url' => site_url('admin/blogs/index/0'),
-            'total_rows' => $blogs->paged->total_rows,
+            'total_rows' => $this->Model_blog->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -179,8 +145,7 @@ class Admin extends Administrator_Controller {
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'blogs' => $blogs,
-            'offset' => $offset
+            'blogs' => $blogs
         );
  
         $this->load->view('adminpage', $data);
@@ -195,21 +160,11 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$blog_edit = new Blog();
-			$blog_edit->select('id,user_id,title,content,start_publish,end_publish,resource_link,image,created_at') 
-							->where('id',$id)
-							->where(array('deleted_at' => NULL))
-							->get();
-							
-			$assignedcategory = new BlogBlogCategory();
-			$assignedcategory->select('blog_category_id as id') 
-							->where('blog_id',$id)
-							->where(array('deleted_at' => NULL))
-							->get();
+			$blog_edit = $this->Model_blog->select($id);							
+			$assignedcategory = $this->Model_blog_blog_category->select($id);
 		}
 		
-		$category = new BlogCategory();
-		$category->select('id,title')->where(array('deleted_at' => NULL))->get();
+		$category = $this->Model_blog_blog_category->getall();
 							
 		$data['content'] = array('blog_edit' => $blog_edit, 
 								'assignedcategory' =>$assignedcategory,
@@ -245,49 +200,42 @@ class Admin extends Administrator_Controller {
 			$start_publish = ($this->input->post('start_publish')=='')?date('Y-m-d') : $this->input->post('start_publish');
 			$end_publish = ($this->input->post('end_publish')=='')?null : $this->input->post('end_publish');
 			
-        	$blog = new Blog();
 			if($id==0){
-				$blog->user_id = $this->session->userdata('user_id');
-				$blog->title = $this->input->post('title');
-				$blog->slug = url_title( $this->input->post('title'), 'dash', true);
-				$blog->resource_link = $this->input->post('resource_link');
-				$blog->image = $file;
-				$blog->content = $this->input->post('content');
-				$blog->start_publish= $start_publish;
-				$blog->end_publish= $end_publish;	
-				$blog->updated_at = date("Y-m-d H:i:s");										
-				$blog->created_at = date("Y-m-d H:i:s");
-				$blog->save();
-				$id = $blog->id;
+				$id = $this->Model_blog->insert(array('user_id'=>$this->session->userdata('user_id'),
+												'title'=> $this->input->post('title'),
+												'slug'=> url_title( $this->input->post('title'), 'dash', true),
+												'resource_link'=> $this->input->post('resource_link'),
+												'image'=> $file,
+												'content'=>  $this->input->post('content'),
+												'start_publish'=> $start_publish,
+												'end_publish'=> $end_publish,				
+												'updated_at' => date("Y-m-d H:i:s"),
+												'created_at' => date("Y-m-d H:i:s")));
 			}
-			else {				
-				$blog->where('id',$id)
-						->update(array(
-									'title'=>$this->input->post('title'), 
-									'slug' => url_title( $this->input->post('title'), 'dash', true),
-									'resource_link'=>$this->input->post('resource_link'), 
-									'content'=>$this->input->post('content'),
-									'start_publish'=>$start_publish,
-									'end_publish'=>$end_publish,
-									'updated_at'=>date("Y-m-d H:i:s")));
-				
+			else {
+				$this->Model_blog->update(array('title'=> $this->input->post('title'),
+												'slug'=> url_title( $this->input->post('title'), 'dash', true),
+												'resource_link'=> $this->input->post('resource_link'),
+												'image'=> $file,
+												'content'=>  $this->input->post('content'),
+												'start_publish'=> $start_publish,
+												'end_publish'=> $end_publish,
+												'updated_at' => date("Y-m-d H:i:s")),$id);
 				if($file!=""){						
-					$blog->where('id',$id)
-							->update(array('image'=>$file));	
-				}			
-				$ar = new BlogBlogCategory();
-				$ar->where('blog_id', $id)->update('deleted_at', date("Y-m-d H:i:s"));
+					$this->Model_blog->update(array('image'=>$file),$id);	
+				}
+				
+				$this->Model_blog->delete($id);
+					
 			}
 			$categorys = $this->input->post('category');
 			if(!empty($categorys)){
 				foreach($categorys as $key => $category_id)
 		        {
-		        	$ar = new BlogBlogCategory();
-		        	$ar->blog_category_id = $category_id;
-					$ar->blog_id = $id;
-					$ar->created_at = date("Y-m-d H:i:s");
-					$ar->updated_at = date("Y-m-d H:i:s");
-					$ar->save();			
+		        	$this->Model_blog_blog_category->insert(array('blog_category_id'=> $category_id,
+																	'blog_id'=> $id,
+																	'created_at'=> date("Y-m-d H:i:s"),
+																	'updated_at' => date("Y-m-d H:i:s")),$id);
 		        }
 			}
         }
@@ -304,9 +252,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('blogid');
-			
-			$blog = new Blog();
-			$blog->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_blog->delete($id);
         }
 	}	
 	
@@ -319,21 +265,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $blogcomments = new BlogComment();
-		
-        $blogcomments->where(array('deleted_at' => NULL))
-			->select('id,content,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $blogcomments->paged->total_rows) {
-            $offset = floor($blogcomments->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 
+		$blogcomments = $this->Model_blog_comment->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+ 	
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/blogcategorys/'),
             'first_url' => site_url('admin/blogs/blogcategorys/0'),
-            'total_rows' => $blogcomments->paged->total_rows,
+            'total_rows' => $this->Model_blog_comment->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -362,7 +299,6 @@ class Admin extends Administrator_Controller {
         $data['content'] = array(
             'pagination' => $this->pagination,
             'blogcomments' => $blogcomments,
-            'offset' => $offset
         );
  
         $this->load->view('adminpage', $data);
@@ -376,24 +312,13 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $blogcomments = new BlogComment();
-		$blog = new Blog();
-		
-        $blogcomments->where(array('deleted_at' => NULL))->where('blog_id',$id)
-			->select('id,content,created_at')
-            ->get_paged($offset, $this->session->userdata('pageitemadmin'), TRUE);
-
-        if ($offset > $blogcomments->paged->total_rows) {
-            $offset = floor($blogcomments->paged->total_rows / $this->session->userdata('pageitemadmin')) *
-                $this->session->userdata('pageitemadmin');
-        }
- 		
-		$blog->select('title')->where('id',$id)->get();
+        $blogcomments = $this->Model_blog_comment->fetch_paging_blog($this->session->userdata('pageitemadmin'),$offset,$id);
+		$blog = $this->Model_blog->select($id);
 		
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/listcommentsforblog/'+$id+'/'),
             'first_url' => site_url('admin/blogs/listcommentsforblog/'+$id+'/0'),
-            'total_rows' => $blogcomments->paged->total_rows,
+            'total_rows' => $this->Model_blog_comment->total_rows($id),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 5,
            	'full_tag_open' => '<ul class="pagination">',
@@ -414,15 +339,13 @@ class Admin extends Administrator_Controller {
 			'num_tag_open' => '<li>',
 			'num_tag_close' => '</li>',
 			'full_tag_close' => '</ul>',
-        );
-		
+        );	
 		
         $this->pagination->initialize($pagination_config);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
             'blogcomments' => $blogcomments,
-            'offset' => $offset,
             'blog' =>$blog
         );
  
@@ -440,46 +363,9 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('blogcategoryid');
-			
-			$blogcategory = new BlogCategory();
-			$blogcategory->where('id', $id)->update(array('deleted_at'=>date("Y-m-d H:i:s")));
+			$this->Model_blog_comment->delete($id);
         }
 	}
-	
-	function blogcomments_create($id)
-	{
-		$data['view'] = 'blogcategory/create_edit';
-
-		$blogcategory_edit = "";
-		
-		if($id>0)
-		{
-			$blogcategory_edit = new BlogCategory();
-			$blogcategory_edit->select('title')->where('id',$id)->get();
-		}
-		
-		$data['content'] = array('blogcategory_edit' => $blogcategory_edit);
-		
-		$this->load->view('adminmodalpage', $data);
-		
-		$this->form_validation->set_rules('title', "Title", 'required');
-	   	if ($this->form_validation->run() == TRUE)
-        {
-			$blogcategory = new BlogCategory();
-			if($id==0){
-				$blogcategory->title = $this->input->post('title');
-				$blogcategory->updated_at = date("Y-m-d H:i:s");										
-				$blogcategory->created_at = date("Y-m-d H:i:s");
-				$blogcategory->save();
-				$id = $blogcategory->id;
-			}
-			else {
-				
-				$blogcategory->where('id', $id)->update(array('title'=>$this->input->post('title'), 
-							'updated_at'=>date("Y-m-d H:i:s")));
-			}			
-        }
-    }
 	
 	/*Install*/
 	function install()

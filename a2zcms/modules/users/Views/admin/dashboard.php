@@ -7,7 +7,7 @@
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/users/create")?>">
 				<span class="icon-plus-sign icon-white"></span> Create</a>
 		</div>
-		<?php if ($content['users']->result_count() > 0) { ?>
+		<?php if (!empty($content['users'])) { ?>
 			   
 		<table class="table table-hover">
 			<thead>
@@ -46,7 +46,7 @@
     	</tbody>
 	</table>
    <div class="dataTables_paginate paging_bootstrap">
-            <?php echo $content['pagination']->create_links(); ?>
+            <?=$content['pagination']->create_links(); ?>
     </div>
 <?php } else { ?>
     <div class="item_list_empty">

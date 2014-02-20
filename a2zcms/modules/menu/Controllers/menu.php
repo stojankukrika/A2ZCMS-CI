@@ -10,17 +10,17 @@ class Menu extends Website_Controller{
 	
 	function __construct(){
 		parent::__construct();
-		$this->load->model("menu_model");
+		$this->load->model("Model_menu");
 		$this->load->module("users");
 	}
 	
 	function index(){
 		$data['current'] = $this->uri->segment(1);
-		$data['items'] = $this->menu_model->read();
+		$data['items'] = $this->Model_menu->read();
 		
 		//Admin links
 		if($this->users->_is_admin()){
-			$data['items'][] = $this->menu_model->menu_admin();
+			$data['items'][] = $this->Model_menu->menu_admin();
 		}
 		$data['currentuser'] = @$this->users->userdata();
 
