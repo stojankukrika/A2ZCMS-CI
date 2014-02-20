@@ -10,7 +10,18 @@ class Install extends CI_Controller {
         'data/avatar' => FALSE,
         'data/page' => FALSE,
     );
-	
+	function __construct()
+    {
+        parent::__construct();
+		
+    	$this->load->config('a2zcms');
+    	$installed = $this->config->item('installed');
+		if($installed!='false')
+		{
+			$this->load->helper('url');
+			redirect('/');
+		}
+	}
 	public function index()
 	{
         $data = array();
