@@ -134,3 +134,11 @@ INSERT INTO `admin_navigations` (`id`, `plugin_id`, `icon`, `order`, `created_at
 (3, 4, 'icon-group', 3, NOW(), NOW(), NULL),
 (4, 5, 'icon-cloud', 4, NOW(), NOW(), NULL),
 (5, 2, 'icon-cogs', 5, NOW(), NOW(), NULL);
+--
+-- Dumping data for table `admin_subnavigations`
+--
+
+INSERT INTO `admin_subnavigations` (`id`, `admin_navigation_id`, `title`, `url`, `icon`, `order`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'Navigation group', 'pages/navigationgroups', 'icon-th-list', 1, NOW(), NOW(), NULL),
+(2, 1, 'Pages', 'pages', 'icon-th-large', 2, NOW(), NOW(), NULL),
+(3, 1, 'Navigation', 'pages/navigation', 'icon-th', 3, NOW(), NOW(), NULL);
