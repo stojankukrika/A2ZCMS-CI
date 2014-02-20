@@ -10,11 +10,11 @@ class Customforms extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-		$this->load->model(array("Model_custom_form","Model_custom_form_field"));
+		$this->load->model(array("Model_customform","Model_customform_field"));
     }
 	/*function for plugins*/
 	function getCustomFormId(){
-		$customform = $this->Model_custom_form->getall();
+		$customform = $this->Model_customform->getall();
 		return array('customform' =>$customform);
 	}
 		

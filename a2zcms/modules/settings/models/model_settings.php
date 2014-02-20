@@ -11,10 +11,16 @@ class Model_settings extends CI_Model {
     {
         parent::__construct();
     }
-	public function getSettigns()
+	public function getSettignsgroup()
 	{
-		return $this->db->not_like('groupname', 'version')->get('settings')->result();
+		return $this->db->not_like('groupname', 'version')->group_by('groupname')->get('settings')->result();
 	}
+	
+	public function getSettignsForGroup($groupname)
+	{
+		return $this->db->where('groupname', $groupname)->get('settings')->result();
+	}
+	
 	public function getSettignsRule()
 	{
 		return $this->db->not_like('groupname', 'version')->where('rule !=', '')->get('settings')->result();

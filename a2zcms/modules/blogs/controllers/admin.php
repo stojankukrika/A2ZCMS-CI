@@ -11,7 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array("Model_blog","Model_blogcategory","Model_blog_blog_category","Model_blogcomment"));
+		$this->load->model(array("Model_blog","Model_blog_category","Model_blog_blog_category","Model_blog_comment"));
 	}
 	/*Blog categories*/
 	function blogcategorys()
@@ -565,6 +565,7 @@ class Admin extends Administrator_Controller {
 						   'updated_at' => date("Y-m-d H:i:s"),
 						   'deleted_at' => NULL
 						   );
+			$this->db->insert('admin_subnavigations', $data);
 		}
 	}
 	/*Uninstall*/

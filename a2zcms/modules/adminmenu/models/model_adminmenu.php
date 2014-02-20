@@ -27,7 +27,7 @@ class Model_adminmenu extends CI_Model{
 					->order_by("order", "asc")
 					->order_by("admin_navigation_id", "asc")
 					->get('admin_subnavigations')->result();
-					if(!empty($mainadminsubmenu->id)){
+					if(!empty($mainadminsubmenu)){
 						$item->adminsubmenu = $mainadminsubmenu;
 					}			
 		}	

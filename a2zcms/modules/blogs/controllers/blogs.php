@@ -10,7 +10,7 @@ class Blogs extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-        $this->load->model(array("Model_blog","Model_blogcategory"));
+        $this->load->model(array("Model_blog","Model_blog_category"));
 	
     }
 	/*function for plugins*/

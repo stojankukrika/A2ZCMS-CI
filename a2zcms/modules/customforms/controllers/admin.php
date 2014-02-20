@@ -11,7 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();	
-		$this->load->model(array("Model_custom_form","Model_custom_form_field"));
+		$this->load->model(array("Model_customform","Model_customform_field"));
 	}
 	
 	function index(){
@@ -21,12 +21,12 @@ class Admin extends Administrator_Controller {
         if (!($offset > 0)) {
             $offset = 0;
         }
-        $customform = $this->Model_custom_form->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+        $customform = $this->Model_customform->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
  
         $pagination_config = array(
             'base_url' => site_url('admin/customforms/index/'),
             'first_url' => site_url('admin/customforms/index/0'),
-            'total_rows' => $this->Model_custom_form->total_rows(),
+            'total_rows' => $this->Model_customform->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -70,7 +70,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('customformid');
-			$this->Model_custom_form->delete($id);
+			$this->Model_customform->delete($id);
         }
 	}
 	function deleteitem($custom_formid)
@@ -88,11 +88,11 @@ class Admin extends Administrator_Controller {
 		$customformfields_count=0;
 		if($id>0)
 		{
-			$customform_edit = $this->Model_custom_form->select($id);
+			$customform_edit = $this->Model_customform->select($id);
 			
-			$customformfields = $this->Model_custom_form_field->selectorder('order', $id);
+			$customformfields = $this->Model_customform_field->selectorder('order', $id);
 						
-			$customformfields_count = $this->Model_custom_form_field->electcount($id);		
+			$customformfields_count = $this->Model_customform_field->electcount($id);		
 		}
 		
 		$data['content'] = array('customform_edit' => $customform_edit,
@@ -106,7 +106,7 @@ class Admin extends Administrator_Controller {
         {
 			if($id==0)
 			{
-				$id = $this->Model_custom_form->insert(array('title'=>$this->input->post('title'),
+				$id = $this->Model_customform->insert(array('title'=>$this->input->post('title'),
 														'message' => $this->input->post('message'),
 														'recievers' => $this->input->post('recievers'),
 														'user_id' => $this->session->userdata('user_id'),
@@ -114,12 +114,12 @@ class Admin extends Administrator_Controller {
 														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else{
-				$this->Model_custom_form->update(array('title'=>$this->input->post('title'),
+				$this->Model_customform->update(array('title'=>$this->input->post('title'),
 														'message'=>$this->input->post('message'), 
 														'recievers'=>$this->input->post('recievers'), 
 														'updated_at' => date("Y-m-d H:i:s")),$id);
 									
-				$this->Model_custom_form_field->deletefomid($id);
+				$this->Model_customform_field->deletefomid($id);
 			}
 			
 			if($this->input->post('pagecontentorder')!=""){
@@ -135,7 +135,7 @@ class Admin extends Administrator_Controller {
 		$order = 1;
 		for ($i=0; $i <= $count*4-1; $i=$i+4) {
 			if($params[$i]!=""){
-				$this->Model_custom_form_field->insert(array('name'=>$params[$i],
+				$this->Model_customform_field->insert(array('name'=>$params[$i],
 														'mandatory'=>$params[$i+1],
 														'type'=>$params[$i+2],
 														'options'=>$params[$i+3],

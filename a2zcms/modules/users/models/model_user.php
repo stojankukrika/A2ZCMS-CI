@@ -23,6 +23,9 @@ class Model_user extends CI_Model {
 	public function insert($data) {		
 		$this->db->insert('users', $data);
 		return $this -> db -> insert_id();
+    }	
+	public function inserthistory($data) {		
+		$this->db->insert('user_login_historys', $data);
     }
 	
 	public function total_rows() {
@@ -81,10 +84,11 @@ class Model_user extends CI_Model {
         			->or_where('email', $username)->get('users')->first_row();
 		if ($u->password != $this->encrypt($password))
         {
-            return FALSE;
+        	return FALSE;
         }
         else
         {
+        	$this->inserthistory(array('created_at'=> date("Y-m-d H:i:s"),'updated_at'=> date("Y-m-d H:i:s"),'user_id'=> $u->id));
             return TRUE;
         }
     }

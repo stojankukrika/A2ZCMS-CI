@@ -6,7 +6,7 @@ Version: 1.0
 
 // ------------------------------------------------------------------------
 
-class Model_custom_form extends CI_Model {
+class Model_customform extends CI_Model {
 	
 	function __construct()
 	{

@@ -41,7 +41,7 @@ class Model_page extends CI_model {
     }
 	
 	public function getall() {		
-		return $this->db->where(array('deleted_at' => NULL))->get('pages')->first_row();
+		return $this->db->where(array('deleted_at' => NULL))->get('pages');
     }
 	
 	public function insert($data) {		
