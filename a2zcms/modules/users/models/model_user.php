@@ -46,19 +46,19 @@ class Model_user extends CI_Model {
    }
 	
 	public function total_rows_role($id_role) {
-        return $this->db->where(array('u.deleted_at' => NULL))
-        				->where('role_id',$id_role)
-        				->from("users u")
-						->join('assigned_roles ar','u.id = ar.user_id')
-						->count_all();
+        return $this->db->from("users")
+						->join('assigned_roles','users.id = assigned_roles.user_id')
+						->where(array('users.deleted_at' => NULL))
+        				->where('assigned_roles.role_id',$id_role)
+        				->count_all();
     }
 	
     public function fetch_paging_role($limit, $start,$id_role) {
         $this->db->limit($limit, $start);
-        $query = $this->db->where(array('u.deleted_at' => NULL))
-        				->where('role_id',$id_role)
-        				->from("users u")
-						->join('assigned_roles ar','u.id = ar.user_id')
+        $query = $this->db->from("users")
+						->join('assigned_roles','users.id = assigned_roles.user_id')
+						->where(array('users.deleted_at' => NULL))
+        				->where('assigned_roles.role_id',$id_role)        				
         				->get();
  
         if ($query->num_rows() > 0) {

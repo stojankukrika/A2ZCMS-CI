@@ -22,14 +22,14 @@ class Model_user_login_history extends CI_Model {
 	
 	
 	public function total_rows_user($user_id) {
-        return $this->db->where(array('u.deleted_at' => NULL))
+        return $this->db->where(array('deleted_at' => NULL))
         				->where('user_id',$user_id)
 						->count_all('user_login_historys');
     }
 	
     public function fetch_paging_user($limit, $start,$user_id) {
         $this->db->limit($limit, $start);
-        $query = $this->db->where(array('u.deleted_at' => NULL))
+        $query = $this->db->where(array('deleted_at' => NULL))
         				->where('user_id',$user_id)
         				->get('user_login_historys');
  

@@ -68,7 +68,8 @@ class Admin extends Administrator_Controller{
         }
 		
 		$users = $this->Model_user->fetch_paging_role($this->session->userdata('pageitemadmin'),$offset,$role_id);
- 
+ 		$role = $this->Model_role->select($role_id);
+		
         $pagination_config = array(
             'base_url' => site_url('admin/users/listusersforrole/'.$role_id.'/'),
             'first_url' => site_url('admin/users/listusersforrole/'.$role_id.'/0'),
@@ -100,7 +101,8 @@ class Admin extends Administrator_Controller{
  
         $data['content'] = array(
             'pagination' => $this->pagination,
-            'users' => $users
+            'users' => $users,
+            'role' => $role,
         );
  
         $this->load->view('adminpage', $data);
@@ -185,7 +187,7 @@ class Admin extends Administrator_Controller{
     }
 	function listlogins($id)
 	{
-		$data['view'] = 'listusersforrole';
+		$data['view'] = 'listlogins';
 		
 		$offset = (int)$this->uri->segment(5);
         if (!($offset > 0)) {

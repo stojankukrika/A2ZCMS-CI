@@ -61,9 +61,8 @@ class Admin extends Administrator_Controller{
 	{
 		$data['view'] = 'create_edit';
 
-		$permission = $this->Model_role->getallisadmin('1');
-								
-		$permission = $this->Model_role->getallisadmin('0');
+		$permissionsAdmin = $this->Model_permission->getallisadmin(1);
+		$permissionsUser = $this->Model_permission->getallisadmin(0);
 					
 		$permisionsadd = "";
 		$rolename = "";

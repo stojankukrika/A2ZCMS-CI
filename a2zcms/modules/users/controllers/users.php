@@ -63,6 +63,7 @@ class Users extends Website_Controller{
 											'confirmation_code'=> md5(microtime() . $this->input->post('password')),
 											'confirmed'=>0,
 											'active'=>1,
+											'created_at' => date("Y-m-d H:i:s"),
 											'updated_at' => date("Y-m-d H:i:s")));
 	        	echo '<div class="container"><div class="col-xs-12 col-sm-6 col-lg-8"><br>
 						<div class="row">You have successfully registered</p></div></div></div>';
