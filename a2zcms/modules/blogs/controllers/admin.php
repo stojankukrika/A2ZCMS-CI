@@ -634,6 +634,12 @@ class Admin extends Administrator_Controller {
 			/*delete plugin functions*/			
 			$this->db->delete('plugin_functions', array('plugin_id' => $plugin_id->id)); 
 			
+			/*delete admin navigation*/			
+			$navigation = $this->db->select('admin_navigations', array('plugin_id' => $plugin_id->id));
+			
+			$this->db->delete('admin_subnavigations', array('admin_navigation_id' => $navigation->id));			
+			$this->db->delete('admin_navigations', array('id' => $navigation->id)); 	
+			
 			/*delete plugin*/
 			$this->db->delete('plugins', array('id' => $plugin_id->id)); 
 					

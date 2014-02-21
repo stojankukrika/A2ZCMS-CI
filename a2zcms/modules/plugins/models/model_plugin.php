@@ -28,7 +28,7 @@ class Model_plugin extends CI_Model {
 	public function update($data,$id) {
 		
 		$this->db->where('plugin_id', $id);
-		$this->db->update('plugins', $data);
+		$this->db->update('admin_navigations', $data);
     }
 	
 }

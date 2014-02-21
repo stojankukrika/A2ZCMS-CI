@@ -212,6 +212,17 @@ class Admin extends Administrator_Controller {
 			$this->db->where_in('name', $names);
 			$this->db->delete('permissions');
 			
+			$plugin_id = $this->db->select('id')
+						->from('plugins')
+						->where('name','todolist')->get()->first_row();
+						
+			/*delete admin navigation*/			
+			$navigation = $this->db->select('admin_navigations', array('plugin_id' => $plugin_id->id));
+			
+			$this->db->delete('admin_subnavigations', array('admin_navigation_id' => $navigation->id));			
+			$this->db->delete('admin_navigations', array('id' => $navigation->id)); 	
+			
+			
 			/*delete plugin*/
 			$this->db->delete('plugins', array('name' =>'todolist')); 
 			
