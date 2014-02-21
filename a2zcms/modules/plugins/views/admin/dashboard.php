@@ -36,7 +36,7 @@
 	$(".iframe").colorbox({
 					iframe : true,
 					width : "50%",
-					height : "40%"
+					height : "50%"
 				});
 	var startPosition;
 	var endPosition;

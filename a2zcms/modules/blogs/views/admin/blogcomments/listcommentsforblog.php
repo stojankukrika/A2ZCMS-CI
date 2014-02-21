@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>List of blog comments - <?=$content['blog']->title?></h1>
 		</div>
-		<?php if ($content['blogcomments']->result_count() > 0) { ?>
+		<?php if (!empty($content['blogcomments'])) { ?>
 			   
 		<table class="table table-hover">
 			<thead>
@@ -20,7 +20,6 @@
 			<td>'.$item->content.'</td>
 			<td>'.$item->created_at.'</td>
 			<td class="">
-				<a class="iframe btn btn-sm btn-default cboxElement" href="'.base_url("admin/blogs/blogcomments_create/".$item->id).'"><i class="icon-edit "></i></a>
 				<a class="iframe btn btn-sm btn-danger cboxElement" href="'.base_url("admin/blogs/blogcomments_delete/".$item->id).'"><i class="icon-trash "></i></a>
             </td>
 			</tr>';

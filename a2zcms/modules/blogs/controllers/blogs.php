@@ -20,7 +20,7 @@ class Blogs extends Website_Controller{
 	}
 	
 	function getBlogGroupId(){
-		$blog = $this->Model_blogcategory->getall();
+		$blog = $this->Model_blog_category->getall();
 		return array('blog' =>$blog);
 	}
 		

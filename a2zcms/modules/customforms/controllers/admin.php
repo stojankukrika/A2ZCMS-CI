@@ -92,7 +92,7 @@ class Admin extends Administrator_Controller {
 			
 			$customformfields = $this->Model_customform_field->selectorder('order', $id);
 						
-			$customformfields_count = $this->Model_customform_field->electcount($id);		
+			$customformfields_count = $this->Model_customform_field->selectcount($id);		
 		}
 		
 		$data['content'] = array('customform_edit' => $customform_edit,

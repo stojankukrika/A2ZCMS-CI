@@ -29,7 +29,7 @@ class Model_assigned_role extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("assigned_roles");
+		return $this->db->where(array('deleted_at' => NULL))->get("assigned_roles")->result();
 	}
 	
 	public function delete($id) {		

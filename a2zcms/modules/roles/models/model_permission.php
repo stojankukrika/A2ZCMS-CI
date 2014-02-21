@@ -29,12 +29,12 @@ class Model_permission extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("permissions");
+		return $this->db->where(array('deleted_at' => NULL))->get("permissions")->result();
 	}
 	
 	public function getallisadmin($is_admin)
 	{
-		$query = $this->db->where('is_admin',$is_admin)->where(array('deleted_at' => NULL))->get("permissions");
+		return $this->db->where('is_admin',$is_admin)->where(array('deleted_at' => NULL))->get("permissions")->result();
 	}
 	
 	public function delete($id) {		

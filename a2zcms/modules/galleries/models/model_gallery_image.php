@@ -25,7 +25,7 @@ class Model_gallery_image extends CI_Model {
             foreach ($query->result() as $row) {
             	$row->countcomments = $this->db->where(array('deleted_at' => NULL))
 												->where('gallery_image_id',$row->id)
-            									->count_all("gallery_images_comments");
+            									->count_all_results("gallery_images_comments");
                 $data[] = $row;
             }
             return $data;
@@ -34,7 +34,7 @@ class Model_gallery_image extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("gallery_images");
+		return $this->db->where(array('deleted_at' => NULL))->get("gallery_images")->result();
 	}
 	
 	public function delete($id) {		
@@ -50,7 +50,7 @@ class Model_gallery_image extends CI_Model {
     }
 	
 	public function selectgalery($galery_id) {		
-		return $this->db->where('galery_id', $galery_id)->get('gallery_images')->result();
+		return $this->db->where('gallery_id', $galery_id)->where(array('deleted_at' => NULL))->get('gallery_images')->result();
     }
 	
 	public function insert($data) {		

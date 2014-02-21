@@ -276,8 +276,8 @@ class Admin extends Administrator_Controller {
 			$pluginfunction_content = $this->Model_page_plugin_function->contentpluginfunction();
 			
 			foreach ($pluginfunction_content as $item) {
-				$function_id = $plugin->function_id;
-				$function_grid = $plugin->function_grid;
+				$function_id = (isset($plugin->function_id))?$plugin->function_id:NULL;
+				$function_grid = (isset($plugin->function_grid))?$plugin->function_grid:NULL;
 				if($function_id!=NULL){
 					$item->function_id = modules::run($plugin->name.'/'.$function_id);
 				}
@@ -296,7 +296,6 @@ class Admin extends Administrator_Controller {
 			
 			$pluginfunction_content = $this->Model_page_plugin_function->contentpluginfunctionpage($id);
 			$pluginfunction_content_all =  $this->Model_page_plugin_function->contentpluginfunction();
-			
 			 /*add to view other content plugins that not in page*/
 			$temp = array();
 				foreach ($pluginfunction_content as $item) {
@@ -410,7 +409,7 @@ class Admin extends Administrator_Controller {
 			
 			}
 			$file='';
-			if($_FILES['image']['name']!=""){
+			if(!empty($_FILES['image']['name'])){
 				$filename = $_FILES['image']['name'];
 				$file = sha1($filename.time()).'.'.pathinfo($filename, PATHINFO_EXTENSION);
 				$config['file_name'] = $file;
@@ -429,16 +428,14 @@ class Admin extends Administrator_Controller {
 			    $config_manip['thumb_marker'] = '_thumb';
 	            $this->load->library('image_lib', $config_manip);
 	            $this->image_lib->resize();
-			
-			}
-			if($file!=""){
-				$this->Model_page->update(array('image'=>$file),$id);
+				
+				$this->Model_page->update(array('image'=>$file),$id);			
 			}
 			
 			$pagesidebar = ($this->input->post('pagesidebar')!="")?$this->input->post('pagesidebar'):"";
 			$pagecontentorder = $this->input->post('pagecontentorder');
 			$pagecontent = $this->input->post('pagecontent');
-		
+			
 			$this->SaveData($pagesidebar,$pagecontentorder, $pagecontent,$id);
         }
 		
@@ -472,19 +469,18 @@ class Admin extends Administrator_Controller {
 		if($pagesidebar!=""){
 				$order = 1;
 				foreach ($pagesidebar as $value) {
-					$plugin_function = new PluginFunction();
-					$plugin_function->where('id', $value)->get();
+					$plugin_function = $this->Model_plugin_function->select($value);
 					$params = $plugin_function->params;
 					if($params!=NULL){
 						$params = explode(';', $params);
-						foreach ($params as $param) {
-							if($param!=""){
-								$param = explode(':', $param);
-									$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
+						foreach ($params as $parameter) {
+							if($parameter!=""){
+								$parameter = explode(':', $parameter);
+								$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
 															'order' => $order,
-															'param' => $param['0'],
-															'type' => (strstr($param['1'], ','))?'array':(is_int($param['1']))?'int':'string',
-															'value' => $param['1'],	
+															'param' => $parameter['0'],
+															'type' => (strstr($parameter['1'], ','))?'array':(is_int($parameter['1']))?'int':'string',
+															'value' => $parameter['1'],	
 															'page_id' => $page_id,	
 															'updated_at' => date("Y-m-d H:i:s"),
 															'created_at' => date("Y-m-d H:i:s")));
@@ -494,9 +490,7 @@ class Admin extends Administrator_Controller {
 				else {
 					$this->Model_page_plugin_function->insert(array('plugin_function_id'=>$value,
 															'order' => $order,
-															'param' => $param['0'],
 															'page_id' => $page_id,
-															'value' => $param['1'],	
 															'page_id' => $page_id,	
 															'updated_at' => date("Y-m-d H:i:s"),
 															'created_at' => date("Y-m-d H:i:s")));															

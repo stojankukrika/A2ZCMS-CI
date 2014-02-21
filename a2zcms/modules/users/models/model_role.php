@@ -23,7 +23,7 @@ class Model_role extends CI_Model {
             foreach ($query->result() as $row) {
             	$row->countusers = $this->db->where(array('deleted_at' => NULL))
 												->where('role_id',$row->id)
-            									->count_all("assigned_roles");
+            									->count_all_results("assigned_roles");
                 $data[] = $row;
             }
             return $data;
@@ -32,7 +32,7 @@ class Model_role extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("roles");
+		return $this->db->where(array('deleted_at' => NULL))->get("roles")->result();
 	}
 	
 	public function delete($id) {		

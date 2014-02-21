@@ -42,12 +42,16 @@
 				<label class="col-md-2 control-label" for="category">Category</label>
 				<div class="col-md-6">
 					<select name="category[]" id="category" multiple style="width:350px;" >
-						<?php
+						<?php						
 						foreach ($content['category'] as $category){
-							echo '<option value="'.$category->id.'"'.
-							(( array_search($category->id, $content['assignedcategory']) !== false 
-								&& array_search($category->id, $content['assignedcategory']) >= 0) ? ' selected="selected"' : '').
-								'>'.$category->title.'</option>';
+							echo '<option value="'.$category->id.'"';
+							$temp = "";
+							for($i=0;$i<count($content['assignedcategory']);$i++){
+								if(array_search($category->id, $content['assignedcategory'][$i]) !== false 
+										&& array_search($category->id, $content['assignedcategory']) >= 0)
+									$temp = ' selected="selected"';
+								}							
+							echo $temp.'>'.$category->title.'</option>';
 						}							
 						?>
 					</select>

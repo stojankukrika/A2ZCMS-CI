@@ -24,7 +24,7 @@ class Model_blog extends CI_Model {
             foreach ($query->result() as $row) {
             	$row->countcomments = $this->db->where(array('deleted_at' => NULL))
 												->where('blog_id',$row->id)
-            									->count_all("blogs_comments");
+            									->count_all_results("blog_comments");
                 $data[] = $row;
             }
             return $data;
@@ -33,7 +33,7 @@ class Model_blog extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("blogs");
+		return $this->db->where(array('deleted_at' => NULL))->get("blogs")->result();
 	}
 	
 	public function delete($id) {		

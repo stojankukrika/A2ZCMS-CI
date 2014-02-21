@@ -25,7 +25,7 @@ class Admin extends Administrator_Controller {
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/blogcategorys/'),
             'first_url' => site_url('admin/blogs/blogcategorys/0'),
-            'total_rows' => $this->Model_blogcategory->total_rows(),
+            'total_rows' => $this->Model_blog_category->total_rows(),
             'per_page' => $this->session->userdata('pageitemadmin'),
             'uri_segment' => 4,
            	'full_tag_open' => '<ul class="pagination">',
@@ -48,7 +48,7 @@ class Admin extends Administrator_Controller {
 			'full_tag_close' => '</ul>',
         );		
         $this->pagination->initialize($pagination_config);
-		$blogcategories = $this->Model_blogcategory->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
+		$blogcategories = $this->Model_blog_category->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
  
         $data['content'] = array(
             'pagination' => $this->pagination,
@@ -68,7 +68,7 @@ class Admin extends Administrator_Controller {
 	   	if ($this->form_validation->run() == TRUE)
         {
         	$id = $this->input->post('blogcategoryid');			
-			$this->Model_blogcategory->delete($id);
+			$this->Model_blog_category->delete($id);
         }
 	}
 	
@@ -80,7 +80,7 @@ class Admin extends Administrator_Controller {
 		
 		if($id>0)
 		{
-			$blogcategory_edit = $this->Model_blogcategory->select($id);
+			$blogcategory_edit = $this->Model_blog_category->select($id);
 		}
 		
 		$data['content'] = array('blogcategory_edit' => $blogcategory_edit);
@@ -90,14 +90,13 @@ class Admin extends Administrator_Controller {
 		$this->form_validation->set_rules('title', "Title", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-			$blogcategory = new BlogCategory();
 			if($id==0){
-				$this->Model_blogcategory->insert(array('title'=>$this->input->post('title'),
+				$this->Model_blog_category->insert(array('title'=>$this->input->post('title'),
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {
-				$this->Model_blogcategory->update(array('title'=>$this->input->post('title'),
+				$this->Model_blog_category->update(array('title'=>$this->input->post('title'),
 														'updated_at' => date("Y-m-d H:i:s")),$id);
 			}			
         }
@@ -164,8 +163,7 @@ class Admin extends Administrator_Controller {
 			$assignedcategory = $this->Model_blog_blog_category->select($id);
 		}
 		
-		$category = $this->Model_blog_blog_category->getall();
-							
+		$category = $this->Model_blog_category->getall();
 		$data['content'] = array('blog_edit' => $blog_edit, 
 								'assignedcategory' =>$assignedcategory,
 								'category' => $category);
@@ -225,7 +223,7 @@ class Admin extends Administrator_Controller {
 					$this->Model_blog->update(array('image'=>$file),$id);	
 				}
 				
-				$this->Model_blog->delete($id);
+				$this->Model_blog_blog_category->delete($id);
 					
 			}
 			$categorys = $this->input->post('category');
@@ -399,7 +397,7 @@ class Admin extends Administrator_Controller {
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ";
 			$this->db->query($query);
 			
-			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blog_blog_categorys` (
+			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."blog_blog_categories` (
 					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 					  `blog_id` int(10) unsigned NOT NULL,
 					  `blog_category_id` int(10) unsigned NOT NULL,
@@ -407,8 +405,8 @@ class Admin extends Administrator_Controller {
 					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 					  `deleted_at` timestamp NULL DEFAULT NULL,
 					  PRIMARY KEY (`id`),
-					  KEY `blog_blog_categorys_blog_id_index` (`blog_id`),
-					  KEY `blog_blog_categorys_blog_category_id_index` (`blog_category_id`)
+					  KEY `blog_blog_categories_blog_id_index` (`blog_id`),
+					  KEY `blog_blog_categories_blog_category_id_index` (`blog_category_id`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
 			$this->db->query($query);
 			
@@ -440,9 +438,9 @@ class Admin extends Administrator_Controller {
 					  ADD CONSTRAINT `blogs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`);";
 			$this->db->query($query);
 			
-			$query = "ALTER TABLE `".$database->dbprefix."blog_blog_categorys`
-					  ADD CONSTRAINT `blog_blog_categorys_blog_category_id_foreign` FOREIGN KEY (`blog_category_id`) REFERENCES `".$database->dbprefix."blog_categories` (`id`) ON DELETE CASCADE,
-					  ADD CONSTRAINT `blog_blog_categorys_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `".$database->dbprefix."blogs` (`id`) ON DELETE CASCADE;";
+			$query = "ALTER TABLE `".$database->dbprefix."blog_blog_categories`
+					  ADD CONSTRAINT `blog_blog_categories_blog_category_id_foreign` FOREIGN KEY (`blog_category_id`) REFERENCES `".$database->dbprefix."blog_categories` (`id`) ON DELETE CASCADE,
+					  ADD CONSTRAINT `blog_blog_categories_blog_id_foreign` FOREIGN KEY (`blog_id`) REFERENCES `".$database->dbprefix."blogs` (`id`) ON DELETE CASCADE;";
 			$this->db->query($query);
 			
 			$query = "ALTER TABLE `".$database->dbprefix."blog_comments`
@@ -529,6 +527,18 @@ class Admin extends Administrator_Controller {
 						   );
 			$this->db->insert('plugin_functions', $data);
 			
+			$data = array(
+						   'title' => 'Display blogs' ,
+						   'plugin_id' => $plugin_id,
+						   'function' => 'showBlogs',
+						   'params' => 'id;sort;order;limit;',
+						   'type' => 'content',
+						   'created_at' => date("Y-m-d H:i:s"),
+						   'updated_at' => date("Y-m-d H:i:s"),
+						   'deleted_at' => NULL
+						   );
+			$this->db->insert('plugin_functions', $data);
+			
 			
 			/*add admin subnavigation*/
 			$data = array(
@@ -566,6 +576,7 @@ class Admin extends Administrator_Controller {
 						   'deleted_at' => NULL
 						   );
 			$this->db->insert('admin_subnavigations', $data);
+			
 		}
 	}
 	/*Uninstall*/
@@ -630,7 +641,7 @@ class Admin extends Administrator_Controller {
 			$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_comments`";
 			$this->db->query($query);
 			
-			$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_blog_categorys`";
+			$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_blog_categories`";
 			$this->db->query($query);
 			
 			$query = "DROP TABLE IF EXISTS `".$database->dbprefix."blog_categories`";

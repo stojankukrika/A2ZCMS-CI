@@ -23,7 +23,7 @@ class Model_navigation_link extends CI_Model {
             									->select('title')->get('navigation_groups')->first_row()->title;
 				$row->page = $this->db->where(array('deleted_at' => NULL))
 												->where('id',$row->navigation_group_id)
-            									->select('title')->get('page')->first_row()->title;
+            									->select('title')->get('pages')->first_row()->title;
                 $data[] = $row;
             }
             return $data;

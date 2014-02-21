@@ -24,7 +24,7 @@ class Model_customform extends CI_Model {
             foreach ($query->result() as $row) {
             	$row->countfields = $this->db->where(array('deleted_at' => NULL))
 												->where('custom_form_id',$row->id)
-            									->count_all("custom_form_fields");
+            									->count_all_results("custom_form_fields");
                 $data[] = $row;
             }
             return $data;
@@ -33,7 +33,7 @@ class Model_customform extends CI_Model {
    	}
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("custom_forms");
+		return $this->db->where(array('deleted_at' => NULL))->get("custom_forms")->result();
 	}
 	
 	public function delete($id) {		

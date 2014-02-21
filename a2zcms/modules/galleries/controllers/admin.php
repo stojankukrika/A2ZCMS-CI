@@ -255,28 +255,6 @@ class Admin extends Administrator_Controller {
         $this->load->view('adminpage', $data);
 	}
 
-	function galleryimagecomments_create($id)
-	{
-		$data['view'] = 'galleryimagecomments/create_edit';
-
-		$gallerycomment_edit = "";
-		
-		if($id>0)
-		{
-			$gallerycomment_edit = $this->Model_gallery_comment->select($id);			
-		}
-		
-		$data['content'] = array('gallerycomment_edit' => $gallerycomment_edit);
-		
-		$this->load->view('adminmodalpage', $data);
-		
-		$this->form_validation->set_rules('content', "Content", 'required');
-	   	if ($this->form_validation->run() == TRUE)
-        {
-        	$this->Model_gallery_image_comment->update(array('content'=>$this->input->post('content'),
-													'updated_at' => date("Y-m-d H:i:s")),$id);
-		}
-    }
 	function galleryimagecomments_delete($id)
 	{
 		$data['view'] = 'galleryimagecomments/delete';

@@ -30,7 +30,7 @@ class Model_customform_field extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("custom_form_fields");
+		return $this->db->where(array('deleted_at' => NULL))->get("custom_form_fields")->result();
 	}
 	
 	public function delete($id) {		
@@ -50,15 +50,15 @@ class Model_customform_field extends CI_Model {
     }
 
 	public function select($id) {		
-		return $this->db->where('id', $id)->get('custom_form_fields')->first_row();
+		return $this->db->where('id', $id)->where(array('deleted_at' => NULL))->get('custom_form_fields')->first_row();
     }
 	
 	public function selectorder($order,$id) {		
-		return $this->db->where('custom_form_id', $id)->order_by($order,'ASC')->get('custom_form_fields')->result();
+		return $this->db->where('custom_form_id', $id)->where(array('deleted_at' => NULL))->order_by($order,'ASC')->get('custom_form_fields')->result();
     }
 	
 	public function selectcount($id) {		
-		return $this->db->where('custom_form_id', $id)->count_all('custom_form_fields');
+		return $this->db->where('custom_form_id', $id)->where(array('deleted_at' => NULL))->count_all('custom_form_fields');
     }
 	
 	public function insert($data) {		

@@ -86,16 +86,14 @@ class Admin extends Administrator_Controller{
 		$this->form_validation->set_rules('name', "Name", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$name = $this->input->post('name');
-			$permissions = $this->input->post('permission');
-			$is_admin = 0;
+        	$is_admin = 0;
 			
-			$permissionsAdmin  = $this->Model_role->getallisadmin('1');
+			$permissionsAdmin  = $this->Model_permission->getallisadmin(1);
 								
 			foreach ($permissionsAdmin as $perm){
-					if(!empty($permissions)){
-			            foreach($permissions as $item){
-		            		if($item==$perm->id && $perm->is_admin ==1)
+					if(!empty($this->input->post('permission'))){
+			            foreach($this->input->post('permission') as $item){
+		            		if($item==$perm->id && $perm->is_admin =='1')
 							{
 								$is_admin = 1;
 							}
@@ -105,20 +103,20 @@ class Admin extends Administrator_Controller{
 			
 			if($id==0){
 				
-				$id = $this->Model_role->insert(array('name'=>$name,
+				$id = $this->Model_role->insert(array('name'=>$this->input->post('name'),
 														'is_admin'=>$is_admin,
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {
-				$this->Model_role->update(array('name'=>$name,
+				$this->Model_role->update(array('name'=>$this->input->post('name'),
 														'is_admin'=>$is_admin,
 														'updated_at' => date("Y-m-d H:i:s")),$id);
 				
 				$this->Model_permission_role->delete($id);
 			}
-			if(!empty($permissions)){
-				foreach($permissions as $key => $permission_id)
+			if(!empty($this->input->post('permission'))){
+				foreach($this->input->post('permission') as $key => $permission_id)
 		        {
 		        	$this->Model_permission_role->insert(array('permission_id'=>$permission_id,
 												'role_id'=> $id,

@@ -30,7 +30,7 @@ class Model_gallery_image_comment extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("gallery_images_comments");
+		return $this->db->where(array('deleted_at' => NULL))->get("gallery_images_comments")->result();
 	}
 	
 	public function fetch_paging_gallery($limit, $start,$gallery_id) {

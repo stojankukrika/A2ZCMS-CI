@@ -29,14 +29,14 @@ class Model_permission_role extends CI_Model {
    }
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("permission_role");
+		return $this->db->where(array('deleted_at' => NULL))->get("permission_role")->result();
 	}
 	
 	public function delete($role_id) {		
 		$data = array(
                'deleted_at' => date("Y-m-d H:i:s")
             );
-			$this->db->where('role_id', $id);
+			$this->db->where('role_id', $role_id);
 			$this->db->update('permission_role', $data);
     }
 

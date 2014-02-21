@@ -31,7 +31,7 @@ class Model_blog_category extends CI_Model {
 	
 	public function getall()
 	{
-		$query = $this->db->where(array('deleted_at' => NULL))->get("blog_categories");
+		return $this->db->where(array('deleted_at' => NULL))->get("blog_categories")->result();
 	}
 	
 	public function delete($id) {		

@@ -52,12 +52,12 @@ class Model_page_plugin_function extends CI_Model {
 	
 	public function contentpluginfunction()
 	{
-		return $this->db->from('plugin_functions pf')
-				->join('plugins p', 'p.id = pf.plugin_id')
-				->where('type','content')
-				->where('pf.deleted_at', NULL)
-				->select('pf.title, p.name, p.function_id, pf.id, pf.function, pf.params, p.function_grid')
-				->get()->result();
+		return	 $this->db->from('plugin_functions pf')
+													->join('plugins p', 'p.id = pf.plugin_id')
+													->where('type','content')
+													->where('pf.deleted_at', NULL)
+													->select('pf.title, p.name, p.function_id, pf.id, pf.function, pf.params, p.function_grid')
+													->get()->result();
 	}
 	
 	public function contentpluginfunctionpage($id)

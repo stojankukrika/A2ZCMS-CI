@@ -240,14 +240,16 @@
 										$result .= '<label class="control-label" for="limit">Limit</label>
 											<input type="text" name="pagecontent['.$item->id.'][limit]" value="'.((isset($item->limits) && $item->limits!="")?$item->limits:"0").'" id="limit'.$item->id.'">';
 											}
-										if(isset($item->ids) && $item->ids != "" || strpos($item->params,'id') !== false){										
+										if(isset($item->ids) && $item->ids != "" || strpos($item->params,'id') !== false){
 										$result .= '<div class="controls">
 											<label class="control-label" for="id">Items</label>
 											  <select id="id'.$item->id.'" name="pagecontent['.$item->id.'][id][]" class="form-control" multiple data-rel="chosen">';
 												if(!empty($item->function_id)){
-													foreach ($item->function_id as $id){
-														if($id->id!="")
-														$result .= '<option value="'.$id->id.'" '.((isset($item->ids) && strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$id->id.' '.$id->title.'</option>';
+													foreach ($item->function_id as $items){
+														foreach($items as $id){										
+															if($id->id!="")
+															$result .= '<option value="'.$id->id.'" '.((isset($item->ids) && strpos($item->ids,(string)$id->id) !== false)?'selected="selected"':'').'>'.$id->id.' '.$id->title.'</option>';
+														}
 													}
 												}
 											  $result .= '</select>
@@ -258,9 +260,11 @@
 											<label class="control-label" for="selectError1">Select groups</label>
 											  <select id="grid'.$item->id.'" name="pagecontent['.$item->id.'][grid][]" class="form-control" multiple data-rel="chosen">';
 												if(!empty($item->function_grid)){
-													foreach ($item->function_grid as $id){
-														if($id->id!="")
-														$result .= '<option value="'.$id->id.'"'.((isset($item->grids) && strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
+													foreach ($item->function_grid as $items){
+														foreach($items as $id){
+															if($id->id!="")
+															$result .= '<option value="'.$id->id.'"'.((isset($item->grids) && strpos($item->grids,$id->id) !== false)?'selected="selected"':'').'>'.$id->title.'</option>';
+														}
 													}
 												}
 											  $result .= '</select>

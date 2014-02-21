@@ -3,7 +3,7 @@
 		<div class="page-header">
 			<h1>Comments for image gallery: <b><?=$content['gallery']->title?></b></h1>
 		</div>
-		<?php if ($content['galleryimagecomment']->result_count() > 0) { ?>
+		<?php if (!empty($content['galleryimagecomment'])) { ?>
    
     <table class="table table-hover">
 		<thead>
@@ -19,7 +19,6 @@
 					<td>'.$item->content.'</td>
 					<td>'.$item->created_at.'</td>
 					<td class="">      
-						<a class="iframe btn btn-sm btn-default cboxElement" href="'.base_url("admin/galleries/galleryimagecomments_create/".$item->id).'"><i class="icon-edit "></i></a>
 						<a class="iframe btn btn-sm btn-danger cboxElement" href="'.base_url("admin/galleries/galleryimagecomments_delete/".$item->id).'"><i class="icon-trash "></i></a>
 		            </td>
                </tr>';

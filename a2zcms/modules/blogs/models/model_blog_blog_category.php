@@ -11,16 +11,16 @@ class Model_blog_blog_category extends CI_Model {
     {
         parent::__construct();
     }
-	public function delete($id) {		
+	public function delete($blog_id) {		
 		$data = array(
                'deleted_at' => date("Y-m-d H:i:s")
             );
-			$this->db->where('plugin_id', $id);
+			$this->db->where('blog_id', $blog_id);
 			$this->db->update('blog_blog_categories', $data);
     }
 
-	public function select($id) {		
-		return $this->db->where('blog_id', $id)->get('blog_blog_categories')->result();
+	public function select($blog_id) {		
+		return $this->db->where('blog_id', $blog_id)->where(array('deleted_at' => NULL))->select('blog_category_id as id')->get('blog_blog_categories')->result_array();
     }
 	
 	public function insert($data) {		
