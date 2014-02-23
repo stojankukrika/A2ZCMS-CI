@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `navigation_links` (
   `uri` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `navigation_group_id` int(10) unsigned NOT NULL,
   `position` int(11) NOT NULL,
-  `target` enum('selected','_blank') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'selected',
+  `target` enum('_self','_blank') COLLATE utf8_unicode_ci NOT NULL DEFAULT '_self',
   `restricted_to` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `class` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -57,10 +57,10 @@ class Model_menu extends CI_Model{
 			foreach ($menu['parents'][$parent] as $itemId) {
 				if (!isset($menu['parents'][$itemId])) {
 
-					$html .= "<li> <a target='".$menu['items'][$itemId]['target']."' class='".$menu['items'][$itemId]['class']."' href='";
+					$html .= "<li> <a target='".(isset($menu['items'][$itemId]['target'])?$menu['items'][$itemId]['target']:"")."' class='".$menu['items'][$itemId]['class']."' href='";
 					switch ($menu['items'][$itemId]['link_type']) {
 						case 'page':
-							$html .= base_url('pages') ."/". $menu['items'][$itemId]['id'];
+							$html .= base_url('pages') ."/index/". $menu['items'][$itemId]['id'];
 							break;
 						case 'url':
 							$html .= base_url($menu['items'][$itemId]['uri']);
@@ -72,10 +72,10 @@ class Model_menu extends CI_Model{
 					$html .="'>" . $menu['items'][$itemId]['title'] . "</a></li>";
 				}
 				if (isset($menu['parents'][$itemId])) {
-					$html .= "<li class='dropdown'> <a target='".$menu['items'][$itemId]['target']."' class='dropdown-toggle ".$menu['items'][$itemId]['class']."' href='";
+					$html .= "<li class='dropdown'> <a target='".(isset($menu['items'][$itemId]['target'])?$menu['items'][$itemId]['target']:"")."' class='dropdown-toggle ".$menu['items'][$itemId]['class']."' href='";
 					switch ($menu['items'][$itemId]['link_type']) {
 						case 'page':
-							$html .= base_url('pages') ."/". $menu['items'][$itemId]['id'];
+							$html .= base_url('pages') ."/index/". $menu['items'][$itemId]['id'];
 							break;
 						case 'url':
 							$html .= base_url($menu['items'][$itemId]['uri']);

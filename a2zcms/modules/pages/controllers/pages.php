@@ -14,6 +14,7 @@ class Pages extends Website_Controller{
 	}
 	
 	public function index(){
+		echo $this->uri->segment(3);
 		$data['current'] = $this->uri->segment(3);
 		$this->load->view("index", $data);
 	}
