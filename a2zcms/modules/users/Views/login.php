@@ -10,11 +10,11 @@
 		if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
-			<a href="<?=base_url('admin/users/index')?>">Admin panel</a>
+			<a href="<?=base_url('admin/pages/index')?>">Admin panel</a>
 		</li>
 		<? } ?>
 		<li>
-			<a href="<?=base_url('messages/index')?>">Messages</a>
+			<a href="<?=base_url('users/messages')?>">Messages</a>
 		</li>
 		<li>
 			<a href="<?=base_url('users/account')?>">Edit profile</a>
@@ -63,7 +63,7 @@
 					<button tabindex="3" type="submit" class="btn btn-primary">
 						Submit
 					</button>
-					<a class="btn btn-success" href="user/forgot">Forgot password</a>
+					<a class="btn btn-success" href="users/forgot">Forgot password</a>
 				</p>
 			</fieldset>
 		</form>	
@@ -72,7 +72,7 @@
 				Create an account here?
 			</p>
 			<p>
-				<a href="register" class="btn btn-info">Create account</a>
+				<a href="users/register" class="btn btn-info">Create account</a>
 			</p>
 		<? } ?>
 	</ul>

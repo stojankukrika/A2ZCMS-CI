@@ -17,7 +17,10 @@ class Model_user extends CI_Model {
 	public function selectuser($username)
 	{
 		return $this->db->where('username', $username)
-        			->or_where('email', $username)->get('users')->first_row();
+        			->or_where('email', $username)
+        			->where('confirmed','1')
+					->where('active','1')		 				
+        			->get('users')->first_row();
 	}
 	
 	public function insert($data) {		
@@ -81,7 +84,10 @@ class Model_user extends CI_Model {
 	function login($username,$password)
     {
         $u = $this->db->where('username', $username)
-        			->or_where('email', $username)->get('users')->first_row();
+						->or_where('email', $username)
+						->where('confirmed','1')
+						->where('active','1')		 				
+        				->get('users')->first_row();
 		if ($u->password != $this->encrypt($password))
         {
         	return FALSE;
@@ -103,6 +109,53 @@ class Model_user extends CI_Model {
         }
 		return "";
     }
+	
+	function isadmin($user_id)
+	{
+		return $this->db->where('user_id', $user_id)
+		 				->from('assigned_roles')
+		 				->join('roles','assigned_roles.role_id=roles.id')
+						->select('roles.is_admin')
+						->where(array('assigned_roles.deleted_at' => NULL))
+						->where(array('roles.deleted_at' => NULL))
+		 				->get()->result();
+						
+	}
+	
+	public function update($data,$id) {		
+		$this->db->where('id', $id);
+		$this->db->update('users', $data);
+    }
+	
+	public function selectAll($user_id)
+	{
+		return $this->db->where(array('deleted_at' => NULL))
+						->where('confirmed','1')
+						->where('active','1')
+						->where('id !=',$user_id)
+		 				->get('users')->result();
+	}
+	public function checkuser($username,$email)
+	{
+		return $this->db->where('username', $username)
+						->where('email', $email)
+						->select('id')	 				
+        				->get('users')->first_row();
+	}
+
+	public function getsiteemail()
+	{
+		return $this->db->where('varname', 'email')
+						->select('value')	 				
+        				->get('settings')->first_row();
+	}
+	
+	public function getsitetitle()
+	{
+		return $this->db->where('varname', 'title')
+						->select('value')	 				
+        				->get('settings')->first_row();
+	}
 	
 }
 

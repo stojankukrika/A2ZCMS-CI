@@ -32,10 +32,10 @@
 									<a href="<?=base_url()?>"><i class="icon-home"></i> Back to website</a>
 								</li>
 								<li>
-									<a href="<?=base_url('users/'.$currentuser->username)?>"><i class="icon-cog"></i> Edit profile</a>
+									<a href="<?=base_url('users/account')?>"><i class="icon-cog"></i> Edit profile</a>
 								</li>
 								<li>
-									<a href="<?=base_url('user/messages')?>"><i class="icon-envelope"></i> Messages</a>
+									<a href="<?=base_url('users/messages')?>"><i class="icon-envelope"></i> Messages</a>
 								</li>
 								<li>
 									<a href="<?=base_url('users/logout')?>"><i class="icon-road icon-white"></i> Logout</a>

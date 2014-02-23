@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `read` tinyint(1) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `deleted_at` timestamp NULL DEFAULT NULL,
+  `deleted_at_receiver` timestamp NULL DEFAULT NULL,
+  `deleted_at_sender` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `messages_user_id_from_foreign` (`user_id_from`),
   KEY `messages_user_id_to_foreign` (`user_id_to`)

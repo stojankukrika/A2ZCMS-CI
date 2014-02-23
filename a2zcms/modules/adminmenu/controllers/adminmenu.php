@@ -22,7 +22,7 @@ class AdminMenu extends Website_Controller{
 	function left_navigation(){
 		$data['current'] = $this->uri->segment(1);
 		//Admin links
-		if($this->users->_is_admin()){
+		if($this->users->_is_admin($this->session->userdata('user_id'))){
 			$data['items'] = $this->Model_adminmenu->menu_admin();
 		}
 		
