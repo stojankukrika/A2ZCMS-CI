@@ -25,30 +25,6 @@ if (!function_exists('make_dir')) {
 	}
 }
 
-if (!function_exists('options')) {
-	// Funtion to generate option elements
-	function options($data, $selected = '') {
-		$html = '';
-		foreach ($data as $id => $value) {
-			$sel = $selected == $id ? ' selected ' : '';
-			$html .= '<option ' . $sel . ' value="' . $id . '">' . $value . '</option>';			
-		}
-		return $html;
-	}
-}
-if (!function_exists('create_checkbox_list')) {
-	// Funtion to generate checkbox list
-	function create_checkbox_list($arr, $name, $arrChecked = array()) {
-		$html = '';
-	
-		foreach ($arr as $k => $v) {
-			$checked = in_array($k, $arrChecked) ? ' checked ' : '';
-			$html .= "<input type='checkbox' name='$name' value='$k' class='dyn_checkbox' $checked > $v <br> ";
-		}
-		return $html;
-	}
-}
-
 if (!function_exists('valid_password')) {
 	// Funtion to chech is valid password
 	function valid_password($pwd) {
