@@ -34,8 +34,7 @@ class Website_Controller extends MY_Controller
 		}
     }
 	public function createSiderContent($page_id=0)
-	{
-		
+	{		
 		if($page_id==0) {
 			$page_id = $this->db->select('id')->get('pages')->first_row()->id;
 		}
@@ -59,36 +58,32 @@ class Website_Controller extends MY_Controller
 			$function = $item['function'];
 			$params = $item['params'];
 			if($page->sidebar==1){
-				$this->load->module($item['name']);
-				$sidebar_right[] = array('content' =>$this->$item['name']->$function($params));
+				$sidebar_right[] = array('content' => modules::run($item['name'].'/'.$function, $params));
 			}
 			if($page->sidebar==0){
-				$this->load->module($item['name']);
-				$sidebar_left[] = array('content' =>$this->$item['name']->$function($params));
+				$sidebar_left[] = array('content' => modules::run($item['name'].'/'.$function, $params));
 			}
 		}
 		foreach ($function_content as $item2)
 		{
-			$function2 = isset($item['function'])?$item['function']:"";
-			$ids = isset($item['ids'])?$item['ids']:"";
-			$grids = isset($item['grids'])?$item['grids']:"";
-			$sorts = isset($item['sorts'])?$item['sorts']:"";
-			$limits = isset($item['limits'])?$item['limits']:"";
-			$orders = isset($item['orders'])?$item['orders']:"";
-			$params = isset($item['params'])?$item['params']:"";
+			$function2 = isset($item2['function'])?$item2['function']:"";
+			$ids = isset($item2['ids'])?$item2['ids']:"";
+			$grids = isset($item2['grids'])?$item2['grids']:"";
+			$sorts = isset($item2['sorts'])?$item2['sorts']:"";
+			$limits = isset($item2['limits'])?$item2['limits']:"";
+			$orders = isset($item2['orders'])?$item2['orders']:"";
+			$params = isset($item2['params'])?$item2['params']:"";
 			
 			if(!isset($item['name']))
 			{
 				$item['name'] = 'pages';
-			}			
+			}		
 			if($params=="")
 			{
-				$this->load->module($item['name']);
-				$content[] = array('content' =>$this->$item['name']->$function($page_id));
+				$content[] = array('content' => modules::run($item['name'].'/'.$function2, $page_id));
 			}
 			else {
-				$this->load->module($item['name']);
-				$content[] = array('content' =>$this->$item['name']->$function($ids,$grids,$sorts,$limits,$orders));
+				$content[] = array('content' => modules::run($item['name'].'/'.$function2, $ids,$grids,$sorts,$limits,$orders));
 			}
 		}
 		return $pagecontent = array('sidebar_right' => $sidebar_right, 'sidebar_left'=>$sidebar_left, 'content'=>$content);	
@@ -108,7 +103,10 @@ class Website_Controller extends MY_Controller
 									plugin_functions.title ,plugins.name, page_plugin_functions.order ,plugins.function_id ,
 									plugin_functions.function ,plugin_functions.params ,plugins.function_grid')
 									->get()->result_array();
+									
+								
 			foreach ($pluginfunction_content as $key => $value) {
+			
 				if($value['plugin_function_id']!=""){
 					
 					$item = $this->db->from('page_plugin_functions')
@@ -158,7 +156,7 @@ class Website_Controller extends MY_Controller
 								plugin_functions.function ,page_plugin_functions.order')
 								->get()->result_array();
 	
-		return $arrayName = array('pluginfunction_content' => $pluginfunction_content, 'pluginfunction_slider' => $pluginfunction_slider);
+		return array('pluginfunction_content' => $pluginfunction_content, 'pluginfunction_slider' => $pluginfunction_slider);
 	}
 	
 	private function splitParams($params)

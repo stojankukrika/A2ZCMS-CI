@@ -41,7 +41,7 @@ class Pages extends Website_Controller{
 	}
 	public function login()
 	{
-		$this->load->module('users/users');
+		$this->load->module('users');
 		return $this->users->login();
 	}
 	public function sideMenu()
@@ -51,8 +51,15 @@ class Pages extends Website_Controller{
 	}
 	public function content($page_id)
 	{
-		return $this->db->get('pages')->where('id',$page_id)->first_row();
-	}	
+		return $this->page($page_id);
+	}
+	public function page($page_id)
+	{
+		$data['view'] = 'index';
+		$data['page'] = $this->db->where('id',$page_id)->get('pages')->first_row();
+		$this->load->view("index", $data);
+	}
+		
 	
 }
 

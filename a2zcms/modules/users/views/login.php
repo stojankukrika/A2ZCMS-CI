@@ -1,5 +1,3 @@
- <div class="well">	
-<ul class="list-unstyled">
    <? if($this->session->userdata('logged_in')){ ?>
    	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
 		<? if($this->session->userdata('avatar')!=""){ ?>
@@ -75,5 +73,3 @@
 				<a href="users/register" class="btn btn-info">Create account</a>
 			</p>
 		<? } ?>
-	</ul>
-</div>

@@ -39,7 +39,7 @@ class Users extends Website_Controller{
 		        }
 		}
 		$data['main_content'] = 'index';
-		$this->load->view('page');
+		$this->load->view('login');
 	}
 	
 	function logout(){
