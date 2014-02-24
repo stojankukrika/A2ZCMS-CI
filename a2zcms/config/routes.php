@@ -67,7 +67,7 @@ if ($handle)
 		}
 	}
 }
-$route['default_controller'] = "home";
+$route['default_controller'] = "pages";
 $route['admin/(:any)'] = "admin/$1";
 
 $route['404_override'] = 'errors/error_404.php';
