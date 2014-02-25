@@ -59,6 +59,11 @@
 	<script src="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/js/prettify.js"></script>
 	<script src="<?php echo ASSETS_PATH.'/'.$sitetheme; ?>/js/summernote.js"></script>
 	<!-- end: JavaScript-->
-		
+	<style>
+		ul
+		{
+		    list-style-type: none;
+		}
+	</style>
 	</head>
 	<body>

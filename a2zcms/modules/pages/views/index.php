@@ -5,7 +5,7 @@ echo '<div class="row">';
 	echo '<h1>'.$page->title.'</h1>';
 
 	if($page->showdate=='1') 
-	echo '<p><i class="icon-time"></i>Posted_on.'.$page->created_at.'</p>';
+	echo '<p><i class="icon-time"></i>Posted on '.$page->created_at.'</p>';
 
 	echo '<hr>';
 	if($page->image)

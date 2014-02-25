@@ -112,7 +112,7 @@ class Admin extends Administrator_Controller {
             $offset = 0;
         }
        	$blogs = $this->Model_blog->fetch_paging($this->session->userdata('pageitemadmin'),$offset);
- 	
+		
         $pagination_config = array(
             'base_url' => site_url('admin/blogs/index/'),
             'first_url' => site_url('admin/blogs/index/0'),

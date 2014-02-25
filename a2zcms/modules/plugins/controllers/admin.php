@@ -26,7 +26,7 @@ class Admin extends Administrator_Controller {
 			
 		foreach (glob( FCPATH.'/a2zcms/modules' . '/*', GLOB_ONLYDIR) as $dir) {
 			$dir = str_replace(FCPATH.'/a2zcms/modules/', '', $dir);
-			if(!in_array($dir,$temp) && $dir!='install' && $dir!='testmodule')
+			if(!in_array($dir,$temp) && $dir!='install' && $dir!='testmodule' && $dir!='offline')
 			$plugin[] =(object) array('name' => $dir, 'id'=>0,
 			'title' => ucfirst($dir), 'created_at' => '', 'can_uninstall' =>0, 'not_installed'=>TRUE);
 		}

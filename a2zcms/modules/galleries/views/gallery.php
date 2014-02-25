@@ -21,13 +21,15 @@
 		else {
 			echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
 		}
-		if(!empty($content['main_content'])) {
-			foreach ($content['main_content'] as $item)
-			 {
-			 	echo $item['content'];
-			 }
-			}
-		echo '</div>';
+		?>
+		<div class="page-header">
+		<h3><?=$gallery->title?></h3>
+	</div>
+         <p><i class="icon-time"></i> Posted on <?=$gallery->created_at;?> by <a href="#"><?=$gallery->user_id;?></a></p>
+          <hr>    
+     <hr>
+     <?php
+     echo '</div>';
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)

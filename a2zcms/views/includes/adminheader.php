@@ -9,7 +9,6 @@
 		$metaauthor = $this->session->userdata('metaauthor');
 		$analytics = $this->session->userdata('analytics');		
 		?>
-	<head>
 		<meta charset="UTF-8">
 
 		<!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
@@ -71,6 +70,12 @@
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/select2.js"></script>		
 		<script src="<?=ASSETS_PATH_ADMIN?>/js/jquery.multiselect.js"></script>
 		<!-- end: JavaScript-->
+		<style>
+		ul
+		{
+		    list-style-type: none;
+		}
+	</style>
 	</head>
 	<body>
 		

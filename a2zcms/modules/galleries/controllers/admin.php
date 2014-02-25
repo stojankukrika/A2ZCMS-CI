@@ -551,9 +551,9 @@ class Admin extends Administrator_Controller {
 			$this->db->insert('plugin_functions', $data);
 			
 			$data = array(
-						   'title' => 'New gallerys' ,
+						   'title' => 'Galleries' ,
 						   'plugin_id' => $plugin_id ,
-						   'function' => 'showGallery',
+						   'function' => 'showGalleries',
 						   'params' => 'id;sort;order;limit;',
 						   'type' => 'content',					   
 						   'created_at' => date("Y-m-d H:i:s"),

@@ -19,7 +19,7 @@ INSERT INTO `plugins` (`id`, `name`,`title`, `function_id`, `function_grid`,
 --
 
 INSERT INTO `plugin_functions` (`id`, `title`, `plugin_id`, `function`, `params`, `type`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'Login form', 0, 'login', '', 'sidebar', NOW(), NOW(), NULL),
+(1, 'Login form', 0, 'login_partial', '', 'sidebar', NOW(), NOW(), NULL),
 (2, 'Search Form', 0, 'search', '', 'sidebar', NOW(), NOW(), NULL),
 (3, 'Content', 0, 'content', '', 'content', NOW(), NOW(), NULL),
 (4, 'Side menu', 0, 'sideMenu', '', 'sidebar', NOW(), NOW(), NULL);

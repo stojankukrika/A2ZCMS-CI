@@ -1,5 +1,26 @@
+<?php $this->load->view('includes/header'); ?>
+
+<div class="container">
 	<div class="row">
-		<div class="span6 offset3">
+		
+		<?php $this->load->module('menu/menu');
+		echo $this->menu->mainmenu('top');
+		if(!empty($content['left_content'])) {
+		 	echo '<div class="col-xs-6 col-lg-4"><br><br>';
+		 	foreach ($content['left_content'] as $item)
+			 {
+			 	if($item['content']!="")
+			 	echo '<div class="well">'.$item['content'].'</div>';
+			 }
+			 echo "</div>"; 
+		}
+		if(empty($content['right_content']) && empty($content['left_content'])) {
+		echo '<div class="col-xs-12 col-sm-12 col-lg-12"><br>';
+		}
+		else {
+			echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
+		}
+		?>
 			<div class="page-header">
 				<h3>Change password</h3>
 			</div>
@@ -41,7 +62,19 @@
 						</div>
 					</div>
 				</form>
-				<div class="form-group">&nbsp;</div>
-			</div>
-		</div>
+			<div class="form-group">&nbsp;</div>
+	<?php	echo '</div></div>';
+		if(!empty($content['right_content'])) {
+			echo '<div class="col-xs-6 col-lg-4"><br><br>';
+			foreach ($content['right_content'] as $item)
+			 {
+			 	if($item['content']!="")
+			 	echo '<div class="well">'.$item['content'].'</div>';
+			 }
+			  echo "</div>"; 
+			}
+		?>
 	</div>
+</div>
+<?php $this->load->view('includes/footer'); ?>	
+

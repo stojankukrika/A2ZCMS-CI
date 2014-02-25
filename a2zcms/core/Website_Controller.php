@@ -36,7 +36,7 @@ class Website_Controller extends MY_Controller
 	public function createSiderContent($page_id=0)
 	{		
 		if($page_id==0) {
-			$page_id = $this->db->select('id')->get('pages')->first_row()->id;
+			$page_id = $this->db->select('id')->limit(1)->get('pages')->first_row()->id;
 		}
 		$page = $this->db->where('id',$page_id)->get('pages')->first_row();
 		
@@ -74,16 +74,16 @@ class Website_Controller extends MY_Controller
 			$orders = isset($item2['orders'])?$item2['orders']:"";
 			$params = isset($item2['params'])?$item2['params']:"";
 			
-			if(!isset($item['name']))
+			if(!isset($item2['name']))
 			{
-				$item['name'] = 'pages';
+				$item2['name'] = 'pages';
 			}		
 			if($params=="")
 			{
-				$content[] = array('content' => modules::run($item['name'].'/'.$function2, $page_id));
+				$content[] = array('content' => modules::run($item2['name'].'/'.$function2, $page_id));
 			}
 			else {
-				$content[] = array('content' => modules::run($item['name'].'/'.$function2, $ids,$grids,$sorts,$limits,$orders));
+				$content[] = array('content' => modules::run($item2['name'].'/'.$function2, $ids,$grids,$sorts,$limits,$orders));
 			}
 		}
 		return $pagecontent = array('sidebar_right' => $sidebar_right, 'sidebar_left'=>$sidebar_left, 'content'=>$content);	
@@ -146,20 +146,21 @@ class Website_Controller extends MY_Controller
 				
 			$pluginfunction_slider = $this->db->from('page_plugin_functions')
 								->join('plugin_functions','plugin_functions.id = page_plugin_functions.plugin_function_id','left')
+								->join('plugins','plugin_functions.plugin_id = plugins.id','left')
 								->where('page_plugin_functions.page_id',$page_id)
 								->where('plugin_functions.type','sidebar')
 								->where('page_plugin_functions.deleted_at', NULL)
 								->where('plugin_functions.deleted_at', NULL)
 								->order_by('page_plugin_functions.order','ASC')
 								->group_by('plugin_functions.id')
-								->select('plugin_functions.id, plugin_functions.title ,plugin_functions.params ,
+								->select('plugin_functions.id, plugins.name, plugin_functions.title ,plugin_functions.params ,
 								plugin_functions.function ,page_plugin_functions.order')
 								->get()->result_array();
 	
 		return array('pluginfunction_content' => $pluginfunction_content, 'pluginfunction_slider' => $pluginfunction_slider);
 	}
 	
-	private function splitParams($params)
+	public function splitParams($params)
 	{
 		$return = array();
 		$params = explode(';', $params);

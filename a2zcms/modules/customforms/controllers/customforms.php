@@ -13,9 +13,9 @@ class Customforms extends Website_Controller{
 		$this->load->model(array("Model_customform","Model_customform_field"));
     }
 	/*function for plugins*/
-	function getCustomFormId(){
-		$customform = $this->Model_customform->getall();
-		return array('customform' =>$customform);
+	function showCustomFormId($id)
+	{
+		echo "Custom form";
 	}
 		
 }

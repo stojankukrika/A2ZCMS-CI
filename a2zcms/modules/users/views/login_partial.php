@@ -1,33 +1,10 @@
-   <?php $this->load->view('includes/header'); ?>
-
-<div class="container">
-	<div class="row">
-		
-		<?php $this->load->module('menu/menu');
-		echo $this->menu->mainmenu('top');
-		if(!empty($content['left_content'])) {
-		 	echo '<div class="col-xs-6 col-lg-4"><br><br>';
-		 	foreach ($content['left_content'] as $item)
-			 {
-			 	if($item['content']!="")
-			 	echo '<div class="well">'.$item['content'].'</div>';
-			 }
-			 echo "</div>"; 
-		}
-		if(empty($content['right_content']) && empty($content['left_content'])) {
-		echo '<div class="col-xs-12 col-sm-12 col-lg-12"><br>';
-		}
-		else {
-			echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
-		}
-		?>
-		<? if($this->session->userdata('logged_in')){ ?>
+   <? if($this->session->userdata('logged_in')){ ?>
    	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
-   		<ul style="list-style: none;">
+   	<ul style="list-style: none;">
 		<? if($this->session->userdata('avatar')!=""){ ?>
-		<img alt="Avatar" src="<?=base_url().'/avatar/'.$this->session->userdata('avatar');?>">
+		<img alt="Avatar" src="<?=base_url().'/data/avatar/'.$this->session->userdata('avatar');?>">
 		<?} else {?>
-		<img alt="Avatar" src="<?= base_url().'/avatar/avatar.png';?>">
+		<img alt="Avatar" src="<?=base_url().'/data/avatar/avatar.png';?>">
 		<? }
 		if($this->session->userdata('admin_logged_in')){
 		?>
@@ -50,8 +27,8 @@
 		</ul>
 		<? } 
 		else { ?>
-		<h3>Login to system</h3>
-		<form method="POST" action="<?=base_url('users/login')?>" accept-charset="UTF-8">
+		<h4>Login to system</h4>
+		<form method="POST" action="login" accept-charset="UTF-8">
 			<fieldset>
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="email">Username or email</label>
@@ -98,14 +75,3 @@
 				<a href="<?=base_url('users/register');?>" class="btn btn-info">Create account</a>
 			</p>
 		<? } ?>
-		<?php	echo '</div>';
-		if(!empty($content['right_content'])) {
-			echo '<div class="col-xs-6 col-lg-4"><br><br>';
-			foreach ($content['right_content'] as $item)
-			 {
-			 	if($item['content']!="")
-			 	echo '<div class="well">'.$item['content'].'</div>';
-			 }
-			  echo "</div>"; 
-			}
-		?>

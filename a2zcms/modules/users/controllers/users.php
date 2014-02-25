@@ -7,13 +7,16 @@ Version: 1.0
 // ------------------------------------------------------------------------
 class Users extends Website_Controller{
 	
+	private $page;
+	private $pagecontent;
 	function __construct(){
 		parent::__construct();		
-		$this->load->model(array('Model_user', "Model_message"));		
+		$this->load->model(array('Model_user', "Model_message"));	
 	
 	}
 	function login(){
-			
+		$this->page = $this->db->limit(1)->get('pages')->first_row();
+		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 		if($this->_is_logged_in()){
 			redirect('');
 		}
@@ -37,9 +40,17 @@ class Users extends Website_Controller{
 		        {
 		        	echo '<br><p class="text-danger">Wrong username or password!</p>';
 		        }
-		}
-		$data['main_content'] = 'index';
-		$this->load->view('login');
+		}		
+		$this->_member_area();		
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		$this->load->view('login',$data);
+	}
+	function login_partial(){			
+		
+		$this->load->view('login_partial');
 	}
 	
 	function logout(){
@@ -48,9 +59,24 @@ class Users extends Website_Controller{
 	}
 	
 	function register(){
-		
+		$this->page = $this->db->limit(1)->get('pages')->first_row();
+		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 		$this->_member_area();
-		if($_POST){
+		
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		
+		$this->load->view('register', $data);
+		
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('password', "Password", 'required');
+		$this->form_validation->set_rules('confirm_password', "Confirm password", 'required');
+		$this->form_validation->set_rules('username', "Username", 'required|is_unique[users.username]');
+		$this->form_validation->set_rules('email', "Email", 'required|valid_email|is_unique[users.email]');
+		if ($this->form_validation->run() == TRUE)
+        {
 			$this->load->library('hash');
 			
 			if($this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
@@ -85,8 +111,7 @@ class Users extends Website_Controller{
 	            echo '<br><p class="text-danger">Password not equal</p>';
 	        }
 		}		
-		$data['main_content'] = 'register';
-		$this->load->view('page', $data);
+		
 		
 	}
 	
@@ -131,9 +156,16 @@ class Users extends Website_Controller{
 
 	function account ()
 	{
+		$this->page = $this->db->limit(1)->get('pages')->first_row();
+		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 		
-		$data['main_content'] = 'changepassword';		
-		$this->load->view('page', $data);
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		
+		$this->load->view('changepassword', $data);
+		
 		$this->load->library('hash');					
 		if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
 		{
@@ -152,11 +184,19 @@ class Users extends Website_Controller{
 	
 	function messages ()
 	{
+		$this->page = $this->db->limit(1)->get('pages')->first_row();
+		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
+		
 		$data['send'] = $this->Model_message->selectSend($this->session->userdata('user_id'));
 		$data['received'] = $this->Model_message->selectReceived($this->session->userdata('user_id'));
 		$data['allUsers'] = $this->Model_user->selectAll($this->session->userdata('user_id'));
-		$data['main_content'] = 'messages';
-		$this->load->view('page', $data);
+		
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		
+		$this->load->view('messages', $data);
 	}
 	
 	function readmessage($id_message)
@@ -192,8 +232,16 @@ class Users extends Website_Controller{
 	
 	function forgot()
 	{
-		$data['main_content'] = 'forgot';
-		$this->load->view('page', $data);
+		$this->page = $this->db->limit(1)->get('pages')->first_row();
+		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
+		
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		
+		$this->load->view('forgot', $data);		
+		
 		if($_POST){
 			  if ($u = $this->Model_user->checkuser($this->input->post('username'),$this->input->post('email')))
 		        {

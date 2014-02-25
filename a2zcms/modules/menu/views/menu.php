@@ -18,7 +18,7 @@
 						</a>
 						<ul class='dropdown-menu' role="menu" aria-labelledby="dLabel">
 							<? if(isset($admin)) {?>
-								<li><a href="<?=base_url('pages/index'); ?>">Admin panel</a></li>
+								<li><a href="<?=base_url('admin/pages/index'); ?>">Admin panel</a></li>
 								<li class="divider"></li>
 							<? }?>
 							<li><a href="<?=base_url('users/account'); ?>">Edit Account</a></li>

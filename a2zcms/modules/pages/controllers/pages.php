@@ -38,15 +38,15 @@ class Pages extends Website_Controller{
 									->from('settings')->get()->first_row()->varname;
 		return "<h4>Search</h4>".$searchcode."<gcse:search></gcse:search>";
 	}
-	public function login()
+	public function login_partial()
 	{
 		$this->load->module('users');
-		return $this->users->login();
+		return $this->users->login_partial();
 	}
 	public function sideMenu()
 	{
 		$this->load->module('menu/menu');
-		return $this->menu->mainmenu('top');	
+		return $this->menu->mainmenu('side');	
 	}
 	public function content($page_id)
 	{
@@ -55,7 +55,7 @@ class Pages extends Website_Controller{
 	public function page($page_id)
 	{
 		$data['view'] = 'index';
-		$data['page'] = $this->db->where('id',$page_id)->get('pages')->first_row();
+		$data['page'] = $this->Model_page->select($page_id);
 		$this->load->view("index", $data);
 	}
 		
