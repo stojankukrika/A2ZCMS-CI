@@ -14,8 +14,7 @@ class Pages extends Website_Controller{
 	}
 	
 	public function index(){
-		
-		$page_id = ($this->uri->segment(3)=="")?$this->uri->segment(3):0;
+		$page_id = ($this->uri->segment(3)!="")?$this->uri->segment(3):0;
 		$pagecontent = Website_Controller::createSiderContent($page_id);
 		// Show the page
 		 $data['content'] = array(

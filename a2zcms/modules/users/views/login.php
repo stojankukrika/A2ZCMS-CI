@@ -61,7 +61,7 @@
 					<button tabindex="3" type="submit" class="btn btn-primary">
 						Submit
 					</button>
-					<a class="btn btn-success" href="users/forgot">Forgot password</a>
+					<a class="btn btn-success" href="<?=base_url('users/forgot');?>">Forgot password</a>
 				</p>
 			</fieldset>
 		</form>	
@@ -70,6 +70,6 @@
 				Create an account here?
 			</p>
 			<p>
-				<a href="users/register" class="btn btn-info">Create account</a>
+				<a href="<?=base_url('users/register');?>" class="btn btn-info">Create account</a>
 			</p>
 		<? } ?>

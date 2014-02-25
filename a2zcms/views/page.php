@@ -5,7 +5,7 @@
 		
 		<?php $this->load->module('menu/menu');
 		echo $this->menu->mainmenu('top');
-		if(isset($content['left_content'])) {
+		if(!empty($content['left_content'])) {
 		 	echo '<div class="col-xs-6 col-lg-4"><br><br>';
 		 	foreach ($content['left_content'] as $item)
 			 {
@@ -14,15 +14,20 @@
 			 }
 			 echo "</div>"; 
 		}
-		echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
-		if(isset($content['main_content'])) {
+		if(empty($content['right_content']) && empty($content['left_content'])) {
+		echo '<div class="col-xs-12 col-sm-12 col-lg-12"><br>';
+		}
+		else {
+			echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
+		}
+		if(!empty($content['main_content'])) {
 			foreach ($content['main_content'] as $item)
 			 {
 			 	echo $item['content'];
 			 }
 			}
 		echo '</div>';
-		if(isset($content['right_content'])) {
+		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)
 			 {
