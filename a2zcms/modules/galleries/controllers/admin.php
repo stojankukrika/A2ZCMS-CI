@@ -541,7 +541,7 @@ class Admin extends Administrator_Controller {
 			$data = array(
 						   'title' => 'New gallerys' ,
 						   'plugin_id' => $plugin_id ,
-						   'function' => 'newGallerys',
+						   'function' => 'newGallery',
 						   'params' => 'sort:asc;order:id;limit:5;',
 						   'type' => 'sidebar',					   
 						   'created_at' => date("Y-m-d H:i:s"),

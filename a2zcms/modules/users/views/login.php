@@ -23,13 +23,17 @@
 		?>
 		<? if($this->session->userdata('logged_in')){ ?>
    	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
-   		<ul style="list-style: none;">
-		<? if($this->session->userdata('avatar')!=""){ ?>
-		<img alt="Avatar" src="<?=base_url().'/avatar/'.$this->session->userdata('avatar');?>">
-		<?} else {?>
-		<img alt="Avatar" src="<?= base_url().'/avatar/avatar.png';?>">
-		<? }
-		if($this->session->userdata('admin_logged_in')){
+   		div class="row">
+  		<div class="col-md-4">
+			<? if($this->session->userdata('avatar')!=""){ ?>
+			<img alt="Avatar" src="<?=base_url().'/data/avatar/'.$this->session->userdata('avatar');?>">
+			<?} else {?>
+			<img alt="Avatar" src="<?=base_url().'/data/avatar/avatar.png';?>">
+			<? }?>
+		</div>
+		<div class="col-md-8">
+		<ul style="list-style: none;">
+		<? if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
 			<a href="<?=base_url('admin/pages/index')?>">Admin panel</a>
@@ -48,6 +52,7 @@
 					</button></a>
 		</li>
 		</ul>
+		</div></div>
 		<? } 
 		else { ?>
 		<h3>Login to system</h3>

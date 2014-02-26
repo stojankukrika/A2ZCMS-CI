@@ -27,11 +27,7 @@ class Blogs extends Website_Controller{
 		return array('blog' =>$blog);
 	}
 	/*function for website part*/
-	function showBlogs($id)
-	{
-		echo "Blogs";
-	}
-	
+		
 	public function newBlogs($params)
 	{
 		$param = Website_Controller::splitParams($params);
@@ -55,6 +51,27 @@ class Blogs extends Website_Controller{
 		}
 		$data['blog'] = $this->db->limit(1)->where('slug',$slug)->get('blogs')->first_row();;
 		$this->load->view('blog',$data);
+	}
+	public function showBlogs($ids,$grids,$sorts,$limits,$orders)
+	{
+		$showBlogs = array();
+		$ids = rtrim($ids, ",");
+
+		if($ids!="" && $grids==""){
+			$ids = rtrim($ids, ",");
+			$ids = explode(',', $ids);
+			
+			$showBlogs = $this->db->where_in('id', $ids)
+									->order_by($orders,$sorts)
+									->select('id, slug, title, content,image')->get('blogs')->result();
+		}
+		else if($limits!=0) {
+			$showBlogs = $this->db->order_by($orders,$sorts)
+								->limit($limits)
+								->select('id, slug, title, content, image')->get('blogs')->result();
+		}
+		$data['showBlogs'] = $showBlogs;
+		return $this->load->view('blogs',$data);
 	}
 		
 }

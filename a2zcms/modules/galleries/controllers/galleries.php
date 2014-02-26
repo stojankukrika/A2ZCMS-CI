@@ -23,12 +23,8 @@ class Galleries extends Website_Controller{
 	}
 
 	/*function for website part*/
-	function showGalleries($id)
-	{
-		echo "Gallery";
-	}
 	
-	public function newGallerys($params)
+	public function newGallery($params)
 	{
 		$param = Website_Controller::splitParams($params);
 		$newGalleries = $this->db->order_by($param['order'],$param['sort'])
@@ -50,8 +46,41 @@ class Galleries extends Website_Controller{
 		if($id=='') {
 			$id = $this->db->select('id')->limit(1)->get('galleries')->first_row()->id;
 		}
-		$data['gallery'] = $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();;
+		$data['gallery'] = $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();
+		$data['gallery_images'] = $this->db->where('gallery_id',$id)->get('gallery_images')->result();
 		$this->load->view('gallery',$data);
 	}
+	
+	function showGalleries($ids="",$grids="",$sorts,$limits,$orders)
+	{
+		$showGallery =array();
+		$showImages =array();
+		if($ids!="" && $grids==""){
+			$ids = rtrim($ids, ",");
+			$ids = explode(',', $ids);
+			$showGallery = $this->db->where('start_publish <=','CURDATE()')
+									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
+									->where_in('id', $ids)
+									->order_by($orders,$sorts)
+									->select('id, title, folderid')->get('galleries')->result();
+			foreach ($ids as $value) {
+				$showImages[$value] = $this->db->where('gallery_id', $value)->select('id, content')->get('gallery_images')->result();
+			}
+			
+		}
+		else if($limits!=0)
+		{
+			$showGallery = $this->db->where('start_publish <=','CURDATE()')
+									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
+									->orderBy($orders,$sorts)
+									->take($limits)
+									->select('id','title','folderid')->get('galleries')->result();
+		}
+		
+		$data['showGallery'] = $showGallery;
+		$data['showImages'] = $showImages;
+		$this->load->view('galleries',$data);
+	}
+	
 }
 ?>

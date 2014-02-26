@@ -26,10 +26,17 @@
 		<h3><?=$gallery->title?></h3>
 	</div>
          <p><i class="icon-time"></i> Posted on <?=$gallery->created_at;?> by <a href="#"><?=$gallery->user_id;?></a></p>
-          <hr>    
-     <hr>
-     <?php
-     echo '</div>';
+          <hr> 
+    <div class="row"> 
+     <? foreach ($gallery_images as $item){
+	 echo '<div class="col-md-3 portfolio-item">
+      	<a href="'.base_url('galleryimage/'.$gallery->id.'/'.$item->id).'">
+      		<img src="'.base_url().'/data/gallery/'.$gallery->folderid.'/thumbs/'. $item->content .'" height="85px" width="150px" class="img-responsive">
+      	</a>
+      </div>';
+      }	
+	 echo '</div>
+     <hr></div>';
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)

@@ -105,45 +105,44 @@ class Website_Controller extends MY_Controller
 									->get()->result_array();
 									
 								
-			foreach ($pluginfunction_content as $key => $value) {
-			
-				if($value['plugin_function_id']!=""){
+			foreach ($pluginfunction_content as $key => $items) {
+				
+				if($items['plugin_function_id']!=""){
 					
 					$item = $this->db->from('page_plugin_functions')
 											->where('param','id')->where('page_id',$page_id)
-											->where('plugin_function_id',$value['plugin_function_id'])
+											->where('plugin_function_id',$items['plugin_function_id'])
 											->select('value')
 											->get()->first_row();
-					$value['ids'] = (!empty($item)?$item->value:"");
+					$pluginfunction_content[$key]['ids'] = (!empty($item))?$item->value:"";
 					$item = $this->db->from('page_plugin_functions')
 											->where('param','grid')->where('page_id',$page_id)
-											->where('plugin_function_id',$value['plugin_function_id'])
+											->where('plugin_function_id',$items['plugin_function_id'])
 											->select('value')
 											->get()->first_row();
-					$value['grids'] = (!empty($item)?$item->value:"");
+					$pluginfunction_content[$key]['grids'] = (!empty($item))?$item->value:"";
 					$item =  $this->db->from('page_plugin_functions')
 											->where('param','sort')->where('page_id',$page_id)
-											->where('plugin_function_id',$value['plugin_function_id'])
+											->where('plugin_function_id',$items['plugin_function_id'])
 											->select('value')
 											->get()->first_row();
-					$value['sorts'] = (!empty($item)?$item->value:"");
+					$pluginfunction_content[$key]['sorts'] = (!empty($item))?$item->value:"";
 					$item =  $this->db->from('page_plugin_functions')
 											->where('param','limit')
 											->where('page_id',$page_id)
-											->where('plugin_function_id',$value['plugin_function_id'])
+											->where('plugin_function_id',$items['plugin_function_id'])
 											->select('value')
 											->get()->first_row();
-					$value['limits'] = (!empty($item)?$item->value:"");
+					$pluginfunction_content[$key]['limits'] = (!empty($item))?$item->value:"";
 					$item =  $this->db->from('page_plugin_functions')
 											->where('param','order')
 											->where('page_id',$page_id)
-											->where('plugin_function_id',$value['plugin_function_id'])
+											->where('plugin_function_id',$items['plugin_function_id'])
 											->select('value')
 											->get()->first_row();
-					$value['orders'] = (!empty($item)?$item->value:"");
+					$pluginfunction_content[$key]['orders'] = (!empty($item))?$item->value:"";
 				}
 			}
-				
 			$pluginfunction_slider = $this->db->from('page_plugin_functions')
 								->join('plugin_functions','plugin_functions.id = page_plugin_functions.plugin_function_id','left')
 								->join('plugins','plugin_functions.plugin_id = plugins.id','left')
@@ -156,7 +155,6 @@ class Website_Controller extends MY_Controller
 								->select('plugin_functions.id, plugins.name, plugin_functions.title ,plugin_functions.params ,
 								plugin_functions.function ,page_plugin_functions.order')
 								->get()->result_array();
-	
 		return array('pluginfunction_content' => $pluginfunction_content, 'pluginfunction_slider' => $pluginfunction_slider);
 	}
 	
