@@ -50,9 +50,36 @@ class Blogs extends Website_Controller{
 			$slug = $this->db->select('slug')->limit(1)->get('blogs')->first_row()->slug;
 		}
 		$blog= $this->db->limit(1)->where('slug',$slug)->get('blogs')->first_row();
+		
+		$datatemp = array(
+               'hits' => $blog->hits + 1,
+            );
+		$this->db->where('slug', $slug);
+		$this->db->update('blogs', $datatemp);
+				
 		$blog->created_at = date($this->session->userdata("datetimeformat"),strtotime($blog->created_at));
 		$blog->user_id = $this->db->where('id',$blog->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
+		$comments = $this->db->where('blog_id',$blog->id)->get('blog_comments');
+		$blog->blog_comments = $comments->num_rows();
+		$comments_temp = $comments->result();
+		foreach ($comments_temp as $item)
+		{
+			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
+			$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+		}
+		$data['blog_comments'] = $comments->result();
 		$data['blog'] = $blog;
+		$this->form_validation->set_rules('comment', "Comment", 'required');
+		if ($this->form_validation->run() == TRUE)
+        {
+        	$this->db->insert('blog_comments', array('content'=>$this->input->post('comment'),
+														'blog_id' => $blog->id,
+														'user_id' => $this->session->userdata('user_id'),
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
+        	
+		}
+
 		$this->load->view('blog',$data);
 	}
 	public function showBlogs($ids,$grids,$sorts,$limits,$orders)

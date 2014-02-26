@@ -47,6 +47,13 @@ class Galleries extends Website_Controller{
 			$id = $this->db->select('id')->limit(1)->get('galleries')->first_row()->id;
 		}
 		$gallery= $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();
+		
+		$datatemp = array(
+               'hits' => $gallery->hits + 1,
+            );
+		$this->db->where('id', $id);
+		$this->db->update('galleries', $datatemp);
+		
 		$gallery->created_at = date($this->session->userdata("datetimeformat"),strtotime($gallery->created_at));
 		$gallery->user_id = $this->db->where('id',$gallery->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 		$data['gallery'] = $gallery;
@@ -87,14 +94,43 @@ class Galleries extends Website_Controller{
 	
 	function galleryimage($gal_id, $image_id)
 	{
-		$gallery= $this->db->limit(1)->where('id',$gal_id)->get('galleries')->first_row();
+		$gallery = $this->db->limit(1)->where('id',$gal_id)->get('galleries')->first_row();
+		$image = $this->db->where('id',$image_id)->get('gallery_images')->first_row();
+		
+		$datatemp = array(
+               'hits' => $image->hits + 1,
+            );
+		$this->db->where('id', $image_id);
+		$this->db->update('gallery_images', $datatemp);		
+		
+		$comments = $this->db->where('gallery_image_id',$image_id)->get('gallery_images_comments');
+		$image->image_comments = $comments->num_rows();
+		$comments_temp = $comments->result();
+		foreach ($comments_temp as $item)
+		{
+			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
+			$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+		}
+		$data['image_comments'] = $comments->result();		
 		$data['gallery'] = $gallery;
-		$data['image'] = $this->db->where('id',$image_id)->get('gallery_images')->first_row();
+		$data['image'] = $image;
+		$data['image_comments'] = $comments_temp;
 				
 		$data['content'] = array(
             'right_content' => $this->pagecontent['sidebar_right'],
             'left_content' => $this->pagecontent['sidebar_left'],
         );
+		$this->form_validation->set_rules('comment', "Comment", 'required');
+		if ($this->form_validation->run() == TRUE)
+        {
+        	$this->Model_gallery_image_comment->insert(array('content'=>$this->input->post('comment'),
+														'gallery_image_id' => $image_id,
+														'gallery_id' => $gal_id,
+														'user_id' => $this->session->userdata('user_id'),
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
+        	
+		}
 		$this->load->view('galleryimage',$data);
 	}
 	

@@ -26,7 +26,58 @@
 		<h3><?=$gallery->title?></h3>
 	</div>
      <?php
-     echo '<img src="'.base_url().'/data/gallery/'.$gallery->folderid.'/'. $image->content .'" class="img-responsive">';
+     echo '<div class="row">
+     <img src="'.base_url().'/data/gallery/'.$gallery->folderid.'/'. $image->content .'" class="img-responsive"></div>';
+	 echo '<p id="vote">Numer of votes <span id="countvote">';
+	 	echo $image->voteup-$image->votedown.'</span> ';
+	if (!$this->session->userdata("post_image_vote")){
+		echo '<br><b><i>You need to be logged in and have permission to add vote. </i></b>';
+		}
+		else {	?>			
+		<span style="display: inline-block;" onclick="contentvote('1','gallery','<?=$gallery->id?>')" class="up"></span>
+		<span style="display: inline-block;" onclick="contentvote('0','gallery','<?=$gallery->id?>')" class="down"></span>
+		<?
+		}
+	echo '</p>
+		<!-- the comment box -->
+  <div class="well">            
+	<h4>'.$image->image_comments.' comments</h4>';
+	
+	if ($image->image_comments>0){
+	foreach ($image_comments as $comment){
+		echo '<h4><b>'.$comment->user_id.'</b> <small>'.$comment->created_at.'</small>
+				</h4><p>'.$comment->content.'</p>';
+		}
+	}
+	else {
+	echo '<hr />';
+	}
+	echo '</div>';
+	
+	if (! $this->session->userdata("user_id")){
+	echo 'To add comment you need to login.
+	<br />
+	<br />
+	Click <a href="'.base_url('user/login').'">here</a> to login
+	<br>';
+	}
+	else if (!$this->session->userdata("post_image_comment")){
+	echo '<br><b><i>You do not have a permittion to add comment</i></b>';
+	}
+	else {
+	echo '<div class="new_comment">
+		<h4>Add comment </h4>
+		<form method="post" action="'.base_url('galleries/galleryimage/'.$gallery->id.'/'.$image->id).'">
+			<div class="form-group">
+				<textarea class="form-control" name="comment" id="comment" placeholder="comment" rows="7"></textarea>
+				<label id="characterLeft"></label>
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-success">Submit</button>
+			</div>
+		</form>
+	</div>';
+	}
 	 echo '<hr></div>';
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';

@@ -56,6 +56,13 @@ class Pages extends Website_Controller{
 	{
 		$data['view'] = 'index';
 		$data['page'] = $this->Model_page->select($page_id);
+		
+		$data = array(
+               'hits' => $data['page']->hits + 1,
+            );
+		$this->db->where('id', $page_id);
+		$this->db->update('pages', $data);
+		
 		$this->load->view("index", $data);
 	}
 		

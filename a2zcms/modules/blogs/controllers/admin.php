@@ -514,6 +514,16 @@ class Admin extends Administrator_Controller {
 						   );
 			$this->db->insert('permissions', $data);
 			
+			$data = array(
+						   'name' => 'post_blog_vote' ,
+						   'display_name' => 'Post blog vote' ,
+						   'is_admin' => '0',
+						   'created_at' => date("Y-m-d H:i:s"),
+						   'updated_at' => date("Y-m-d H:i:s"),
+						   'deleted_at' => NULL
+						   );
+			$this->db->insert('permissions', $data);
+			
 			/*add plugin function*/
 			$data = array(
 						   'title' => 'New blogs' ,
@@ -610,7 +620,7 @@ class Admin extends Administrator_Controller {
 			$this->db->delete('permission_role', array('id' => $permission->id)); 
 			
 			/*delete permissions*/
-			$names = array('manage_blogs','manage_blog_categris','post_blog_comment');
+			$names = array('manage_blogs','manage_blog_categris','post_blog_comment','post_blog_vote');
 			$this->db->where_in('name', $names);
 			$this->db->delete('permissions');
 			

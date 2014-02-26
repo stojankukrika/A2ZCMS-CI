@@ -34,6 +34,16 @@ class Users extends Website_Controller{
 					'admin_logged_in' => $this->_is_admin($user->id),
 					);
 					$this->session->set_userdata($data);
+					$result = $this->db->from('assigned_roles')
+										->join('permission_role','assigned_roles.role_id=permission_role.role_id')
+										->join('permissions','permissions.id=permission_role.permission_id')
+										->where('assigned_roles.user_id',$this->session->userdata("user_id"))
+										->select('name')
+										->get()->result();
+					foreach ($result as $row)
+					{
+						$this->session->set_userdata($row->name,$row->name);
+					}					
 					redirect('');
 		        }
 		        else
