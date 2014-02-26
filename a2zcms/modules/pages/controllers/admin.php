@@ -276,13 +276,13 @@ class Admin extends Administrator_Controller {
 			$pluginfunction_content = $this->Model_page_plugin_function->contentpluginfunction();
 			
 			foreach ($pluginfunction_content as $item) {
-				$function_id = (isset($plugin->function_id))?$plugin->function_id:NULL;
-				$function_grid = (isset($plugin->function_grid))?$plugin->function_grid:NULL;
+				$function_id = (isset($item->function_id))?$item->function_id:NULL;
+				$function_grid = (isset($item->function_grid))?$item->function_grid:NULL;
 				if($function_id!=NULL){
-					$item->function_id = modules::run($plugin->name.'/'.$function_id);
+					$item->function_id = modules::run($item->name.'/'.$function_id);
 				}
 				if($function_grid!=NULL){
-					$item->function_grid = modules::run($plugin->name.'/'.$function_grid);
+					$item->function_grid = modules::run($item->name.'/'.$function_grid);
 				}
 			}	
 			$pluginfunction_slider = $this->Model_page_plugin_function->sidepluginfunction();

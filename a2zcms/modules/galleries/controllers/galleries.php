@@ -16,8 +16,13 @@ class Galleries extends Website_Controller{
 		$this->page = $this->db->limit(1)->get('pages')->first_row();
 		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 	}
-	
 	/*function for plugins*/
+	function getGalleryId(){
+		$gallery = $this->Model_gallery->getall();
+		return array('gallery' =>$gallery);
+	}
+
+	/*function for website part*/
 	function showGalleries($id)
 	{
 		echo "Gallery";

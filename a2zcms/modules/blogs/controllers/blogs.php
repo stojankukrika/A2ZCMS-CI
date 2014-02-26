@@ -17,8 +17,16 @@ class Blogs extends Website_Controller{
 		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 	
     }
-	
-	/*function for plugins*/
+	 /*function for plugins*/
+	function getBlogId(){
+		$blog = $this->Model_blog->getall();
+		return array('blog' =>$blog);
+	}
+	function getBlogGroupId(){
+		$blog = $this->Model_blog_category->getall();
+		return array('blog' =>$blog);
+	}
+	/*function for website part*/
 	function showBlogs($id)
 	{
 		echo "Blogs";
