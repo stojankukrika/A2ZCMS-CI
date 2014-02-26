@@ -23,24 +23,11 @@
 		}
 		?>
 		<div class="page-header">
-		<h3><?=$blog->title?></h3>
+		<h3><?=$gallery->title?></h3>
 	</div>
-         <p><i class="icon-time"></i> Posted on <?=$blog->created_at;?> by <?=$blog->user_id;?></p>
-          <hr>
-          <?php 
-          if($blog->image) { ?>
-          <img src="../blog/<?=$blog->image;?>" class="img-responsive">
-          <hr>
-         <? } ?>
-          <p>
-			<?= $blog->content?>
-			</p>
-   		<p>
-   			<strong>Resource :</strong><?=$blog->resource_link?>
-   		</p>          
-     <hr>
      <?php
-     echo '</div>';
+     echo '<img src="'.base_url().'/data/gallery/'.$gallery->folderid.'/'. $image->content .'" class="img-responsive">';
+	 echo '<hr></div>';
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)

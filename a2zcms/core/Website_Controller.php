@@ -18,7 +18,7 @@ class Website_Controller extends MY_Controller
 			redirect('/install');
 		}
 		else {
-			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title',
+			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'email',
 							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme');
 			$this->db->where_in('varname',$varname);
 			$query = $this->db->from('settings')->get();
@@ -26,6 +26,14 @@ class Website_Controller extends MY_Controller
 			{
 				$this->session->set_userdata($row->varname,$row->value);
 			}
+			if($this->session->userdata("dateformat")!="" && $this->session->userdata("timeformat")!="")
+			{
+				$dateformat = $this->session->userdata("dateformat").$this->session->userdata("timeformat");
+			}
+			else {
+				$dateformat = "d.m.Y h:i A";
+			}
+			$this->session->set_userdata('datetimeformat',$dateformat);
 			if($this->session->userdata('offline')=="Yes")
 			{
 				header('Location: '. base_url('offline'));

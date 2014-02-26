@@ -49,7 +49,10 @@ class Blogs extends Website_Controller{
 		if($slug=='') {
 			$slug = $this->db->select('slug')->limit(1)->get('blogs')->first_row()->slug;
 		}
-		$data['blog'] = $this->db->limit(1)->where('slug',$slug)->get('blogs')->first_row();;
+		$blog= $this->db->limit(1)->where('slug',$slug)->get('blogs')->first_row();
+		$blog->created_at = date($this->session->userdata("datetimeformat"),strtotime($blog->created_at));
+		$blog->user_id = $this->db->where('id',$blog->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
+		$data['blog'] = $blog;
 		$this->load->view('blog',$data);
 	}
 	public function showBlogs($ids,$grids,$sorts,$limits,$orders)

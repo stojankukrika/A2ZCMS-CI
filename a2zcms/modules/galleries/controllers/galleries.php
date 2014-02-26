@@ -46,7 +46,10 @@ class Galleries extends Website_Controller{
 		if($id=='') {
 			$id = $this->db->select('id')->limit(1)->get('galleries')->first_row()->id;
 		}
-		$data['gallery'] = $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();
+		$gallery= $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();
+		$gallery->created_at = date($this->session->userdata("datetimeformat"),strtotime($gallery->created_at));
+		$gallery->user_id = $this->db->where('id',$gallery->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
+		$data['gallery'] = $gallery;
 		$data['gallery_images'] = $this->db->where('gallery_id',$id)->get('gallery_images')->result();
 		$this->load->view('gallery',$data);
 	}
@@ -80,6 +83,19 @@ class Galleries extends Website_Controller{
 		$data['showGallery'] = $showGallery;
 		$data['showImages'] = $showImages;
 		$this->load->view('galleries',$data);
+	}
+	
+	function galleryimage($gal_id, $image_id)
+	{
+		$gallery= $this->db->limit(1)->where('id',$gal_id)->get('galleries')->first_row();
+		$data['gallery'] = $gallery;
+		$data['image'] = $this->db->where('id',$image_id)->get('gallery_images')->first_row();
+				
+		$data['content'] = array(
+            'right_content' => $this->pagecontent['sidebar_right'],
+            'left_content' => $this->pagecontent['sidebar_left'],
+        );
+		$this->load->view('galleryimage',$data);
 	}
 	
 }

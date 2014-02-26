@@ -5,7 +5,7 @@
 		 	echo '<div class="row">';
 			foreach($showGallery as $item){
 				echo '<div class="col-lg-4 col-md-4">
-						<h3><a href="'.base_url('galleries/item/'.$item->id).'">'.$item->title.'</a></h3>
+						<h3><a href="'.base_url('galleries/item/'.$item->id).'">'.$item->title.' '.$item->created_at. '</a></h3>
 				</div>';
 			}
 			echo '</div>';
