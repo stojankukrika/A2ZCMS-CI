@@ -79,7 +79,7 @@
 	else {
 	echo '<div class="new_comment">
 		<h4>Add comment </h4>
-		<form method="post" action="'.base_url('blog/item/'.$blog->slug).'">
+		<form method="post" action="">
 			<div class="form-group">
 				<textarea class="form-control" name="blogcomment" id="blogcomment" placeholder="blogcomment" rows="7"></textarea>
 				<label id="characterLeft"></label>

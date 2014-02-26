@@ -24,7 +24,7 @@
         <?php foreach ($content['gallery'] as $item) {
             echo '<tr>
 		            <td>'.$item->title.'</td>
-					<td>'.$item->views.'</td>
+					<td>'.$item->hits.'</td>
 					<td><a class="btn btn-link btn-sm" href="'.base_url("admin/galleries/listimages/".$item->id).'">'.$item->countimages.'</a></td>
 					<td><a class="btn btn-link btn-sm" href="'.base_url("admin/galleries/listcomments/".$item->id).'">'.$item->countcomments.'</a></td>
 					<td>'.$item->created_at.'</td>

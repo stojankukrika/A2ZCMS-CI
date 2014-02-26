@@ -50,23 +50,17 @@ class Pages extends Website_Controller{
 	}
 	public function content($page_id)
 	{
-		return $this->page($page_id);
-	}
-	public function page($page_id)
-	{
 		$data['view'] = 'index';
 		$data['page'] = $this->Model_page->select($page_id);
 		
-		$data = array(
+		$data_temp = array(
                'hits' => $data['page']->hits + 1,
             );
 		$this->db->where('id', $page_id);
-		$this->db->update('pages', $data);
+		$this->db->update('pages', $data_temp);
 		
 		$this->load->view("index", $data);
-	}
-		
-	
+	}	
 }
 
 ?>

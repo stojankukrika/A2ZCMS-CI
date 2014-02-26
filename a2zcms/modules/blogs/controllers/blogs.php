@@ -69,6 +69,7 @@ class Blogs extends Website_Controller{
 		}
 		$data['blog_comments'] = $comments->result();
 		$data['blog'] = $blog;
+		
 		$this->form_validation->set_rules('comment', "Comment", 'required');
 		if ($this->form_validation->run() == TRUE)
         {
@@ -79,7 +80,6 @@ class Blogs extends Website_Controller{
 														'created_at' => date("Y-m-d H:i:s")));
         	
 		}
-
 		$this->load->view('blog',$data);
 	}
 	public function showBlogs($ids,$grids,$sorts,$limits,$orders)
