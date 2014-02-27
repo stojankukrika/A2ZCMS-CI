@@ -42,19 +42,19 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (11, 'email', 'Email', 'general', 'admin@mail.com', '', 'text', 'required|valid_email'),
 (12, 'dateformat', 'Date format', 'general', 'd.m.Y', 'd.m.Y', 'text', 'required'),
 (13, 'timeformat', 'Time format', 'general', ' - H:i', 'h:i A', 'text', 'required'),
-(14, 'useravatwidth', 'User avatar width', 'general', '150', '150', 'text', 'required|integer'),
-(15, 'useravatheight', 'User avatar height', 'general', '113', '113', 'text', 'required|integer'),
-(16, 'pageitem', 'Per page item', 'general', '8', '8', 'text', 'required|integer'),
-(17, 'searchcode', 'Search code', 'search', '', '', 'textarea', ''),
-(18, 'sitetheme', 'Site theme', 'general', 'a2z-default', 'ASSETS_PATH_FULL', 'option', 'required'),
-(19, 'pageitemadmin', 'Per page item-Admin', 'general', '10', '10', 'text', 'required|integer'),
-(20, 'passwordpolicy', 'Password policy', 'password', 'No', 'Yes;No', 'radio', ''),
-(21, 'minpasswordlength', 'Password length', 'password', '6', '6', 'text', 'integer'),
-(22, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', 'integer'),
-(23, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', 'integer'),
-(24, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', 'integer'),
-(25, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', 'integer');
-
+(14, 'timeago', 'Convert any date/time to “xx Time ago” style', 'general', 'No', 'Yes;No', 'radio', ''),
+(15, 'useravatwidth', 'User avatar width', 'general', '150', '150', 'text', 'required|integer'),
+(16, 'useravatheight', 'User avatar height', 'general', '113', '113', 'text', 'required|integer'),
+(17, 'pageitem', 'Per page item', 'general', '8', '8', 'text', 'required|integer'),
+(18, 'searchcode', 'Search code', 'search', '', '', 'textarea', ''),
+(19, 'sitetheme', 'Site theme', 'general', 'a2z-default', 'ASSETS_PATH_FULL', 'option', 'required'),
+(20, 'pageitemadmin', 'Per page item-Admin', 'general', '10', '10', 'text', 'required|integer'),
+(21, 'passwordpolicy', 'Password policy', 'password', 'No', 'Yes;No', 'radio', ''),
+(22, 'minpasswordlength', 'Password length', 'password', '6', '6', 'text', 'integer'),
+(23, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', 'integer'),
+(24, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', 'integer'),
+(25, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', 'integer'),
+(26, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', 'integer');
 
 --
 -- Dumping data for table `pages`

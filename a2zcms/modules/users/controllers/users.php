@@ -197,8 +197,26 @@ class Users extends Website_Controller{
 		$this->page = $this->db->limit(1)->get('pages')->first_row();
 		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
 		
-		$data['send'] = $this->Model_message->selectSend($this->session->userdata('user_id'));
-		$data['received'] = $this->Model_message->selectReceived($this->session->userdata('user_id'));
+		$sent = $this->Model_message->selectSend($this->session->userdata('user_id'));
+		foreach($sent as $item){
+			if($this->session->userdata('timeago')=='Yes'){
+				$item->created_at =timespan(strtotime($item->created_at), time() ) . ' ago' ;
+			}
+			else{				
+				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			}
+		}
+		$received = $this->Model_message->selectReceived($this->session->userdata('user_id'));
+		foreach($received as $item){
+			if($this->session->userdata('timeago')=='Yes'){
+				$item->created_at =timespan(strtotime($item->created_at), time() ) . ' ago' ;
+			}
+			else{				
+				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			}
+		}
+		$data['send'] = $sent;
+		$data['received'] = $received;
 		$data['allUsers'] = $this->Model_user->selectAll($this->session->userdata('user_id'));
 		
 		$data['content'] = array(

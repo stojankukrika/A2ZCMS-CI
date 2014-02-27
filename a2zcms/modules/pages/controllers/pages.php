@@ -51,7 +51,15 @@ class Pages extends Website_Controller{
 	public function content($page_id)
 	{
 		$data['view'] = 'index';
-		$data['page'] = $this->Model_page->select($page_id);
+		$page = $this->Model_page->select($page_id);
+		if($this->session->userdata('timeago')=='Yes'){
+			$page->created_at =timespan(strtotime($page->created_at), time() ) . ' ago' ;
+		}
+		else{				
+			$page->created_at = date($this->session->userdata("datetimeformat"),strtotime($page->created_at));
+		}
+		
+		$data['page'] = $page;
 		
 		$data_temp = array(
                'hits' => $data['page']->hits + 1,

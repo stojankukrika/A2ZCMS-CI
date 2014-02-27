@@ -19,7 +19,7 @@ class Website_Controller extends MY_Controller
 		}
 		else {
 			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'email',
-							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme');
+							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme','timeago');
 			$this->db->where_in('varname',$varname);
 			$query = $this->db->from('settings')->get();
 			foreach ($query->result() as $row)

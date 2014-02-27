@@ -23,7 +23,7 @@
 		}
 		?>
 		<div class="page-header">
-		<h3><?=$gallery->title?></h3>
+		<h3><a href="<?=base_url('galleries/item/'.$gallery->id)?>"><?=$gallery->title?></a></h3>
 	</div>
      <?php
      echo '<div class="row">
@@ -61,13 +61,13 @@
 	Click <a href="'.base_url('user/login').'">here</a> to login
 	<br>';
 	}
-	else if (!$this->session->userdata("post_image_comment")){
+	else if (!$this->session->userdata("manage_gallery_imagecomments")){
 	echo '<br><b><i>You do not have a permittion to add comment</i></b>';
 	}
 	else {
 	echo '<div class="new_comment">
 		<h4>Add comment </h4>
-		<form method="post" action="'.base_url('galleries/galleryimage/'.$gallery->id.'/'.$image->id).'">
+		<form method="post" action="">
 			<div class="form-group">
 				<textarea class="form-control" name="comment" id="comment" placeholder="comment" rows="7"></textarea>
 				<label id="characterLeft"></label>

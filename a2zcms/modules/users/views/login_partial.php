@@ -33,7 +33,7 @@
 		<? } 
 		else { ?>
 		<h4>Login to system</h4>
-		<form method="POST" action="login" accept-charset="UTF-8">
+		<form method="POST" action="<?=base_url('users/login')?>" accept-charset="UTF-8">
 			<fieldset>
 				<div class="form-group">
 					<label class="col-md-4 control-label" for="email">Username or email</label>

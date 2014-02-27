@@ -40,7 +40,7 @@
 	                   <b><?=$item->subject?></b>
 	                  </a>
 	                </h4><span><?=$item->name.' '.$item->surname?></span> 
-	                ( <?= date("d.m.Y H:i", strtotime($item->created_at))?> ) 
+	                ( <?=$item->created_at?> ) 
 	                <a class="btn btn-sm btn-danger" id="delmsgr-<?=$item->id?>"><i class="glyphicon glyphicon-remove"></i></a>
 	              </div>
 	              <div id="<?=$item->id?>" class="panel-collapse collapse">
@@ -60,7 +60,7 @@
 	                    <b><?=$item->subject?></b>
 	                  </a>
 	                </h4><span><?=$item->name.' '.$item->surname;?></span> 
- 					( <?= date("d.m.Y H:i", strtotime($item->created_at))?>)
+ 					( <?=$item->created_at?>)
  					<a class="btn btn-sm btn-danger" id="delmsgs-<?=$item->id?>"><i class="glyphicon glyphicon-remove"></i></a>
 	              </div>
 	              <div id="<?=$item->id?>" class="panel-collapse collapse">

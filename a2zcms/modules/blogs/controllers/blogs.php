@@ -56,8 +56,13 @@ class Blogs extends Website_Controller{
             );
 		$this->db->where('slug', $slug);
 		$this->db->update('blogs', $datatemp);
-				
-		$blog->created_at = date($this->session->userdata("datetimeformat"),strtotime($blog->created_at));
+		
+		if($this->session->userdata('timeago')=='Yes'){
+			$blog->created_at =timespan(strtotime($blog->created_at), time() ) . ' ago' ;
+		}
+		else{				
+			$blog->created_at = date($this->session->userdata("datetimeformat"),strtotime($blog->created_at));
+		}			
 		$blog->user_id = $this->db->where('id',$blog->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 		$comments = $this->db->where('blog_id',$blog->id)->get('blog_comments');
 		$blog->blog_comments = $comments->num_rows();
@@ -65,7 +70,12 @@ class Blogs extends Website_Controller{
 		foreach ($comments_temp as $item)
 		{
 			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
-			$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			if($this->session->userdata('timeago')=='Yes'){
+				$item->created_at =timespan(strtotime($item->created_at), time() ) . ' ago' ;
+			}
+			else{				
+				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			}	
 		}
 		$data['blog_comments'] = $comments->result();
 		$data['blog'] = $blog;
@@ -78,7 +88,7 @@ class Blogs extends Website_Controller{
 														'user_id' => $this->session->userdata('user_id'),
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
-        	
+        	redirect($this->uri->uri_string());
 		}
 		$this->load->view('blog',$data);
 	}

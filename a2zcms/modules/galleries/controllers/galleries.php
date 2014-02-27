@@ -53,8 +53,12 @@ class Galleries extends Website_Controller{
             );
 		$this->db->where('id', $id);
 		$this->db->update('galleries', $datatemp);
-		
-		$gallery->created_at = date($this->session->userdata("datetimeformat"),strtotime($gallery->created_at));
+		if($this->session->userdata('timeago')=='Yes'){
+				$gallery->created_at =timespan(strtotime($gallery->created_at), time() ) . ' ago' ;
+			}
+		else{				
+			$gallery->created_at = date($this->session->userdata("datetimeformat"),strtotime($gallery->created_at));
+		}		
 		$gallery->user_id = $this->db->where('id',$gallery->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 		$data['gallery'] = $gallery;
 		$data['gallery_images'] = $this->db->where('gallery_id',$id)->get('gallery_images')->result();
@@ -109,7 +113,12 @@ class Galleries extends Website_Controller{
 		foreach ($comments_temp as $item)
 		{
 			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
-			$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			if($this->session->userdata('timeago')=='Yes'){
+				$item->created_at = timespan(strtotime($item->created_at), time() ) . ' ago' ;
+			}
+			else{				
+				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
+			}
 		}
 		$data['image_comments'] = $comments->result();		
 		$data['gallery'] = $gallery;
@@ -129,7 +138,7 @@ class Galleries extends Website_Controller{
 														'user_id' => $this->session->userdata('user_id'),
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
-        	
+        	redirect($this->uri->uri_string());
 		}
 		$this->load->view('galleryimage',$data);
 	}

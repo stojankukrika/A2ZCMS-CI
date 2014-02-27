@@ -81,7 +81,7 @@
 		<h4>Add comment </h4>
 		<form method="post" action="">
 			<div class="form-group">
-				<textarea class="form-control" name="blogcomment" id="blogcomment" placeholder="blogcomment" rows="7"></textarea>
+				<textarea class="form-control" name="comment" id="comment" placeholder="comment" rows="7"></textarea>
 				<label id="characterLeft"></label>
 			</div>
 			<div class="form-group">

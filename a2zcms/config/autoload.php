@@ -71,7 +71,7 @@ else
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'file', 'form','custom', 'path','fineuploader','thumbnail','UUID');
+$autoload['helper'] = array('url', 'file', 'form','custom', 'path','fineuploader','thumbnail','UUID','date');
 
 
 /*
