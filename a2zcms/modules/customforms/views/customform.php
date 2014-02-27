@@ -26,7 +26,7 @@ if(!empty($showCustomFormId)){
   	<div class="col-lg-12 col-md-12"><div class="page-header">
 		<h3>'.$showCustomFormId->title.'</h3>
 	</div>
-	<form action="'.base_url('customforms/item/'.$showCustomFormId[0]->id).'" method="post" enctype="multipart/form-data">';
+	<form action="" method="post" enctype="multipart/form-data">';
 				foreach($showCustomFormFildId as $field){
 						echo '<div class="col-lg-6 form-group">'.$field->name.'</div>
 						<div class="col-lg-6 form-group">';

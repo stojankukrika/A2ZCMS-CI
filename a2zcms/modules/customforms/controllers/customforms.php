@@ -54,45 +54,43 @@ class Customforms extends Website_Controller{
         );
 		$customform = $this->db->where('id',$id)->get('custom_forms')->first_row();
 		$data['showCustomFormId']= $customform;	
-		$customform_fields = $this->db->where('custom_form_id', $id)
+		$data['showCustomFormFildId']= $this->db->where('custom_form_id', $id)
 										->select('id, name, options, type, order, mandatory')
 										->order_by('order','ASC')
-										->get('custom_form_fields');	
-		$data['showCustomFormFildId']= $customform_fields->result();		
-				
-		$emailadmin = $this->session->userdata("email");
+										->get('custom_form_fields')->result();		
 		
-		$emailadmin = $emailadmin.','.$customform->recievers;
+		$this->load->view('customform',$data);		
+		
+		$contactemail = $this->session->userdata("contactemail");
+		
+		$emailadmin = $contactemail.';'.$customform->recievers;
 		$rules = array();
-		foreach ($customform_fields->result_array() as $fields) {
-			switch ($fields['mandatory']) {
+		foreach ($data['showCustomFormFildId'] as $fields) {
+			switch ($fields->mandatory) {
 				case '2':
-					$rules[$fields->name] = 'required|';
+					$this->form_validation->set_rules(url_title($fields->name, 'dash', true), $fields->name, 'required');
 					break;
 				case '3':
-					$rules[$fields->name] = 'required|numeric';
+					$this->form_validation->set_rules(url_title($fields->name, 'dash', true), $fields->name, 'required|numeric');
 					break;
 				case '4':
-					$rules[$fields->name] = 'required|email';
+					$this->form_validation->set_rules(url_title($fields->name, 'dash', true), $fields->name, 'required|email');
 					break;
 			}			
 		}
-		$this->form_validation->set_rules($rules); 
-		
 		// Check if the form validates with success
-		if ($this->form_validation->run() == FALSE)
+		if ($this->form_validation->run() == TRUE)
 		{
+			
 			// Save the comment
 			$this->load->library('email');
 			$data = $this->input->post();
 			
-			if (strpos($emailadmin,'.') !== false && strpos($emailadmin,'@') !== false && strlen($emailadmin)>6) {
-			
 			$emailadmin = explode(';', $emailadmin);
 			foreach ($emailadmin as $email) {
 				if($email!=""){	
-					$this->email->to($emailadmin);
-					$this->email->from($emailadmin);							
+					$this->email->to($email);
+					$this->email->from($contactemail);							
 					$this->email->subject('Contact message');
 					$mail_text = "";
 					foreach($data  as $key => $val)
@@ -102,12 +100,9 @@ class Customforms extends Website_Controller{
 					$this->email->message($mail_text);
 					
 					$this->email->send();
-					}
 				}
 			}
-		}	
-			
-		$this->load->view('customform',$data);
+		}
 	}
 		
 }

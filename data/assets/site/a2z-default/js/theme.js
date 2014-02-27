@@ -56,18 +56,16 @@ $(function () {
         //IE7 and 8 stuff
         $("body").addClass("old-ie");
     }
-    
 });
-
-function contentvote(updown,content,id)
+ 
+function contentvote(module,updown,content,id,showresult)
 {
-	var url = $('#url').val();
 	$.ajax({
-		 url: url,
+		url: $('#url').val()+module+'/contentvote',
 		type: "GET",
 		data: { updown: updown,content:content, id: id },
 		success: function(data){
-			$( "#countvote" ).text(data);
+			$( "#"+showresult ).text(data);
 		}
 	});
 }

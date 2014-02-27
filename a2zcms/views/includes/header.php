@@ -66,4 +66,5 @@
 		}
 	</style>
 	</head>
-	<body>
+	<body>		
+		<input type="hidden" id="url" value='<?=base_url()?>' />	

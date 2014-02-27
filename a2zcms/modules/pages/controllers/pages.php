@@ -69,6 +69,48 @@ class Pages extends Website_Controller{
 		
 		$this->load->view("index", $data);
 	}	
+	public function contentvote()
+	{
+		$updown = $this->input->get('updown');
+		$content = $this->input->get('content');
+		$id = $this->input->get('id');
+		$user = $this->session->userdata('user_id');
+		$newvalue = 0;
+		$exists = $this->db->where('content',$content)
+							->where('idcontent',$id)
+							->where('user_id',$user)
+							->select('id')->get('content_votes')->num_rows();
+		
+		$item = $this->db->where('id', $id)->get('pages')->first_row();
+		$newvalue = $item->voteup - $item -> votedown;
+		if($exists == 0 ){
+			$this->db->insert('content_votes',array('user_id'=>$user,
+														'updown' => $updown,
+														'content' => $content,
+														'idcontent' => $id,
+														'user_id' => $this->session->userdata('user_id'),
+														'updated_at' => date("Y-m-d H:i:s"),
+														'created_at' => date("Y-m-d H:i:s")));
+			
+			if($updown=='1')
+				{
+					$item -> voteup = $item -> voteup + 1;
+				}
+				else {
+					$item -> votedown = $item -> votedown + 1;
+				}
+				
+			$this->db->where('id', $id);		
+			$data = array(
+	               'voteup' => $item -> voteup,
+	               'votedown' => $item -> votedown,
+	            	);
+			$this->db->update('pages', $data);
+					
+			$newvalue = $item->voteup - $item -> votedown;						
+		}		
+		echo $newvalue;
+	}
 }
 
 ?>

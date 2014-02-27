@@ -42,11 +42,11 @@
      <p id="vote">Numer of votes <span id="countvote"><?=$blog->voteup-$blog->votedown;?></span> 
 		<?php
 		if (!$this->session->userdata("post_blog_vote")){
-		echo '<br><b><i>You need to be logged in and have permission to add vote. </i></b>';
+		echo '<br><b><i>You need to be logged in or have permission to add vote. </i></b>';
 		}
 		else {	?>			
-		<span style="display: inline-block;" onclick="contentvote('1','blog','<?=$blog->id?>')" class="up"></span>
-		<span style="display: inline-block;" onclick="contentvote('0','blog','<?=$blog->id?>')" class="down"></span>
+		<span style="display: inline-block;" onclick="contentvote('blogs','1','blog','<?=$blog->id?>','countvote')" class="up"></span>
+		<span style="display: inline-block;" onclick="contentvote('blogs','0','blog','<?=$blog->id?>','countvote')" class="down"></span>
 		<?
 		}
 	echo '</p>
@@ -57,7 +57,18 @@
 	if ($blog->blog_comments>0){
 	foreach ($blog_comments as $comment){
 		echo '<h4><b>'.$comment->user_id.'</b>
-				<small>	'.$comment->created_at.'</small>
+				<small>	'.$comment->created_at.'
+		|| Numer of votes <span id="commentcountvote'.$comment->id.'">';
+	 	echo $comment->voteup-$comment->votedown.'</span> ';
+	if (!$this->session->userdata("post_image_vote")){
+		echo '<i>You need to be logged in or have permission to add vote. </i>';
+		}
+		else {	?>			
+		<span style="display: inline-block;" onclick="contentvote('blogs','1','blogcomment','<?=$comment->id?>','commentcountvote<?=$comment->id?>')" class="up"></span>
+		<span style="display: inline-block;" onclick="contentvote('blogs','0','blogcomment','<?=$comment->id?>','commentcountvote<?=$comment->id?>')" class="down"></span>
+		<?
+		}
+	echo '</small>
 				</h4><p>'.$comment->content.'</p>';
 		}
 	}

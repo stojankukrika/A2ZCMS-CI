@@ -18,7 +18,7 @@ class Website_Controller extends MY_Controller
 			redirect('/install');
 		}
 		else {
-			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'email',
+			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'contactemail',
 							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme','timeago');
 			$this->db->where_in('varname',$varname);
 			$query = $this->db->from('settings')->get();
@@ -177,69 +177,6 @@ class Website_Controller extends MY_Controller
 				}
 			}
 		return $return;	
-	}
-
-	/*method for voting content get id of content,up-down vote and type of content(page,blog,image)*/
-	public function contentvote()
-	{
-		$id = $this->input->post('id');
-		$updown = $this->input->post('updown');
-		$content = $this->input->post('content');
-		$user = $this->session->userdata('user_id');
-		$newvalue = 0;
-		$exists = $this->db->where('content',$content)
-							->where('idcontent',$id)
-							->where('user_id',$user)
-							->select('id')->get('content_votes');
-		
-		switch ($content) {
-			case 'page':
-				$item = $this->db->where('id', '=', $id)->get('pages')->first_row();
-				break;
-			case 'image':
-				$item = $this->db->where('id', '=', $id)->get('gallery_images')->first_row();
-				break;
-			case 'blog':
-				$item = $this->db->where('id', '=', $id)->get('blogs')->first_row();
-				break;			
-			}
-		if($exists->num_rows() == 0 ){
-			$this->db->insert('content_votes',array('user_id'=>$user,
-														'updown' => $updown,
-														'content' => $content,
-														'idcontent' => $id,
-														'user_id' => $this->session->userdata('user_id'),
-														'updated_at' => date("Y-m-d H:i:s"),
-														'created_at' => date("Y-m-d H:i:s")));
-			
-			if($updown=='1')
-				{
-					$item -> voteup = $item -> voteup + 1;
-				}
-				else {
-					$item -> votedown = $item -> votedown + 1;
-				}
-				
-		$this->db->where('id', $id);		
-		$data = array(
-               'voteup' => $item -> voteup,
-               'votedown' => $item -> voteup,
-            	);
-				switch ($content) {
-					case 'page':
-						$this->db->update('pages', $data);
-						break;
-					case 'image':
-						$this->db->update('gallery_images', $data);
-						break;
-					case 'blog':
-						$this->db->update('blogs', $data);
-						break;			
-					}					
-			}
-			$newvalue = $item->voteup - $item -> votedown;
-					
-		return $newvalue;
 	}
 	
 }
