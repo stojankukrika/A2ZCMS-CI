@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `assigned_roles` (
 CREATE TABLE IF NOT EXISTS `content_votes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
-  `updown` tinyint(1) NOT NULL,
+  `updown` tinyint(1) NOT NULL COMMENT '1-up;0-down',
   `content` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `idcontent` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
