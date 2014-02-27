@@ -58,17 +58,18 @@
 		<h3>Login to system</h3>
 		<form method="POST" action="<?=base_url('users/login')?>" accept-charset="UTF-8">
 			<fieldset>
-				<div class="form-group">
-					<label class="col-md-4 control-label" for="email">Username or email</label>
-					<div class="col-md-8">
-						<input class="form-control" tabindex="1" placeholder="Username or email" type="text" name="email" id="email" value="">
+				<div class="form-group">					
+					<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('email', 'Username or email', "", 'form-control');
+					?>
 					</div>
 				</div>
-				<div class="form-group">&nbsp;</div>
 				<div class="form-group">
-					<label class="col-md-4 control-label" for="password"> Password</label>
-					<div class="col-md-8">
-						<input class="form-control" tabindex="2" placeholder="Password" type="password" name="password" id="password">
+					<div class="col-lg-12">
+					<?
+						$this -> form_builder -> password('password', 'Password', "", 'form-control');
+					?>
 					</div>
 				</div>			
 				<div class="form-group">

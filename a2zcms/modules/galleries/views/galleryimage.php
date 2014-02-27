@@ -80,7 +80,9 @@
 		<h4>Add comment </h4>
 		<form method="post" action="">
 			<div class="form-group">
-				<textarea class="form-control" name="comment" id="comment" placeholder="comment" rows="7"></textarea>
+				';
+				$this -> form_builder -> textarea('comment', 'Comment', "", 'wysihtml5');
+				echo '</div>
 				<label id="characterLeft"></label>
 			</div>
 			<div class="form-group">

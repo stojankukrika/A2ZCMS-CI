@@ -11,10 +11,11 @@
 		<!-- General tab -->
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">Name</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" name="name" id="name" value="<?=$content['rolename']?>" />
+			<div class="form-group">								
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('name', 'Name', (isset($content['rolename']))?$content['rolename']:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ name -->

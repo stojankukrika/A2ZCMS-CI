@@ -91,8 +91,10 @@
 	echo '<div class="new_comment">
 		<h4>Add comment </h4>
 		<form method="post" action="">
-			<div class="form-group">
-				<textarea class="form-control" name="comment" id="comment" placeholder="comment" rows="7"></textarea>
+			<div class="form-group">			
+				<div class="col-md-12">';
+				$this -> form_builder -> textarea('comment', 'Comment', "", 'wysihtml5');
+				echo '</div>
 				<label id="characterLeft"></label>
 			</div>
 			<div class="form-group">

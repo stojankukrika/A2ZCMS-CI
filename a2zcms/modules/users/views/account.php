@@ -21,46 +21,50 @@
 			echo '<div class="col-xs-12 col-sm-6 col-lg-8"><br>';
 		}
 		?>
-		<div class="span6 offset3">
-			<h1>Account settings</h1>
-			
-			<?php if(@$message): ?>
+			<div class="page-header">
+				<h3>Change password</h3>
+			</div>
+						
+			<?php if(@$error): ?>
 			<div class="alert">
 				<button type="button" class="close" data-dismiss="alert">×</button>
-				<?php echo $message; ?>
+				<?php echo $error; ?>
 			</div>
 			<?php endif; ?>
-
-			<div class="well">
-					
-				<form class="form-horizontal" method="post" action="">
-					<div class="control-group">
-						<label for="inputNickname" class="control-label">Nickname</label>
-						<div class="controls">
-							<input type="text" id="inputNickname" name="nickname" value="<?php echo $user->user_nicename; ?>" />
+			<form method="post" action="">
+				<div class="form-group">
+					<div class="form-group">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> password('old_password', 'Old password', "", 'form-control');
+						?>
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputEmail">Email</label>
-						<div class="controls">
-							<input type="text" id="inputEmail" placeholder="Email" name="email" value="<?php echo $user->user_email; ?>" />
+					<div class="form-group">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> password('password', 'New password', "", 'form-control');
+						?>
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="inputPassword">Password</label>
-						<div class="controls">
-							<input type="password" id="inputPassword" placeholder="Password" name="password" value="" />
+					<div class="form-group">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> password('confirm_password', 'Confirm password', "", 'form-control');
+						?>
 						</div>
 					</div>
-					<div class="control-group">
-						<div class="controls">
-							<button type="submit" class="btn">Update</button>
+					<div class="form-group">&nbsp;</div>
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-10">
+							<button class="btn btn-primary" type="submit" tabindex="3">
+								Change password			
+							</button>
 						</div>
 					</div>
 				</form>
-			</div>
-		</div>
-	<?php	echo '</div>';
+			<div class="form-group">&nbsp;</div>
+	<?php	echo '</div></div>';
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)

@@ -33,44 +33,50 @@
 			<?php endif; ?>
 			<form method="post" action="">
 				<div class="form-group">
-						<label class="col-md-2 control-label" for="name">Name</label>
-						<div class="col-md-10">
-							<input type="text" id="name" class="form-control" value="<?php echo set_value('name'); ?>" name="name">
-						</div>
+					<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('name', 'Name', "", 'form-control');
+					?>
+					</div>
 					</div>
 					<div class="form-group">&nbsp;</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="surname">Surname</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="surname" value="<?php echo set_value('surname'); ?>" name="surname">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('surname', 'Surname', "", 'form-control');
+						?>
 						</div>
 					</div>		
 					<div class="form-group">&nbsp;</div>			
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="username">Username</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="username" value="<?php echo set_value('username'); ?>" name="username">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('username', 'Username', "", 'form-control');
+						?>
 						</div>
 					</div>	
 					<div class="form-group">&nbsp;</div>				
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="email">Email</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="email" value="<?php echo set_value('email'); ?>" name="email">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('email', 'Email', "", 'form-control');
+						?>
 						</div>
 					</div>
 					<div class="form-group">&nbsp;</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="password">Password</label>
-						<div class="col-md-10">
-							<input type="password" class="form-control" id="password" name="password">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('password', 'Password', "", 'form-control');
+						?>
 						</div>
 					</div>
 					<div class="form-group">&nbsp;</div>
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="confirm_password">Confirm password</label>
-						<div class="col-md-10">
-							<input type="password" class="form-control" id="confirm_password" name="confirm_password">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('confirm_password', 'Confirm password', "", 'form-control');
+						?>
 						</div>
 					</div>
 					<div class="form-group">&nbsp;</div>

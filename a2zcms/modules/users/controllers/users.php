@@ -174,7 +174,7 @@ class Users extends Website_Controller{
             'left_content' => $this->pagecontent['sidebar_left'],
         );
 		
-		$this->load->view('changepassword', $data);
+		$this->load->view('account', $data);
 		
 		$this->load->library('hash');					
 		if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))

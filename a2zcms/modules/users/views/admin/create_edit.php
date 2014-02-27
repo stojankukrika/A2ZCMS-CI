@@ -12,55 +12,62 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- name -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="name">Name</label>
-				<div class="col-md-10">
-					<input class="form-control" tabindex="1" placeholder="Name" type="text" name="name" id="name" value="<?=isset($content['user_edit']->name)?$content['user_edit']->name:""?>">
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('name', 'Name', (isset($content['user_edit']->name))?$content['user_edit']->name:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- name -->
 			<!-- surname -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="surname">Surname</label>
-				<div class="col-md-10">
-					<input class="form-control" tabindex="2" placeholder="Surname" type="text" name="surname" id="surname" value="<?=isset($content['user_edit']->surname)?$content['user_edit']->surname:""?>">
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('surname', 'Surname', (isset($content['user_edit']->surname))?$content['user_edit']->surname:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- surname -->
 			<!-- username -->
-			<div class="form-group {{{ $errors->has('username') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="username">Username</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" tabindex="3" placeholder="Username" name="username" id="username" value="<?=isset($content['user_edit']->username)?$content['user_edit']->username:""?>" />
+			<div class="form-group">
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('username', 'Username', (isset($content['user_edit']->username))?$content['user_edit']->username:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ username -->
 
 			<!-- Email -->
-			<div class="form-group {{{ $errors->has('email') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="email">Email</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" tabindex="4" placeholder="Email" name="email" id="email" value="<?=isset($content['user_edit']->email)?$content['user_edit']->email:""?>" />
+			<div class="form-group">				
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('email', 'Email', (isset($content['user_edit']->email))?$content['user_edit']->email:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ email -->
 
 			<!-- Password -->
-			<div class="form-group {{{ $errors->has('password') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="password">Password</label>
-				<div class="col-md-10">
-					<input class="form-control"  tabindex="5" placeholder="Password" type="password" name="password" id="password" value="" />
+			<div class="form-group">								
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> password('password', 'Password', "", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ password -->
 
 			<!-- Activation Status -->
 			<div class="form-group {{{ $errors->has('activated') || $errors->has('confirm') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="confirm">Activate User?</label>
-				<div class="col-md-6">
-					<select class="form-control" name="active" id="active">
-						<option value="1" <?=(!isset($content['user_edit']) || (isset($content['user_edit']->active) && $content['user_edit']->active=='1'))?'selected="selected"':""; ?>>Yes</option>
-						<option value="0" <?=(isset($content['user_edit']->active) && $content['user_edit']->active=='0')?'selected="selected"':""; ?>>No</option>
-					</select>					
+				<div class="col-lg-12">
+					<?php
+						$radios = '';
+						$radios[] = (object) array('id' => 0, 'name' => 'Yes');
+						$radios[] = (object) array('id' => 1, 'name' => 'No');
+					
+						$this -> form_builder -> radio('confirm', 'Activate User?', $radios, (isset($content['page_edit']->active))?$content['page_edit']->active:"1", 'form-control');							
+					?>	
 				</div>
 			</div>
 			<!-- ./ activation status -->

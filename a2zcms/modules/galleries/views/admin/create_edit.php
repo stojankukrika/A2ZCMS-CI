@@ -12,25 +12,28 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">Title</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" name="title" id="title" value="<?=(isset($content['gallery_edit']->title))?$content['gallery_edit']->title:"";?>" />
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('title', 'Title', (isset($content['gallery_edit']->title)?$content['gallery_edit']->title:""), 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ name -->
 			<!-- Start publish -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="start_publish">Start publish</label>
-					<input class="form-control" type="text" name="start_publish" id="start_publish" value="<?=(isset($content['gallery_edit']->start_publish))?$content['gallery_edit']->start_publish:"";?>" />
+				<?
+					$this -> form_builder -> text('start_publish', 'Start publish', (isset($content['gallery_edit']->start_publish)?$content['gallery_edit']->start_publish:""), 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ start publish -->			
 			<!-- End publish -->
 			<div class="form-group">
-				<div class="col-md-12 controls">
-					<label class="control-label" for="end_publish">End publish</label>
-					<input class="form-control" type="text" name="end_publish" id="end_publish" value="<?=(isset($content['gallery_edit']->end_publish))?$content['gallery_edit']->end_publish:"";?>" />
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('end_publish', 'End publish', (isset($content['gallery_edit']->end_publish)?$content['gallery_edit']->end_publish:""), 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ end publish -->

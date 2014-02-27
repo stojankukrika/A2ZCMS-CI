@@ -14,18 +14,20 @@
 		<!-- General tab -->
 		<div class="tab-pane active" id="tab-general">
 			<!-- text -->
-			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">Title</label>
-				<div class="col-md-10">
-					<input class="form-control" tabindex="1" placeholder="Title" type="text" name="title" id="title" value="<?=isset($content['blog_edit']->title)?$content['blog_edit']->title:""?>">
+			<div class="form-group">				
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('title', 'Title', isset($content['blog_edit']->title)?$content['blog_edit']->title:"", 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- text -->
 			<!-- resource_link -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="resource_link">Resource link</label>
-				<div class="col-md-10">
-					<input class="form-control" tabindex="2" placeholder="Resource link" type="text" name="resource_link" id="resource_link" value="<?=isset($content['blog_edit']->resource_link)?$content['blog_edit']->resource_link:""?>">
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('resource_link', 'Resource link', isset($content['blog_edit']->resource_link)?$content['blog_edit']->resource_link:"", 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- resource_link -->
@@ -61,8 +63,9 @@
 			<!-- Content -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="content">Content</label>
-					<textarea class="form-control full-width wysihtml5" name="content" value="content" rows="10"><?=isset($content['blog_edit']->content)?$content['blog_edit']->content:""?></textarea>
+				<?
+					$this -> form_builder -> textarea('content', 'Content', isset($content['blog_edit']->content)?$content['blog_edit']->content:"", 'wysihtml5');
+				?>
 				</div>
 			</div>
 			<!-- ./ content -->
@@ -73,17 +76,19 @@
 			<!-- Start publish -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="start_publish">Start publish</label>
-					<input class="form-control" type="text" name="start_publish" id="start_publish" value="<?=isset($content['blog_edit']->start_publish)?$content['blog_edit']->start_publish:""?>" />
+				<?
+					$this -> form_builder -> text('start_publish', 'Start publish', isset($content['blog_edit']->start_publish)?$content['blog_edit']->start_publish:"", 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ start publish -->
 
 			<!-- End publish -->
 			<div class="form-group">
-				<div class="col-md-12 controls">
-					<label class="control-label" for="end_publish">End publish</label>
-					<input class="form-control" type="text" name="end_publish" id="end_publish" value="<?=isset($content['blog_edit']->end_publish)?$content['blog_edit']->end_publish:""?>" />
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('end_publish', 'End publish', isset($content['blog_edit']->end_publish)?$content['blog_edit']->end_publish:"", 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ end publish -->

@@ -25,17 +25,18 @@
 				<h3>Forgot password</h3>
 			</div>
 			<form method="post" action="">
-				<div class="form-group">
-						<label class="col-md-2 control-label" for="username">Username</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="username" value="<?php echo set_value('username'); ?>" name="username">
-						</div>
+				<div class="form-group">					
+					<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('username', 'Username', "", 'form-control');
+					?>
+					</div>
 					</div>	
-					<div class="form-group">&nbsp;</div>				
 					<div class="form-group">
-						<label class="col-md-2 control-label" for="email">Email</label>
-						<div class="col-md-10">
-							<input type="text" class="form-control" id="email" value="<?php echo set_value('email'); ?>" name="email">
+						<div class="col-lg-12">
+						<?
+							$this -> form_builder -> text('email', 'Email', "", 'form-control');
+						?>
 						</div>
 					</div>					
 					<div class="form-group">&nbsp;</div>

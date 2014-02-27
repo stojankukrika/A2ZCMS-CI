@@ -17,8 +17,9 @@
 			<!-- Title -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="title">Title</label>
-					<input class="form-control" type="text" name="title" id="title" value="<?=(isset($content['customform_edit']->title))?$content['customform_edit']->title:""?>" />
+				<?
+					$this -> form_builder -> text('title', 'Title', isset($content['customform_edit']->title)?$content['customform_edit']->title:"", 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ title -->
@@ -26,19 +27,21 @@
 			<!-- Recievers -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="recievers">Recievers 
-						<small>(Disassemble the different recievers ​​with a semicolon)</small></label>
-					<input class="form-control" type="text" name="recievers" id="recievers" value="<?=(isset($content['customform_edit']->recievers))?$content['customform_edit']->recievers:""?>" />
+				<?
+					$this -> form_builder -> text('recievers', 'Recievers', isset($content['customform_edit']->recievers)?$content['customform_edit']->recievers:"", 'form-control');
+				?>
+				<small>(Disassemble the different recievers ​​with a semicolon)</small>
 				</div>
 			</div>
 			<!-- ./ resource recievers -->
 			<!-- Content -->
 			<div class="form-group">
 				<div class="col-md-12">
-					<label class="control-label" for="message">Message</label>
-					<textarea class="form-control full-width wysihtml5" name="message" value="message" rows="10">
-						<?=(isset($content['customform_edit']->message))?$content['customform_edit']->message:""?>
-					</textarea>
+					<div class="col-md-12">
+						<?
+							$this -> form_builder -> textarea('message', 'Message', isset($content['customform_edit']->message)?$content['customform_edit']->message:"", 'wysihtml5');
+						?>
+					</div>
 				</div>
 			</div>
 			<!-- ./ content -->
@@ -60,9 +63,9 @@
 							if(!empty($content['customformfields'])){
 								foreach($content['customformfields'] as $item) { ?>								
 									<li class="ui-state-default" name="formf" value="<?=$item->id?>" id="formf<?=$item->id?>">
-										<label class="control-label" for="name">Fild name</label>
-										<input type="text" id="name<?=$item->id?>" value="<?=$item->name?>" name="name<?=$item->id?>">
-										<div>
+										<?
+											$this -> form_builder -> text('name'.$item->id, 'Fild name', $item->name, '');
+										?><div>
 											<label class="control-label" for="mandatory">Mandatory </label>
 											<select name="mandatory<?=$item->custom_form_id?>" id="mandatory<?=$item->id?>"> 
 												<option value="1" <?=($item->mandatory=='1')?"selected":"";?>>No</option>

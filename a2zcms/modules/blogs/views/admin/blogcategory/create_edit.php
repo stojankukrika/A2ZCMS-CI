@@ -12,9 +12,10 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">Title</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" name="title" id="title" value="<?=(isset($content['blogcategory_edit']->title)?$content['blogcategory_edit']->title:"")?>" />
+				<div class="col-md-12">
+				<?
+					$this -> form_builder -> text('title', 'Title', (isset($content['blogcategory_edit']->title)?$content['blogcategory_edit']->title:""), 'form-control');
+				?>
 				</div>
 			</div>
 			<!-- ./ name -->

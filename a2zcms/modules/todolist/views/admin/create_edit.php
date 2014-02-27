@@ -12,26 +12,29 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">Name</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" name="title" id="title" value="<?=(isset($content['todolist_edit']->title))?$content['todolist_edit']->title:"";?>" />
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('title', 'Title', (isset($content['todolist_edit']->title))?$content['todolist_edit']->title:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ name -->
 			<!-- Permissions -->
 			<div class="form-group">
-			<label class="col-md-2 control-label" for="name">Content</label>
-				<div class="col-md-10">
-					<textarea class="full-width col-md-12 wysihtml5" name="content" id="content" ><?=(isset($content['todolist_edit']->content))?$content['todolist_edit']->content:"";?></textarea>
-		        </div>
+				<div class="col-lg-12">
+				<?
+					$this -> form_builder -> textarea('content', 'Content', (isset($content['todolist_edit']->content))?$content['todolist_edit']->content:"", 'wysihtml5');
+				?>
+				</div>
 		    </div>
 		    <!-- ./ permissions -->
 		    <!-- FInished-->
 			<div class="form-group">
-				<div class="col-md-12">
-					 <label class="control-label"  for="finished">Finished</label></br>
-					 <input id="finished" class="form-control"  name="finished" value="<?=(isset($content['todolist_edit']->finished))?$content['todolist_edit']->finished:"0.00"?>" />
-				</div>				
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('finished', 'Finished', (isset($content['todolist_edit']->finished))?$content['todolist_edit']->finished:"0.00", 'form-control');
+					?>
+				</div>			
 			</div>
 			<!-- ./ finished -->
 		</div>

@@ -24,9 +24,10 @@
 		<div class="tab-pane active" id="tab-general">
 			<!-- Name -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="title">Name</label>
-				<div class="col-md-10">
-					<input class="form-control" type="text" name="title" id="title" value="<?=(isset($content['page_edit']->title))?$content['page_edit']->title:"";?>" />
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('title', 'Title', (isset($content['page_edit']->title))?$content['page_edit']->title:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ name -->
@@ -109,19 +110,21 @@
 			<!-- ./ show sidebar -->
 
 			<!-- Show Password Protected -->
-			<div class="form-group">
+			<div class="form-group">				
 				<div class="col-lg-12">
-					<label class="control-label" for="passwordprotect">Password Protected</label>
-					<input type="password" name="password" id="password" value="<?=(isset($content['page_edit']->password))?$content['page_edit']->password:""?>" class="form-control input-sm" />
+					<?
+						$this -> form_builder -> password('password', 'Password Protected', (isset($content['page_edit']->password))?$content['page_edit']->password:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ show password -->
 			
 			<!-- Show tags -->
-			<div class="form-group">
+			<div class="form-group">							
 				<div class="col-lg-12">
-					<label class="control-label" for="tags">Tags</label>
-					<input type="text" name="tags" id="tags" value="<?=(isset($content['page_edit']->tags))?$content['page_edit']->tags:""?>" class="form-control input-sm" />
+					<?
+						$this -> form_builder -> text('tags', 'Tags', (isset($content['page_edit']->tags))?$content['page_edit']->tags:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ show tags -->
@@ -129,8 +132,9 @@
 			<!-- Content -->
 			<div class="form-group">
 				<div class="col-lg-12">
-					<label class="control-label" for="content">Content</label>
-					<textarea class="full-width col-md-12 wysihtml5" name="content" value="content" rows="10" class="form-control"><?=(isset($content['page_edit']->content))?$content['page_edit']->content:""?></textarea>
+					<?
+						$this -> form_builder -> textarea('content', 'Content', (isset($content['page_edit']->content))?$content['page_edit']->content:"", 'wysihtml5');
+					?>
 				</div>
 			</div>
 			<!-- ./ content -->
@@ -153,28 +157,31 @@
 		<!-- Meta Data tab -->
 		<div class="tab-pane" id="tab-meta-data">
 			<!-- Meta Title -->
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label" for="meta_title">Meta title</label>
-					<input class="form-control" type="text" name="meta_title" id="meta_title" value="<?=(isset($content['page_edit']->meta_title))?$content['page_edit']->meta_title:""?>" />
+			<div class="form-group">										
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('meta_title', 'Meta title', (isset($content['page_edit']->meta_title))?$content['page_edit']->meta_title:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ meta title -->
 
 			<!-- Meta Description -->
-			<div class="form-group">
-				<div class="col-md-12 controls">
-					<label class="control-label" for="meta_description">Meta description</label>
-					<input class="form-control" type="text" name="meta_description" id="meta_description" value="<?=(isset($content['page_edit']->meta_description))?$content['page_edit']->meta_description:""?>" />
+			<div class="form-group">									
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('meta_description', 'Meta description', (isset($content['page_edit']->meta_description))?$content['page_edit']->meta_description:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ meta description -->
 
 			<!-- Meta Keywords -->
-			<div class="form-group">
-				<div class="col-md-12">
-					<label class="control-label" for="meta_keywords">Meta Keywords</label>
-					<input class="form-control" type="text" name="meta_keywords" id="meta_keywords" value="<?=(isset($content['page_edit']->meta_keywords))?$content['page_edit']->meta_keywords:""?>" />
+			<div class="form-group">								
+				<div class="col-lg-12">
+					<?
+						$this -> form_builder -> text('meta_keywords', 'Meta Keywords', (isset($content['page_edit']->meta_keywords))?$content['page_edit']->meta_keywords:"", 'form-control');
+					?>
 				</div>
 			</div>
 			<!-- ./ meta keywords -->
@@ -186,8 +193,9 @@
 			<!-- Content -->
 			<div class="form-group">
 				<div class="col-lg-12">
-					<label class="control-label" for="page_css">Page CSS</label>
-					<textarea class="full-width col-md-12 wysihtml5" name="page_css" value="page_css" rows="8" class="form-control"><?=(isset($content['page_edit']->page_css))?$content['page_edit']->page_css:""?></textarea>
+					<?
+						$this -> form_builder -> textarea('page_css', 'Page CSS', (isset($content['page_edit']->page_css))?$content['page_edit']->page_css:"", 'wysihtml5');
+					?>
 				</div>
 			</div>
 			<!-- ./ content -->
@@ -199,8 +207,9 @@
 			<!-- Content -->
 			<div class="form-group">
 				<div class="col-lg-12">
-					<label class="control-label" for="page_javascript">Page Java Script</label>
-					<textarea class="full-width col-md-12 wysihtml5" name="page_javascript" value="page_javascript" rows="8" class="form-control"><?=(isset($content['page_edit']->page_javascript))?$content['page_edit']->page_javascript:""?></textarea>
+					<?
+						$this -> form_builder -> textarea('page_javascript', 'Page Java Script', (isset($content['page_edit']->page_javascript))?$content['page_edit']->page_javascript:"", 'wysihtml5');
+					?>
 				</div>
 			</div>
 			<!-- ./ content -->
