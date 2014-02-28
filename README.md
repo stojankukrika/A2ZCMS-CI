@@ -67,7 +67,7 @@
 
 #### Option 2: Download the repository
 
-    https://github.com/mrakodol/A2ZCMS/archive/master.zip
+    https://github.com/mrakodol/A2ZCMS-CI/archive/master.zip
 
 -----
 <a name="step2"></a>
