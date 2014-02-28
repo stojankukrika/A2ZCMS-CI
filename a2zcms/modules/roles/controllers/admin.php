@@ -9,7 +9,7 @@ class Admin extends Administrator_Controller{
 	
 	function __construct(){
 		parent::__construct();	
-		$this->load->model(array("Model_assigned_role","Model_permission","Model_permission_role","Model_role"));
+		$this->load->model(array("Model_permission","Model_permission_role","Model_role"));
 	}
 	
 	function index(){

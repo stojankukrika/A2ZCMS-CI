@@ -30,11 +30,6 @@ class Model_role extends CI_Model {
         }
         return false;
    }
-	public function getall()
-	{
-		return $this->db->where(array('deleted_at' => NULL))->get("roles")->result();
-	}
-	
 	public function delete($id) {		
 		$data = array(
                'deleted_at' => date("Y-m-d H:i:s")
