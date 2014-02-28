@@ -67,4 +67,17 @@ class Model_blog_comment extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('blog_comments', $data);
     }
+	
+	public function selectAllFromBlog($blog_id) {
+					
+		return $this->db->where('blog_id', $blog_id)
+								->where(array('blog_comments.deleted_at' => NULL))
+								->where(array('users.deleted_at' => NULL))
+								->from('blog_comments')
+								->join('users','blog_comments.user_id=users.id')
+								->select('blog_comments.*,CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)
+								->get()
+								->result();	
+    }
+	
 }

@@ -53,5 +53,18 @@ class Model_page extends CI_model {
 		$this->db->where('id', $id);
 		$this->db->update('pages', $data);
     }
+	public function selectById($id)
+	{
+		$page = $this->db->where('id', $id)->get('pages')->first_row();
+		
+		if(!empty($page))
+		{
+			$datatemp = array(
+               'hits' => $page->hits + 1,
+           		);
+			$this->update($datatemp,$page->id);
+		}
+		return $page;
+	}
 	
 }

@@ -57,4 +57,45 @@ class Model_blog extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('blogs', $data);
     }
+	
+	public function getAllByParams($order,$sort,$limit)
+	{
+		return  $this->db->order_by($order,$sort)
+						->limit($limit)->select('id, title, slug')->get('blogs')->result();
+	}
+	public function selectFirstSlug() {		
+		return 	$this->db->select('slug')->limit(1)->get('blogs')->first_row()->slug;
+    }
+	
+	public function selectBySlug($slug)
+	{
+		$blog = $this->db->limit(1)->where('slug',$slug)
+								->from('blogs')
+								->join('users','blogs.user_id=users.id')
+								->select('blogs.*,CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)
+								->get()->first_row();
+		if(!empty($blog))
+		{
+			$datatemp = array(
+               'hits' => $blog->hits + 1,
+           		);
+			$this->update($datatemp,$blog->id);
+		}
+		return $blog;
+	}
+	
+	public function selectWhereIn($ids,$orders,$sorts)
+	{
+		 return $this->db->where_in('id', $ids)
+									->order_by($orders,$sorts)
+									->select('id, slug, title, content,image')->get('blogs')->result();
+	}
+	
+	public function selectWhereLimit($orders,$sorts,$limits)
+	{
+		 return $this->db->order_by($orders,$sorts)
+								->limit($limits)
+								->select('id, slug, title, content, image')->get('blogs')->result();
+	}
+	
 }

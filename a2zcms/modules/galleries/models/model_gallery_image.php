@@ -49,8 +49,13 @@ class Model_gallery_image extends CI_Model {
 		return $this->db->where('id', $id)->get('gallery_images')->first_row();
     }
 	
-	public function selectgalery($galery_id) {		
-		return $this->db->where('gallery_id', $galery_id)->where(array('deleted_at' => NULL))->get('gallery_images')->result();
+	public function selectgalery($galery_id,$limit=0) {
+		if($limit==0){
+			return $this->db->where('gallery_id', $galery_id)->where(array('deleted_at' => NULL))->get('gallery_images')->result();
+		}
+		else {
+			return $this->db->where('gallery_id', $galery_id)->limit($limit)->where(array('deleted_at' => NULL))->get('gallery_images')->result();
+		}
     }
 	
 	public function insert($data) {		
@@ -61,5 +66,17 @@ class Model_gallery_image extends CI_Model {
 	public function update($data,$id) {		
 		$this->db->where('id', $id);
 		$this->db->update('gallery_images', $data);
+    }
+	public function selectForId($id) {		
+		$gallery_image = $this->db->where('id', $id)->get('gallery_images')->first_row();
+		
+		if(!empty($gallery_image))
+		{
+			$datatemp = array(
+               'hits' => $gallery_image->hits + 1,
+           		);
+			$this->update($datatemp,$gallery_image->id);
+		}
+		return $gallery_image;
     }
 }

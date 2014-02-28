@@ -70,4 +70,11 @@ class Model_customform_field extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('custom_form_fields', $data);
     }
+	public function selectForId($id) {		
+		return $this->db->where('custom_form_id', $id)
+								->where(array('deleted_at' => NULL))
+								->select('id, name, options, type, order, mandatory')
+								->order_by('order','ASC')
+								->get('custom_form_fields')->result();
+    }
 }

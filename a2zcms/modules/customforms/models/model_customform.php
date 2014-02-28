@@ -57,4 +57,12 @@ class Model_customform extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('custom_forms', $data);
     }
+	public function selectWhereIn($ids)
+	{
+		return $this->db->where(array('deleted_at' => NULL))
+						->where_in('id', $ids)
+						->select('id, recievers, title, message')
+						->get('custom_forms')->result();
+	}
+	
 }

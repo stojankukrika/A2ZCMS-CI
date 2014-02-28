@@ -18,7 +18,7 @@ class Website_Controller extends MY_Controller
 			redirect('/install');
 		}
 		else {
-			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'contactemail',
+			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'contactemail','pageitem',
 							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme','timeago');
 			$this->db->where_in('varname',$varname);
 			$query = $this->db->from('settings')->get();

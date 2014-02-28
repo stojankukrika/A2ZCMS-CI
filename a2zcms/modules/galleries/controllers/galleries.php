@@ -12,9 +12,8 @@ class Galleries extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-    	$this->load->model(array("Model_gallery","Model_gallery_image","Model_gallery_image_comment"));
-		$this->page = $this->db->limit(1)->get('pages')->first_row();
-		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
+    	$this->load->model(array("Model_gallery","Model_gallery_image","Model_gallery_image_comment","Model_content_vote"));
+		$this->pagecontent = Website_Controller::createSiderContent(0);
 	}
 	/*function for plugins*/
 	function getGalleryId(){
@@ -27,9 +26,8 @@ class Galleries extends Website_Controller{
 	public function newGallery($params)
 	{
 		$param = Website_Controller::splitParams($params);
-		$newGalleries = $this->db->order_by($param['order'],$param['sort'])
-						->limit($param['limit'])->select('id, title')->get('galleries')->result();
-						
+		$newGalleries = $this->Model_gallery->getAllByParams($param['order'],$param['sort'],$param['limit']);
+		
 		$data['content'] = array(
             'right_content' => $this->pagecontent['sidebar_right'],
             'left_content' => $this->pagecontent['sidebar_left'],
@@ -44,24 +42,18 @@ class Galleries extends Website_Controller{
             'left_content' => $this->pagecontent['sidebar_left'],
         );
 		if($id=='') {
-			$id = $this->db->select('id')->limit(1)->get('galleries')->first_row()->id;
+			$id = $this->Model_gallery->selectFirst();
 		}
-		$gallery= $this->db->limit(1)->where('id',$id)->get('galleries')->first_row();
+		$gallery= $this->Model_gallery->selectById($id);
 		
-		$datatemp = array(
-               'hits' => $gallery->hits + 1,
-            );
-		$this->db->where('id', $id);
-		$this->db->update('galleries', $datatemp);
 		if($this->session->userdata('timeago')=='Yes'){
 				$gallery->created_at =timespan(strtotime($gallery->created_at), time() ) . ' ago' ;
 			}
 		else{				
 			$gallery->created_at = date($this->session->userdata("datetimeformat"),strtotime($gallery->created_at));
 		}		
-		$gallery->user_id = $this->db->where('id',$gallery->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 		$data['gallery'] = $gallery;
-		$data['gallery_images'] = $this->db->where('gallery_id',$id)->get('gallery_images')->result();
+		$data['gallery_images'] = $this->Model_gallery_image->selectgalery($id);
 		$this->load->view('gallery',$data);
 	}
 	
@@ -72,23 +64,16 @@ class Galleries extends Website_Controller{
 		if($ids!="" && $grids==""){
 			$ids = rtrim($ids, ",");
 			$ids = explode(',', $ids);
-			$showGallery = $this->db->where('start_publish <=','CURDATE()')
-									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
-									->where_in('id', $ids)
-									->order_by($orders,$sorts)
-									->select('id, title, folderid')->get('galleries')->result();
+			$showGallery = $this->Model_gallery->selectWhereIn($ids,$orders,$sorts);
+			
 			foreach ($ids as $value) {
-				$showImages[$value] = $this->db->where('gallery_id', $value)->select('id, content')->get('gallery_images')->result();
+				$showImages[$value] = $this->Model_gallery_image->selectgalery($value,$this->session->userdata('pageitem'));
 			}
 			
 		}
 		else if($limits!=0)
 		{
-			$showGallery = $this->db->where('start_publish <=','CURDATE()')
-									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
-									->orderBy($orders,$sorts)
-									->take($limits)
-									->select('id','title','folderid')->get('galleries')->result();
+			$showGallery = $this->Model_gallery->selectLimit($limits,$orders,$sorts);
 		}
 		
 		$data['showGallery'] = $showGallery;
@@ -98,32 +83,25 @@ class Galleries extends Website_Controller{
 	
 	function galleryimage($gal_id, $image_id)
 	{
-		$gallery = $this->db->limit(1)->where('id',$gal_id)->get('galleries')->first_row();
-		$image = $this->db->where('id',$image_id)->get('gallery_images')->first_row();
+		$gallery = $this->Model_gallery->select($gal_id);
+		$image = $this->Model_gallery_image->selectForId($image_id);
 		
-		$datatemp = array(
-               'hits' => $image->hits + 1,
-            );
-		$this->db->where('id', $image_id);
-		$this->db->update('gallery_images', $datatemp);		
+		$comments = $this->Model_gallery_image_comment->selectAllFromImage($image_id);
 		
-		$comments = $this->db->where('gallery_image_id',$image_id)->get('gallery_images_comments');
-		$image->image_comments = $comments->num_rows();
-		$comments_temp = $comments->result();
-		foreach ($comments_temp as $item)
+		$image->image_comments = $this->Model_gallery_image_comment->total_rows_gallery_image($image_id);
+			
+		foreach ($comments as $item)
 		{
-			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 			if($this->session->userdata('timeago')=='Yes'){
 				$item->created_at = timespan(strtotime($item->created_at), time() ) . ' ago' ;
 			}
 			else{				
 				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
 			}
-		}
-		$data['image_comments'] = $comments->result();		
+		}	
 		$data['gallery'] = $gallery;
 		$data['image'] = $image;
-		$data['image_comments'] = $comments_temp;
+		$data['image_comments'] = $comments;
 				
 		$data['content'] = array(
             'right_content' => $this->pagecontent['sidebar_right'],
@@ -149,29 +127,24 @@ class Galleries extends Website_Controller{
 		$content = $this->input->get('content');
 		$id = $this->input->get('id');
 		$user = $this->session->userdata('user_id');
-		$newvalue = 0;
-		$exists = $this->db->where('content',$content)
-							->where('idcontent',$id)
-							->where('user_id',$user)
-							->select('id')->get('content_votes')->num_rows();
+		$exists = $this->Model_content_vote->countVoteForContent($updown,$content,$id,$user);		
 		
 		if($content=='galleryimage')
 			{
-				$item = $this->db->where('id', $id)->get('gallery_images')->first_row();
+				$item = $this->Model_gallery_image->select($id);
 			}
 		else {
-			$item = $this->db->where('id', $id)->get('gallery_images_comments')->first_row();
+				$item = $this->Model_gallery_image_comment->select($id);
 		}
 		$newvalue = $item->voteup - $item -> votedown;
 		if($exists == 0 ){
-			$this->db->insert('content_votes',array('user_id'=>$user,
+			$this->Model_content_vote->insert(array('user_id'=>$user,
 														'updown' => $updown,
 														'content' => $content,
 														'idcontent' => $id,
 														'user_id' => $this->session->userdata('user_id'),
 														'updated_at' => date("Y-m-d H:i:s"),
-														'created_at' => date("Y-m-d H:i:s")));
-			
+														'created_at' => date("Y-m-d H:i:s")));			
 			if($updown=='1')
 				{
 					$item -> voteup = $item -> voteup + 1;
@@ -179,18 +152,17 @@ class Galleries extends Website_Controller{
 				else {
 					$item -> votedown = $item -> votedown + 1;
 				}
-				
-			$this->db->where('id', $id);		
+					
 			$data = array(
 	               'voteup' => $item -> voteup,
 	               'votedown' => $item -> votedown,
 	            	);
 			if($content=='galleryimage')
 			{
-				$this->db->update('gallery_images', $data);
+				$this->Model_gallery_image->update($data,$id);
 			}
-			else {
-				$this->db->update('gallery_images_comments', $data);
+			else {				
+				$this->Model_gallery_image_comment->update($data,$id);
 			}
 					
 			$newvalue = $item->voteup - $item -> votedown;						

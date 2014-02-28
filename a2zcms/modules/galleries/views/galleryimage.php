@@ -45,11 +45,11 @@
 	
 	if ($image->image_comments>0){
 	foreach ($image_comments as $comment){
-		echo '<h4><b>'.$comment->user_id.'</b> <small>'.$comment->created_at.'
+		echo '<h4><b>'.$comment->fullname.'</b> <small>'.$comment->created_at.'
 		|| Numer of votes <span id="commentcountvote'.$comment->id.'">';
 	 	echo $comment->voteup-$comment->votedown.'</span> ';
 	if (!$this->session->userdata("post_image_vote")){
-		echo '<i>You need to be logged in or have permission to add vote. </i>';
+		echo '<br>(<i>You need to be logged in or have permission to add vote. </i>)';
 		}
 		else {	?>			
 		<span style="display: inline-block;" onclick="contentvote('galleries','1','gallerycomment','<?=$comment->id?>','commentcountvote<?=$comment->id?>')" class="up"></span>

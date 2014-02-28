@@ -15,7 +15,7 @@ echo '<div class="row">';
 		'.$page->content.'
 	</p>';
 	if($page->showtags=='1') 
-	echo '<p id="tags"><i class="icon-tags"></i>'.$page->tags.'</p>';
+	echo '<p id="tags">Tags: '.$page->tags.'</p>';
 	if($page->showvote=='1'){
 	echo '<p id="vote">Num of votes <span id="countvote">';
 	echo $page->voteup-$page->votedown;

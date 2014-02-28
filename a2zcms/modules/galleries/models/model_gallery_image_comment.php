@@ -70,4 +70,18 @@ class Model_gallery_image_comment extends CI_Model {
 		$this->db->where('id', $id);
 		$this->db->update('gallery_images_comments', $data);
     }
+	public function selectAllFromImage($image_id) {
+					
+		return $this->db->where('gallery_image_id', $image_id)
+								->where(array('gallery_images_comments.deleted_at' => NULL))
+								->where(array('users.deleted_at' => NULL))
+								->from('gallery_images_comments')
+								->join('users','gallery_images_comments.user_id=users.id')
+								->select('gallery_images_comments.*,CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)
+								->get()
+								->result();	
+    }
+	public function total_rows_gallery_image($image_id) {
+        return $this->db->where(array('deleted_at' => NULL))->where('gallery_image_id',$image_id)->count_all("gallery_images_comments");
+    }
 }

@@ -59,5 +59,48 @@ class Model_gallery extends CI_Model {
 	public function update($data,$id) {		
 		$this->db->where('id', $id);
 		$this->db->update('galleries', $data);
+    }    
+    public function selectFirst() {		
+		return $this->db->select('id')->limit(1)->get('galleries')->first_row()->id;
     }
+	public function selectById($id)
+	{
+		$gallery = $this->db->where('galleries.id',$id)
+								->from('galleries')
+								->join('users','galleries.user_id=users.id')
+								->select('galleries.*,CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)
+								->get()->first_row();
+		if(!empty($gallery))
+		{
+			$datatemp = array(
+               'hits' => $gallery->hits + 1,
+           		);
+			$this->update($datatemp,$gallery->id);
+		}
+		return $gallery;
+	}
+	
+	public function getAllByParams($order,$sort,$limit)
+	{
+		return  $this->db->order_by($order,$sort)
+						->limit($limit)->select('id, title')->get('galleries')->result();
+	}
+	
+	public function selectWhereIn($ids,$orders,$sorts)
+	{
+		return $this->db->where('start_publish <=','CURDATE()')
+									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
+									->where_in('id', $ids)
+									->order_by($orders,$sorts)
+									->select('id, title, folderid')->get('galleries')->result();
+	}
+	
+	public function selectLimit($limits,$orders,$sorts)
+	{		
+		return $this->db->where('start_publish <=','CURDATE()')
+									->where('(end_publish IS NULL OR end_publish >= CURDATE())')
+									->orderBy($orders,$sorts)
+									->take($limits)
+									->select('id','title','folderid')->get('galleries')->result();
+	} 
 }

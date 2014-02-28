@@ -26,7 +26,7 @@
 		<h3><?=$gallery->title?></h3>
 	</div>
          <p><i class="icon-time"></i> Posted on 
-         	<?=$gallery->created_at;?> by <?=$gallery->user_id;?></p>
+         	<?=$gallery->created_at;?> by <?=$gallery->fullname;?></p>
           <hr> 
     <div class="row"> 
      <? foreach ($gallery_images as $item){

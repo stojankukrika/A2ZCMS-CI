@@ -12,9 +12,8 @@ class Blogs extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-        $this->load->model(array("Model_blog","Model_blog_category"));
-		$this->page = $this->db->limit(1)->get('pages')->first_row();
-		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
+        $this->load->model(array("Model_blog","Model_blog_category","Model_blog_comment","Model_content_vote"));
+		$this->pagecontent = Website_Controller::createSiderContent(0);
 	
     }
 	 /*function for plugins*/
@@ -31,8 +30,7 @@ class Blogs extends Website_Controller{
 	public function newBlogs($params)
 	{
 		$param = Website_Controller::splitParams($params);
-		$data['newBlogs'] = $this->db->order_by($param['order'],$param['sort'])
-						->limit($param['limit'])->select('id, title, slug')->get('blogs')->result();
+		$data['newBlogs'] = $this->Model_blog->getAllByParams($param['order'],$param['sort'],$param['limit']);
 						
 		$data['content'] = array(
             'right_content' => $this->pagecontent['sidebar_right'],
@@ -47,29 +45,21 @@ class Blogs extends Website_Controller{
             'left_content' => $this->pagecontent['sidebar_left'],
         );
 		if($slug=='') {
-			$slug = $this->db->select('slug')->limit(1)->get('blogs')->first_row()->slug;
+			$slug = $this->Model_blog->selectFirstSlug();
 		}
-		$blog= $this->db->limit(1)->where('slug',$slug)->get('blogs')->first_row();
-		
-		$datatemp = array(
-               'hits' => $blog->hits + 1,
-            );
-		$this->db->where('slug', $slug);
-		$this->db->update('blogs', $datatemp);
+		$blog= $this->Model_blog->selectBySlug($slug);		
 		
 		if($this->session->userdata('timeago')=='Yes'){
 			$blog->created_at =timespan(strtotime($blog->created_at), time() ) . ' ago' ;
 		}
 		else{				
 			$blog->created_at = date($this->session->userdata("datetimeformat"),strtotime($blog->created_at));
-		}			
-		$blog->user_id = $this->db->where('id',$blog->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
-		$comments = $this->db->where('blog_id',$blog->id)->get('blog_comments');
-		$blog->blog_comments = $comments->num_rows();
-		$comments_temp = $comments->result();
-		foreach ($comments_temp as $item)
+		}	
+		$blog->blog_comments = $this->Model_blog_comment->total_rows_blog($blog->id);
+		
+		$blog_comments = $this->Model_blog_comment->selectAllFromBlog($blog->id);
+		foreach ($blog_comments as $item)
 		{
-			$item->user_id = $this->db->where('id',$item->user_id)->select('CONCAT(name ,'.'," " ,'.', surname) as fullname', FALSE)->get('users')->first_row()->fullname;
 			if($this->session->userdata('timeago')=='Yes'){
 				$item->created_at =timespan(strtotime($item->created_at), time() ) . ' ago' ;
 			}
@@ -77,13 +67,13 @@ class Blogs extends Website_Controller{
 				$item->created_at = date($this->session->userdata("datetimeformat"),strtotime($item->created_at));
 			}	
 		}
-		$data['blog_comments'] = $comments->result();
+		$data['blog_comments'] = $blog_comments;
 		$data['blog'] = $blog;
 		
 		$this->form_validation->set_rules('comment', "Comment", 'required');
 		if ($this->form_validation->run() == TRUE)
         {
-        	$this->db->insert('blog_comments', array('content'=>$this->input->post('comment'),
+        	$this->Model_blog_comment->insert(array('content'=>$this->input->post('comment'),
 														'blog_id' => $blog->id,
 														'user_id' => $this->session->userdata('user_id'),
 														'updated_at' => date("Y-m-d H:i:s"),
@@ -101,15 +91,13 @@ class Blogs extends Website_Controller{
 			$ids = rtrim($ids, ",");
 			$ids = explode(',', $ids);
 			
-			$showBlogs = $this->db->where_in('id', $ids)
-									->order_by($orders,$sorts)
-									->select('id, slug, title, content,image')->get('blogs')->result();
+			$showBlogs = $this->Model_blog->selectWhereIn($ids,$orders,$sorts);
 		}
 		else if($limits!=0) {
-			$showBlogs = $this->db->order_by($orders,$sorts)
-								->limit($limits)
-								->select('id, slug, title, content, image')->get('blogs')->result();
+			$showBlogs = $this->Model_blog->selectWhereLimit($orders,$sorts,$limits);			
+			
 		}
+		else {}
 		$data['showBlogs'] = $showBlogs;
 		return $this->load->view('blogs',$data);
 	}
@@ -119,29 +107,25 @@ class Blogs extends Website_Controller{
 		$content = $this->input->get('content');
 		$id = $this->input->get('id');
 		$user = $this->session->userdata('user_id');
-		$newvalue = 0;
-		$exists = $this->db->where('content',$content)
-							->where('idcontent',$id)
-							->where('user_id',$user)
-							->select('id')->get('content_votes')->num_rows();
+		
+		$exists = $this->Model_content_vote->countVoteForContent($updown,$content,$id,$user);
 		if($content=='blog')
 		{
-			$item = $this->db->where('id', $id)->get('blogs')->first_row();
+			$item = $this->Model_blog->select($id);
 		}
 		else {
-			$item = $this->db->where('id', $id)->get('blog_comments')->first_row();
+			$item = $this->Model_blog_comment->select($id);
 		}
 		
 		$newvalue = $item->voteup - $item -> votedown;
 		if($exists == 0 ){
-			$this->db->insert('content_votes',array('user_id'=>$user,
+			$this->Model_content_vote->insert(array('user_id'=>$user,
 														'updown' => $updown,
 														'content' => $content,
 														'idcontent' => $id,
 														'user_id' => $this->session->userdata('user_id'),
 														'updated_at' => date("Y-m-d H:i:s"),
-														'created_at' => date("Y-m-d H:i:s")));
-			
+														'created_at' => date("Y-m-d H:i:s")));			
 			if($updown=='1')
 				{
 					$item -> voteup = $item -> voteup + 1;
@@ -150,19 +134,17 @@ class Blogs extends Website_Controller{
 					$item -> votedown = $item -> votedown + 1;
 				}
 				
-			$this->db->where('id', $id);		
 			$data = array(
 	               'voteup' => $item -> voteup,
 	               'votedown' => $item -> votedown,
 	            	);
 			if($content=='blog')
 			{
-				$this->db->update('blogs', $data);
+				$this->Model_blog->update($data,$id);
 			}
 			else {
-				$this->db->update('blog_comments', $data);
+				$this->Model_blog_comment->update($data,$id);
 			}
-		
 					
 			$newvalue = $item->voteup - $item -> votedown;						
 		}		

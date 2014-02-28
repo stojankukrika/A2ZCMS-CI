@@ -12,9 +12,8 @@ class Customforms extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-		$this->load->model(array("Model_customform","Model_customform_field"));
-		$this->page = $this->db->limit(1)->get('pages')->first_row();
-		$this->pagecontent = Website_Controller::createSiderContent($this->page->id);
+		$this->load->model(array("Model_customform","Model_customform_field","Model_content_vote"));
+		$this->pagecontent = Website_Controller::createSiderContent(0);
     }
 	/*function for plugins*/	
 	function getCustomFormId(){
@@ -31,14 +30,9 @@ class Customforms extends Website_Controller{
 		if($ids!=""){
 			$ids = rtrim($ids, ",");
 			$ids = explode(',', $ids);
-			$showCustomFormId = $this->db->where_in('id', $ids)
-										->select('id, recievers, title, message')
-										->get('custom_forms')->result();
+			$showCustomFormId = $this->Model_customform->selectWhereIn($ids);
 			foreach ($ids as $id){
-				$showCustomFormFildId[$id] = $this->db->where_in('custom_form_id', $id)
-										->select('id, name, options, type, order, mandatory')
-										->order_by('order','ASC')
-										->get('custom_form_fields')->result();
+				$showCustomFormFildId[$id] = $this->Model_customform_field->selectForId($id);
 			}
 		}
 		$data['showCustomFormId'] = $showCustomFormId;
@@ -52,12 +46,11 @@ class Customforms extends Website_Controller{
             'right_content' => $this->pagecontent['sidebar_right'],
             'left_content' => $this->pagecontent['sidebar_left'],
         );
-		$customform = $this->db->where('id',$id)->get('custom_forms')->first_row();
-		$data['showCustomFormId']= $customform;	
-		$data['showCustomFormFildId']= $this->db->where('custom_form_id', $id)
-										->select('id, name, options, type, order, mandatory')
-										->order_by('order','ASC')
-										->get('custom_form_fields')->result();		
+		$customform = $this->Model_customform->select($id);
+		$data['showCustomFormId'] = $customform;	
+		
+		$showCustomFormFildId = $this->Model_customform_field->selectorder('order',$id);		
+		$data['showCustomFormFildId'] = $showCustomFormFildId;
 		
 		$this->load->view('customform',$data);		
 		
