@@ -11,11 +11,14 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
-		$this->load->model(array("Model_plugin"));
+		$this->load->model(array("Model_plugin"));		
 	}
 	
 	function index(){
-		$data['view'] = 'dashboard';
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
+		$data['view'] = 'index';
 		
         $plugin = $this->Model_plugin->getall();
 				
@@ -40,6 +43,9 @@ class Admin extends Administrator_Controller {
 	
 	function plugin_reorder()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$list = $this->input->get('list');
 		$items = explode(",", $list);
 		$order = 1;
@@ -54,6 +60,18 @@ class Admin extends Administrator_Controller {
 				$order++;
 			}
 		};
+	}
+	
+	
+	
+	function dashboard()
+	{
+		$data['view'] = 'dashboard';
+		
+		$data['content'] = array(
+            'navigation' =>  $this->Model_plugin->menu_admin()
+        );
+		$this->load->view('adminpage', $data);
 	}
 	
 

@@ -98,7 +98,7 @@ class Model_menu extends CI_Model{
 		//Just a prototype
 
 		$menu = new stdClass();
-		$menu->url = "admin/pages/index";
+		$menu->url = "admin/plugins/dashboard";
 		$menu->name = "Admin";
 
 		return $menu;

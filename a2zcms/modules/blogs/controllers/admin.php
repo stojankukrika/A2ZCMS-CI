@@ -16,6 +16,9 @@ class Admin extends Administrator_Controller {
 	/*Blog categories*/
 	function blogcategorys()
 	{
+		if (!$this->session->userdata("manage_blog_categris")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcategory/dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -59,6 +62,9 @@ class Admin extends Administrator_Controller {
 	}
 	function blogcategorys_delete($id)
 	{
+		if (!$this->session->userdata("manage_blog_categris")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcategory/delete';
 		$data['content'] = array('blogcategoryid' => $id);
 		
@@ -74,6 +80,9 @@ class Admin extends Administrator_Controller {
 	
 	function blogcategorys_create($id = 0)
 	{
+		if (!$this->session->userdata("manage_blog_categris")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcategory/create_edit';
 
 		$blogcategory_edit = "";
@@ -105,6 +114,9 @@ class Admin extends Administrator_Controller {
 	/*Blogs*/
 	function index()
 	{
+		if (!$this->session->userdata("manage_blogs")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -152,6 +164,9 @@ class Admin extends Administrator_Controller {
 	
 	function blog_create($id = 0)
 	{
+		if (!$this->session->userdata("manage_blogs")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'create_edit';
 
 		$blog_edit = array();
@@ -241,6 +256,9 @@ class Admin extends Administrator_Controller {
 	
 	function blog_delete($id)
 	{
+		if (!$this->session->userdata("manage_blogs")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'delete';
 		$data['content'] = array('blogid' => $id);
 		
@@ -257,6 +275,9 @@ class Admin extends Administrator_Controller {
 	/*Blog comments*/
 	function blogcomments()
 	{
+		if (!$this->session->userdata("post_blog_comment")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcomments/dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -304,6 +325,9 @@ class Admin extends Administrator_Controller {
 
 	function listcommentsforblog($id)
 	{
+		if (!$this->session->userdata("post_blog_comment")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcomments/listcommentsforblog';
 		
 		$offset = (int)$this->uri->segment(5);
@@ -352,6 +376,9 @@ class Admin extends Administrator_Controller {
 
 	function blogcomments_delete($id)
 	{
+		if (!$this->session->userdata("post_blog_comment")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'blogcategory/delete';
 		$data['content'] = array('blogcategoryid' => $id);
 		
@@ -477,6 +504,7 @@ class Admin extends Administrator_Controller {
 			$data = array(
 						   'plugin_id' => $plugin_id ,
 						   'icon' => 'icon-external-link' ,
+						   'background_color'=> 'darkBlue',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),

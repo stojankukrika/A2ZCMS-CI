@@ -31,4 +31,13 @@ class Model_plugin extends CI_Model {
 		$this->db->update('admin_navigations', $data);
     }
 	
+	function menu_admin(){
+
+		return $mainadminmenu = $this->db->select('an.id, p.title, an.background_color,an.icon, p.name, an.order')
+				->from('admin_navigations an')
+				->join('plugins p','p.id=an.plugin_id')
+				->order_by('ISNULL(an.order), an.order','ASC')
+				->where(array('an.deleted_at' => NULL))->get()->result();
+	}	
+	
 }

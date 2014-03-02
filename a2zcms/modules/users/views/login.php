@@ -36,7 +36,7 @@
 		<? if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
-			<a href="<?=base_url('admin/pages/index')?>">Admin panel</a>
+			<a href="<?=base_url('admin/plugins/dashboard')?>">Admin panel</a>
 		</li>
 		<? } ?>
 		<li>

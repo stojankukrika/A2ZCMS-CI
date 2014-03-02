@@ -12,6 +12,9 @@ class Admin extends Administrator_Controller {
 	{
 		parent::__construct();
 		$this->load->model("Model_settings");
+		if (!$this->session->userdata("manage_settings")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 	}
 	
 	function index()

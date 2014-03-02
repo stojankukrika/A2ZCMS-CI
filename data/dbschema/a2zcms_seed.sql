@@ -97,14 +97,16 @@ INSERT INTO `permissions` (`id`, `name`, `display_name`, `is_admin`, `created_at
 (2, 'manage_roles', 'Manage roles', 1, NOW(), NOW(), NULL),
 (3, 'manage_navigation', 'Manage navigation', 1, NOW(), NOW(), NULL),
 (4, 'manage_pages', 'Manage pages', 1, NOW(), NOW(), NULL),
-(5, 'manage_navigation_groups', 'Manage navigation groups', 1, NOW(), NOW(), NULL);
+(5, 'manage_navigation_groups', 'Manage navigation groups', 1, NOW(), NOW(), NULL),
+(6, 'manage_settings', 'Manage settings', 1, NOW(), NOW(), NULL),
+(7, 'manage_plugins', 'Manage plugins', 1, NOW(), NOW(), NULL);
 
 --
 -- Dumping data for table `roles`
 --
 
 INSERT INTO `roles` (`id`, `name`, `is_admin`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'admin', 1, NOW(), NOW(), NULL);
+(1, 'Administrator', 1, NOW(), NOW(), NULL);
 
 --
 -- Dumping data for table `permission_role`
@@ -115,7 +117,9 @@ INSERT INTO `permission_role` (`id`, `permission_id`, `role_id`, `created_at`, `
 (2, 2, 1, NOW(), NOW(), NULL),
 (3, 3, 1, NOW(), NOW(), NULL),
 (4, 4, 1, NOW(), NOW(), NULL),
-(5, 5, 1, NOW(), NOW(), NULL);
+(5, 5, 1, NOW(), NOW(), NULL),
+(6, 6, 1, NOW(), NOW(), NULL),
+(7, 7, 1, NOW(), NOW(), NULL);
 
 --
 -- Dumping data for table `assigned_roles`
@@ -128,12 +132,13 @@ INSERT INTO `assigned_roles` (`id`, `user_id`, `role_id`, `created_at`, `updated
 -- Dumping data for table `admin_navigations`
 --
 
-INSERT INTO `admin_navigations` (`id`, `plugin_id`, `icon`, `order`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 1, 'icon-globe', 1, NOW(), NOW(), NULL),
-(2, 3, 'icon-user', 2, NOW(), NOW(), NULL),
-(3, 4, 'icon-group', 3, NOW(), NOW(), NULL),
-(4, 5, 'icon-cloud', 4, NOW(), NOW(), NULL),
-(5, 2, 'icon-cogs', 5, NOW(), NOW(), NULL);
+INSERT INTO `admin_navigations` (`id`, `plugin_id`, `icon`, `background_color`,`order`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(1, 1, 'icon-globe','red',  1, NOW(), NOW(), NULL),
+(2, 3, 'icon-user','yellow',  2, NOW(), NOW(), NULL),
+(3, 4, 'icon-group','green',  3, NOW(), NOW(), NULL),
+(4, 5, 'icon-cloud','blue',  4, NOW(), NOW(), NULL),
+(5, 2, 'icon-cogs', 'orange', 5, NOW(), NOW(), NULL);
+
 --
 -- Dumping data for table `admin_subnavigations`
 --

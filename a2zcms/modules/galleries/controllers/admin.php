@@ -15,6 +15,9 @@ class Admin extends Administrator_Controller {
 	}
 	
 	function index(){
+		if (!$this->session->userdata("manage_galleries")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -61,6 +64,9 @@ class Admin extends Administrator_Controller {
 	}
 	function create($id=0)
 	{
+		if (!$this->session->userdata("manage_galleries")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'create_edit';
 
 		$gallery_edit = "";
@@ -106,6 +112,9 @@ class Admin extends Administrator_Controller {
     }
 	function delete($id)
 	{
+		if (!$this->session->userdata("manage_galleries")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'delete';
 		$data['content'] = array('galleryid' => $id);
 		
@@ -121,6 +130,9 @@ class Admin extends Administrator_Controller {
 	
 	function upload($id)
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'upload';
 		
 		$gallery = $this->Model_gallery->select($id);
@@ -130,6 +142,9 @@ class Admin extends Administrator_Controller {
 	}
 	function do_upload()
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		   	$id = $this->input->get('gid');
 			
         	$gallery = $this->Model_gallery->select($id);
@@ -162,6 +177,9 @@ class Admin extends Administrator_Controller {
 
 	/*Gallery comments*/	
 	function galleryimagecomments(){
+		if (!$this->session->userdata("manage_gallery_imagecomments")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimagecomments/dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -208,6 +226,9 @@ class Admin extends Administrator_Controller {
 	}
 
 	function listcomments($gallery_id){
+		if (!$this->session->userdata("manage_gallery_imagecomments")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimagecomments/listcomments';
 		
 		$offset = (int)$this->uri->segment(5);
@@ -257,6 +278,9 @@ class Admin extends Administrator_Controller {
 
 	function galleryimagecomments_delete($id)
 	{
+		if (!$this->session->userdata("manage_gallery_imagecomments")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimagecomments/delete';
 		$data['content'] = array('gallerycommentid' => $id);
 		
@@ -273,6 +297,9 @@ class Admin extends Administrator_Controller {
 	/*Gallery images*/
 	function galleryimages()
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimages/dashboard';
 
 		$gallery = $this->Model_gallery->getall();
@@ -295,6 +322,9 @@ class Admin extends Administrator_Controller {
 	
 	function listimages($id)
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimages/listimages';
 
 		$gallery = $this->Model_gallery->select($id);
@@ -316,6 +346,9 @@ class Admin extends Administrator_Controller {
 	
 	function imageforgallery($id)
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$galleryimages = $this->Model_gallery_image->selectgalery($id);
 		
 		$gallery = $this->Model_gallery->select($id);
@@ -335,6 +368,9 @@ class Admin extends Administrator_Controller {
 	}
 	function galleryimages_delete($id)
 	{
+		if (!$this->session->userdata("manage_gallery_images")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'galleryimages/delete';
 		$data['content'] = array('galleryimageid' => $id);
 		
@@ -443,6 +479,7 @@ class Admin extends Administrator_Controller {
 			$data = array(
 						   'plugin_id' => $this->db->insert_id() ,
 						   'icon' => 'icon-camera' ,
+						   'background_color'=> 'blue',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),

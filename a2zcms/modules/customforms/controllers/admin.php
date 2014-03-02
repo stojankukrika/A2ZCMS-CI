@@ -12,6 +12,9 @@ class Admin extends Administrator_Controller {
 	{
 		parent::__construct();	
 		$this->load->model(array("Model_customform","Model_customform_field"));
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 	}
 	
 	function index(){
@@ -222,6 +225,7 @@ class Admin extends Administrator_Controller {
 			$data = array(
 						   'plugin_id' => $plugin_id ,
 						   'icon' => 'icon-list-alt' ,
+						   'background_color'=> 'pink',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),

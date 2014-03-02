@@ -17,6 +17,9 @@ class Admin extends Administrator_Controller {
 	
 	/*navigation group*/
 	function navigationgroups(){
+		if (!$this->session->userdata("manage_navigation_groups")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigationgroup/dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -64,6 +67,9 @@ class Admin extends Administrator_Controller {
 	}
 	function navigationgroups_create($id=0)
 	{
+		if (!$this->session->userdata("manage_navigation_groups")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigationgroup/create_edit';
 
 		$navigationgroup_edit = "";
@@ -101,6 +107,9 @@ class Admin extends Administrator_Controller {
     }
 	function navigationgroups_delete($id)
 	{
+		if (!$this->session->userdata("manage_navigation_groups")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigationgroup/delete';
 		$data['content'] = array('navigationgroupid' => $id);
 		
@@ -116,6 +125,9 @@ class Admin extends Administrator_Controller {
 	
 	/*Navigation list*/
 	function navigation(){
+		if (!$this->session->userdata("manage_navigation")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigation/dashboard';
 		
 		$navigation = $this->Model_navigation_link->getall();
@@ -128,6 +140,9 @@ class Admin extends Administrator_Controller {
 	}
 	function navigation_reorder()
 	{
+		if (!$this->session->userdata("manage_navigation")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$list = $this->input->get('list');
 		$items = explode(",", $list);
 		$order = 1;
@@ -143,6 +158,9 @@ class Admin extends Administrator_Controller {
 	}
 	function navigation_create($id=0)
 	{
+		if (!$this->session->userdata("manage_navigation")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigation/create_edit';
 
 		$navigation_edit = "";
@@ -206,6 +224,9 @@ class Admin extends Administrator_Controller {
     }
 	function navigation_delete($id)
 	{
+		if (!$this->session->userdata("manage_navigation")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'navigation/delete';
 		$data['content'] = array('navigationlinkid' => $id);
 		
@@ -222,6 +243,9 @@ class Admin extends Administrator_Controller {
 	
 	/*Pages*/
 	function index(){
+		if (!$this->session->userdata("manage_pages")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -268,6 +292,9 @@ class Admin extends Administrator_Controller {
 	
 	function create($id=0)
 	{
+		if (!$this->session->userdata("manage_pages")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'create_edit';
 
 		$page_edit = $pluginfunction_content_all = $pluginfunction_slider_all = "";
@@ -442,6 +469,9 @@ class Admin extends Administrator_Controller {
     }
 	function delete($id)
 	{
+		if (!$this->session->userdata("manage_pages")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'delete';
 		$data['content'] = array('pageid' => $id);
 		
@@ -456,7 +486,10 @@ class Admin extends Administrator_Controller {
 	}
 	
 	function change($id)
-	{		
+	{
+		if (!$this->session->userdata("manage_pages")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}		
 		$page =$this->Model_page->select($id);
 		$this->Model_page->update(array('status'=>($page -> status + 1) % 2,
 											'updated_at'=>date("Y-m-d H:i:s")),$id);
@@ -466,6 +499,9 @@ class Admin extends Administrator_Controller {
 	}
 	function saveData($pagesidebar="",$pagecontentorder,$pagecontent,$page_id)
 	{
+		if (!$this->session->userdata("manage_pages")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		if($pagesidebar!=""){
 				$order = 1;
 				foreach ($pagesidebar as $value) {

@@ -12,6 +12,9 @@ class Admin extends Administrator_Controller {
 	{
 		parent::__construct();
 		$this->load->model(array("Model_todolist"));
+		if (!$this->session->userdata("manage_todolists")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 	}
 	
 	function index(){
@@ -170,6 +173,7 @@ class Admin extends Administrator_Controller {
 			$data2 = array(
 						   'plugin_id' => $this->db->insert_id() ,
 						   'icon' => 'icon-bell' ,
+						   'background_color'=> 'pink',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),

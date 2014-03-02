@@ -9,7 +9,10 @@ class Admin extends Administrator_Controller{
 	
 	function __construct(){
 		parent::__construct();		
-		$this->load->model(array("Model_user", "Model_assigned_role","Model_role","Model_user_login_history"));					
+		$this->load->model(array("Model_user", "Model_assigned_role","Model_role","Model_user_login_history"));
+		if (!$this->session->userdata("manage_users")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 	}
 	
 	function index(){
