@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('title', 'Title', (isset($content['poll_edit']->title))?$content['poll_edit']->title:"", 'form-control');
+						$this -> form_builder -> text('poll', 'Title', (isset($content['poll_edit']->title))?$content['poll_edit']->title:"", 'form-control');
 					?>
 				</div>
 			</div>

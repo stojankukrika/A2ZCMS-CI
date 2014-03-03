@@ -22,6 +22,7 @@ class Model_poll extends CI_Model {
         $this->db->limit($limit, $start);
         $query = $this->db->where(array('deleted_at' => NULL))
         				->where('user_id',$user_id)
+						->order_by("id","DESC")
         				->get("polls");
  
         if ($query->num_rows() > 0) {
@@ -101,7 +102,7 @@ class Model_poll extends CI_Model {
 	{
 		return  $this->db->order_by($order,$sort)
 						->limit($limit)
-						->where('active','0')
+						->where('active','1')
 						->where(array('deleted_at' => NULL))
 						->select('id, title')
 						->get('polls')
@@ -117,6 +118,15 @@ class Model_poll extends CI_Model {
 						->join('poll_votes','poll_options.id=poll_votes.option_id')
 						->count_all_results();
 		return $votes>0?false:true;
+	}
+	public function selectOptionForPoll($poll_id,$option_id)
+	{
+		return $this->db->where('poll_id', $poll_id)
+						->where('id', $option_id)
+						->where(array('deleted_at' => NULL))
+						->select('id,votes')
+						->get('poll_options')
+						->first_row();
 	}
 	
 	public function insertVote($data) {		

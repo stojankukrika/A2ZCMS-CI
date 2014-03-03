@@ -84,21 +84,20 @@ class Admin extends Administrator_Controller {
 		
 		$this->load->view('adminmodalpage', $data);
 		
-		$this->form_validation->set_rules('title', "Title", 'required');
+		$this->form_validation->set_rules('poll', "Title", 'required');
 	   	if ($this->form_validation->run() == TRUE)
         {
         	if($id==0){
-				$id = $this->Model_poll->insert(array('title'=>$this->input->post('title'),
+				$id = $this->Model_poll->insert(array('title'=>$this->input->post('poll'),
 														'user_id' =>$this->session->userdata('user_id'),
-														'active' => $this->session->userdata('active'),
+														'active' => 0,
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
 			}
 			else {
-				$this->Model_poll->update(array('title'=>$this->input->post('title'), 
+				$this->Model_poll->update(array('title'=>$this->input->post('poll'), 
 														'updated_at'=>date("Y-m-d H:i:s")),$id);
 			}
-			
 			if($this->input->post('pagecontentorder')!=""){
 					$this->saveFilds($this->input->post('pagecontentorder'),$this->input->post('count'),$id,$this->session->userdata('user_id'));
 				}
@@ -107,7 +106,7 @@ class Admin extends Administrator_Controller {
 
 	public function saveFilds($pagecontentorder,$count,$poll_id,$user_id)
 	{
-		if (!$this->session->userdata("manage_customform")){
+		if (!$this->session->userdata("manage_polls")){
 			redirect($_SERVER['HTTP_REFERER']);
 		}
 		
@@ -124,7 +123,8 @@ class Admin extends Administrator_Controller {
 				else {
 				$this->Model_poll->insertOption(array('title'=>$params[$i],
 												'poll_id' =>$poll_id,
-												'order'=>$order,												
+												'order'=>$order,
+												'votes'=>0,												
 												'updated_at' => date("Y-m-d H:i:s"),
 												'created_at' => date("Y-m-d H:i:s")));
 				}
@@ -153,7 +153,7 @@ class Admin extends Administrator_Controller {
 	
 	function deleteitem()
 	{
-		if (!$this->session->userdata("manage_customform")){
+		if (!$this->session->userdata("manage_polls")){
 			redirect($_SERVER['HTTP_REFERER']);
 		}
 		$id = $this->input->get('id');		
@@ -183,6 +183,7 @@ class Admin extends Administrator_Controller {
         $poll = $this->Model_poll->select($id);
 		$pollOptions = $this->Model_poll->selectOptions($id);
 		$pollTotalVotes = $this->Model_poll->selectSumVotes($id);
+		if($pollTotalVotes==0)$pollTotalVotes=1;
 		
 		foreach ($pollOptions as $item) {
 			$item->percentage = number_format(( intval($item->votes)/$pollTotalVotes) * 100, 2 ) . '%' ;
@@ -190,8 +191,7 @@ class Admin extends Administrator_Controller {
 		
         $data['content'] = array(
             'poll' => $poll,
-            'pollOptions'=>$pollOptions,
-            'pollTotalVotes' => $pollTotalVotes
+            'pollOptions'=>$pollOptions
         );
  
         $this->load->view('adminpage', $data);
@@ -216,7 +216,7 @@ class Admin extends Administrator_Controller {
 					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
 					  `user_id` int(10) unsigned NOT NULL,
 					  `title` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-					  `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'if the poll is closed or not',
+					  `active` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'if the poll is active or not',
 					  `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 					  `deleted_at` timestamp NULL DEFAULT NULL,

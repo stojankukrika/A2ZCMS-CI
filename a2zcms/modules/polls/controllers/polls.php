@@ -20,7 +20,7 @@ class Polls extends Website_Controller {
 		$uservoted=false;
 		$param = Website_Controller::splitParams($params);		
 		$poll = $this->Model_poll->getAllByParams($param['order'],$param['sort'],$param['limit']);
-		if($poll->id>0){
+		if(!empty($poll)){
 			$polloptions = $this->Model_poll->selectOptions($poll->id);	
 			$uservoted = $this->Model_poll->chechUserVoted($poll->id,$this->input->ip_address());	
 		}
@@ -41,10 +41,15 @@ class Polls extends Website_Controller {
 			$pollid = $this->input->post('pollid');
 			if($this->Model_poll->chechUserVoted($pollid,$ip_address))
 			{
-				$this->Model_poll->insertVote(array('option_id'=>$pollvote,
+				$option = $this->Model_poll->selectOptionForPoll($pollid,$pollvote);
+				if($option->id>0){
+					$this->Model_poll->insertVote(array('option_id'=>$pollvote,
 												'ip_address'=>$ip_address,									
 												'updated_at' => date("Y-m-d H:i:s"),
 												'created_at' => date("Y-m-d H:i:s")));
+					$this->Model_poll->updateOption(array('votes'=>$option->votes+1),$option->id);
+				}
+				
 			}
 		}
 		redirect('');
