@@ -2,7 +2,11 @@
 	<div class="row">
 		<div class="page-header">
 			<h1>Plugins</h1>
-			<small>Reorder plugins causes a change in the admin navigation</small>
+			<br><b>
+					* Reorder plugins causes a change in the admin navigation<br>
+					** After install some plugin, you need to add role to some user group that 
+							they can access to that plugin. User get that roles after first login to website.
+				</b>
 		</div>
     <table class="table table-hover">
 		<thead>
