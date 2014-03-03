@@ -382,6 +382,9 @@ class Admin extends Administrator_Controller {
 	/*Install*/
 	function install()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);	
 		$data['view'] = 'install';
 		$data['content'] = array();
@@ -605,6 +608,9 @@ class Admin extends Administrator_Controller {
 	/*Uninstall*/
 	function uninstall()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'uninstall';
 		$data['content'] = array();

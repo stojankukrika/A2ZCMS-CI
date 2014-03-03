@@ -11,13 +11,13 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();	
-		$this->load->model(array("Model_customform","Model_customform_field"));
-		if (!$this->session->userdata("manage_customform")){
-			redirect($_SERVER['HTTP_REFERER']);
-		}
+		$this->load->model(array("Model_customform","Model_customform_field"));		
 	}
 	
 	function index(){
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -64,6 +64,9 @@ class Admin extends Administrator_Controller {
 
 	function delete($id)
 	{
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'delete';
 		$data['content'] = array('customformid' => $id);
 		
@@ -78,6 +81,9 @@ class Admin extends Administrator_Controller {
 	}
 	function deleteitem($custom_formid)
 	{
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$id = $this->input->get('id');		
 		$this->Model_custom_form_field->delete($id);
 		return 0;	
@@ -85,6 +91,9 @@ class Admin extends Administrator_Controller {
 	
 	function create($id=0)
 	{
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'create_edit';
 
 		$customform_edit = $customformfields="";
@@ -134,6 +143,9 @@ class Admin extends Administrator_Controller {
 
 	public function saveFilds($pagecontentorder,$count,$customform_id,$user_id)
 	{
+		if (!$this->session->userdata("manage_customform")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$params = explode(',', $pagecontentorder);
 		$order = 1;
 		for ($i=0; $i <= $count*4-1; $i=$i+4) {
@@ -156,6 +168,9 @@ class Admin extends Administrator_Controller {
 	/*Install*/
 	function install()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'install';
 		$data['content'] = array();
@@ -261,6 +276,9 @@ class Admin extends Administrator_Controller {
 	/*Uninstall*/
 	function uninstall()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'uninstall';
 		$data['content'] = array();

@@ -12,12 +12,13 @@ class Admin extends Administrator_Controller {
 	{
 		parent::__construct();
 		$this->load->model(array("Model_todolist"));
-		if (!$this->session->userdata("manage_todolists")){
-			redirect($_SERVER['HTTP_REFERER']);
-		}
+		
 	}
 	
 	function index(){
+		if (!$this->session->userdata("manage_todolists")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'dashboard';
 		
 		$offset = (int)$this->uri->segment(4);
@@ -64,6 +65,9 @@ class Admin extends Administrator_Controller {
 	
 	function create($id=0)
 	{
+		if (!$this->session->userdata("manage_todolists")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'create_edit';
 
 		$todolist_edit = "";
@@ -101,6 +105,9 @@ class Admin extends Administrator_Controller {
     }
 	function delete($id)
 	{
+		if (!$this->session->userdata("manage_todolists")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$data['view'] = 'delete';
 		$data['content'] = array('todolistid' => $id);
 		
@@ -113,7 +120,10 @@ class Admin extends Administrator_Controller {
 			$this->Model_todolist->delete($id);
         }
 	}
-	function change($id) {				
+	function change($id) {
+		if (!$this->session->userdata("manage_todolists")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}				
 		$todolist_edit = $this->Model_todolist->select($id);
 		
 		$this->Model_todolist->update(array('finished'=>(($todolist_edit -> work_done + 1) % 2) *100.00, 				
@@ -127,6 +137,9 @@ class Admin extends Administrator_Controller {
 	/*Install*/
 	function install()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'install';
 		$data['content'] = array();
@@ -173,7 +186,7 @@ class Admin extends Administrator_Controller {
 			$data2 = array(
 						   'plugin_id' => $this->db->insert_id() ,
 						   'icon' => 'icon-bell' ,
-						   'background_color'=> 'pink',
+						   'background_color'=> 'green',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),
@@ -197,6 +210,9 @@ class Admin extends Administrator_Controller {
 	/*Uninstall*/
 	function uninstall()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);						
 		$data['view'] = 'uninstall';
 		$data['content'] = array();

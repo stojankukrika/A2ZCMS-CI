@@ -395,6 +395,9 @@ class Admin extends Administrator_Controller {
 	/*Install*/
 	function install()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);	
 		$data['view'] = 'install';
 		$data['content'] = array();
@@ -504,7 +507,7 @@ class Admin extends Administrator_Controller {
 			$data = array(
 						   'plugin_id' => $plugin_id ,
 						   'icon' => 'icon-external-link' ,
-						   'background_color'=> 'darkBlue',
+						   'background_color'=> 'orange',
 						   'order' => 0,
 						   'created_at' => date("Y-m-d H:i:s"),
 						   'updated_at' => date("Y-m-d H:i:s"),
@@ -622,6 +625,9 @@ class Admin extends Administrator_Controller {
 	/*Uninstall*/
 	function uninstall()
 	{
+		if (!$this->session->userdata("manage_plugins")){
+			redirect($_SERVER['HTTP_REFERER']);
+		}
 		$database = $this->load->database('default', TRUE);				
 		$data['view'] = 'uninstall';
 		$data['content'] = array();
