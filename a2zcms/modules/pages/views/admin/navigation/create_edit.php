@@ -95,12 +95,12 @@
 					<?php
 					$options = '';
 					if(isset($content['navigationGroupList'])){
-						foreach ($content['navigationGroupList'] as $parent) {
-							$options[] = (object) array('id' => $parent->id, 'name' => $parent->title);
+						foreach ($content['navigationGroupList'] as $key => $parent) {
+							$options[] = (object) array('id' => $parent['id'], 'name' => $parent['title']);
 						}
+						$this -> form_builder -> option('navigation_group_id', 'Navigation Group', $options, 
+						(isset($content['navigation_edit']->page_id))?$content['navigation_edit']->page_id:"", 'form-control');
 					}
-					$this -> form_builder -> option('navigation_group_id', 'Navigation Group', $options, 
-					(isset($content['navigation_edit']->page_id))?$content['navigation_edit']->page_id:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -139,7 +139,7 @@
 	<!-- Form Actions -->
 	<div class="form-group">
 		<div class="col-md-12">
-			<button type="reset" class="btn btn-link close_popup">
+			<button type="reset" class="btn btn-warning close_popup">
 				<span class="icon-remove"></span> Cancel
 			</button>
 			<button type="reset" class="btn btn-default">

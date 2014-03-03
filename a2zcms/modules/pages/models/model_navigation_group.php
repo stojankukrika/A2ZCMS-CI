@@ -40,7 +40,7 @@ class Model_navigation_group extends CI_Model {
 		return $this->db->where('id', $id)->get('navigation_groups')->first_row();
     }
 	public function getall() {		
-		return $this->db->where(array('deleted_at' => NULL))->get('navigation_groups')->first_row();
+		return $this->db->where(array('deleted_at' => NULL))->get('navigation_groups')->result_array();
     }
 	
 	public function insert($data) {		
