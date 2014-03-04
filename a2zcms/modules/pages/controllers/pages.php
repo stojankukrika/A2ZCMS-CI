@@ -47,19 +47,27 @@ class Pages extends Website_Controller{
 	}
 	public function content($page_id)
 	{
-		$data['view'] = 'index';
 		$page = $this->Model_page->selectById($page_id);
-		
-		if($this->session->userdata('timeago')=='Yes'){
-			$page->created_at =timespan(strtotime($page->created_at), time() ) . ' ago' ;
+		$rightpassword = false;
+		if($page->password == $this->input->post('pagepass') && $page->id== $this->input->post('pageid')){
+			$rightpassword = true;
+		}			
+		$data['view'] = 'index';
+		if($page->password=="" || ($page->password!="" && $rightpassword==true)){
+			$data['view'] = 'index';
+			if($this->session->userdata('timeago')=='Yes'){
+				$page->created_at =timespan(strtotime($page->created_at), time() ) . ' ago' ;
+			}
+			else{				
+				$page->created_at = date($this->session->userdata("datetimeformat"),strtotime($page->created_at));
+			}			
+			$data['page'] = $page;
+			$this->load->view("index", $data);
 		}
-		else{				
-			$page->created_at = date($this->session->userdata("datetimeformat"),strtotime($page->created_at));
+		else {
+			$data['page'] = $page;			
+			$this->load->view("protected", $data);
 		}
-		
-		$data['page'] = $page;
-		
-		$this->load->view("index", $data);
 	}	
 	public function contentvote()
 	{
