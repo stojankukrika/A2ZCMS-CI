@@ -19,7 +19,8 @@ class Website_Controller extends MY_Controller
 		}
 		else {
 			$varname = array('offline', 'metadesc','offlinemessage','metakey','metaauthor','title', 'contactemail','pageitem',
-							'copyright','analytics','dateformat','timeformat','searchcode','sitetheme','timeago','usegravatar');
+							'useravatwidth','useravatheight','copyright','analytics','dateformat','timeformat','searchcode',
+							'sitetheme','timeago','usegravatar','passwordpolicy');
 			$this->db->where_in('varname',$varname);
 			$query = $this->db->from('settings')->get();
 			foreach ($query->result() as $row)
@@ -34,7 +35,7 @@ class Website_Controller extends MY_Controller
 				$dateformat = "d.m.Y h:i A";
 			}
 			$this->session->set_userdata('datetimeformat',$dateformat);
-			if($this->session->userdata('offline')=="Yes")
+			if($this->session->userdata('offline')=="Yes" && $this->session->userdata('admin_logged_in')==false)
 			{
 				header('Location: '. base_url('offline'));
 				exit ;

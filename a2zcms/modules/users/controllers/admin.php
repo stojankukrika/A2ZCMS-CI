@@ -148,10 +148,38 @@ class Admin extends Administrator_Controller{
 	   	
 	   	if ($this->form_validation->run() == TRUE)
         {
-        	$this->load->library('hash');
-			
-			if($id==0){
-				$this->Model_user->insert(array('name'=>$this->input->post('name'),
+        	$passwordOk = "";
+        	if($this->session->userdata('passwordpolicy')=="Yes"){	        		
+	        	$varname = array('minpasswordlength','minpassworddigits','minpasswordlower',
+	        					'minpasswordupper','minpasswordnonalphanum');
+				$this->db->where_in('varname',$varname);
+				$query = $this->db->from('settings')->get();
+				foreach ($query->result() as $row)
+				{
+					switch ($row->varname) {
+						case 'minpasswordlength':
+								if(!strlen($this->input->post('password'))>=$row->value) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpassworddigits':
+								if(!preg_match('/[0-9]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordlower':
+								if(!preg_match('/[a-z]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordupper':
+								if(!preg_match('/[A-Z]+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+					}
+				}
+        	}			
+        	if($passwordOk==""){
+        		$this->load->library('hash');
+				if($id==0){
+					$this->Model_user->insert(array('name'=>$this->input->post('name'),
 												'surname'=>$this->input->post('surname'),
 												'email'=>$this->input->post('email'),
 												'username'=>$this->input->post('username'),
@@ -161,20 +189,20 @@ class Admin extends Administrator_Controller{
 												'active'=>$this->input->post('active'),												
 												'updated_at' => date("Y-m-d H:i:s"),
 												'created_at' => date("Y-m-d H:i:s")));
-			}
-			else {
-				$this->Model_user->update(array('name'=>$this->input->post('name'), 
-												'surname'=>$this->input->post('surname'), 
-												'active'=>$this->input->post('active'),
-												'updated_at'=>date("Y-m-d H:i:s")),$id);
-				if($this->input->post('password')!="")
-				{
-					$this->Model_user->update(array('password'=> $this->hash->make($this->input->post('password')), 
-												'updated_at'=>date("Y-m-d H:i:s")),$id);
 				}
-				$this->Model_assigned_role->deleteuser($id);
-				
-			}	
+				else {
+					$this->Model_user->update(array('name'=>$this->input->post('name'), 
+													'surname'=>$this->input->post('surname'), 
+													'active'=>$this->input->post('active'),
+													'updated_at'=>date("Y-m-d H:i:s")),$id);
+					if($this->input->post('password')!="")
+					{
+						$this->Model_user->update(array('password'=> $this->hash->make($this->input->post('password')), 
+													'updated_at'=>date("Y-m-d H:i:s")),$id);
+					}
+					$this->Model_assigned_role->deleteuser($id);
+					
+				}	
 			
 			$roles = $this->input->post('roles');
 			if(!empty($roles)){
@@ -186,7 +214,8 @@ class Admin extends Administrator_Controller{
 												'created_at' => date("Y-m-d H:i:s")));
 		        }
 			}
-        }
+		 }
+       }
     }
 	function listlogins($id)
 	{

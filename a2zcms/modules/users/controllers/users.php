@@ -88,39 +88,73 @@ class Users extends Website_Controller{
 		$this->form_validation->set_rules('email', "Email", 'required|valid_email|is_unique[users.email]');
 		if ($this->form_validation->run() == TRUE)
         {
+        	$passwordOk = "";
+        	if($this->session->userdata('passwordpolicy')=="Yes"){	        		
+	        	$varname = array('minpasswordlength','minpassworddigits','minpasswordlower',
+	        					'minpasswordupper','minpasswordnonalphanum');
+				$this->db->where_in('varname',$varname);
+				$query = $this->db->from('settings')->get();
+				foreach ($query->result() as $row)
+				{
+					switch ($row->varname) {
+						case 'minpasswordlength':
+								if(!strlen($this->input->post('password'))>=$row->value) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpassworddigits':
+								if(!preg_match('/[0-9]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordlower':
+								if(!preg_match('/[a-z]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordupper':
+								if(!preg_match('/[A-Z]+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+					}
+				}
+        	}			
+			if($passwordOk==""){
+				
 			$this->load->library('hash');
-			
-			if($this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
-			{
-				$code = md5(microtime() . $this->input->post('password'));
-				$this->Model_user->insert(array('name'=>$this->input->post('name'),
-											'surname'=>$this->input->post('surname'),
-											'username'=>$this->input->post('username'),
-											'password'=>$this->hash->make($this->input->post('password')),
-											'email'=>$this->input->post('email'),
-											'confirmation_code'=> $code,
-											'confirmed'=>0,
-											'active'=>1,
-											'created_at' => date("Y-m-d H:i:s"),
-											'updated_at' => date("Y-m-d H:i:s")));
-	        	echo '<div class="container"><div class="col-xs-12 col-sm-6 col-lg-8"><br>
-						<div class="row">You have successfully registered</p></div></div></div>';
-					
-					//Send validation mail 
-					
-					$this->load->library('email');
+				if($this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
+					{
+						$code = md5(microtime() . $this->input->post('password'));
+						$this->Model_user->insert(array('name'=>$this->input->post('name'),
+													'surname'=>$this->input->post('surname'),
+													'username'=>$this->input->post('username'),
+													'password'=>$this->hash->make($this->input->post('password')),
+													'email'=>$this->input->post('email'),
+													'confirmation_code'=> $code,
+													'confirmed'=>0,
+													'active'=>1,
+													'created_at' => date("Y-m-d H:i:s"),
+													'updated_at' => date("Y-m-d H:i:s")));
+			        	echo '<div class="container"><div class="col-xs-12 col-sm-6 col-lg-8"><br>
+								<div class="row">You have successfully registered</p></div></div></div>';
+							
+							//Send validation mail 
+							
+							$this->load->library('email');
+		
+							$this->email->from($this->Model_user->getsiteemail(), $this->Model_user->getsitetitle());
+							$this->email->to($this->input->post('email')); 
+							
+							$this->email->subject('Confirmation');
+							$this->email->message("Confirm your subscription <a href=''>Confirmar</a>".$code);	
+							$this->email->send();
+			        }
+			        else
+			        {
+			            echo '<br><p class="text-danger">Password not equal</p>';
+			        }
+	        	}
+			else {
+				echo '<br><p>'.$passwordOk.'</p>';		            
+			}
 
-					$this->email->from($this->Model_user->getsiteemail(), $this->Model_user->getsitetitle());
-					$this->email->to($this->input->post('email')); 
-					
-					$this->email->subject('Confirmation');
-					$this->email->message("Confirm your subscription <a href=''>Confirmar</a>".$code);	
-					$this->email->send();
-	        }
-	        else
-	        {
-	            echo '<br><p class="text-danger">Password not equal</p>';
-	        }
 		}		
 		
 		
@@ -197,9 +231,9 @@ class Users extends Website_Controller{
 					$config_manip['new_image'] = DATA_PATH.'/avatar/';
 		            $config_manip['maintain_ratio'] = TRUE;
 				    $config_manip['create_thumb'] = TRUE;
-				    $config_manip['width'] = 80;
+				    $config_manip['width'] = $this->session->userdata("useravatwidth");
 				    $config_manip['quality'] = 100;
-					$config_manip['height'] = 80;
+					$config_manip['height'] = $this->session->userdata("useravatheight");
 		            $this->load->library('image_lib', $config_manip);
 		            $this->image_lib->resize();
 					
@@ -209,19 +243,54 @@ class Users extends Website_Controller{
 					$data = array('avatar'=>$file);
 					$this->Model_user->update($data,$this->session->userdata('user_id'));
 				
-				}					
-			if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
-			{
-				$user = $this->Model_user->selectuser($this->session->userdata('username'));
-				if($user->password==$this->hash->make($this->input->post('old_password')))
-				{
-					$data = array('password'=>$this->hash->make($this->input->post('password')));
-					$this->Model_user->update($data,$this->session->userdata('user_id'));
 				}
-				else {
-					echo '<br><p class="text-danger">Old password is not valid!</p>';
+
+			$passwordOk = "";
+        	if($this->session->userdata('passwordpolicy')=="Yes"){	        		
+	        	$varname = array('minpasswordlength','minpassworddigits','minpasswordlower',
+	        					'minpasswordupper','minpasswordnonalphanum');
+				$this->db->where_in('varname',$varname);
+				$query = $this->db->from('settings')->get();
+				foreach ($query->result() as $row)
+				{
+					switch ($row->varname) {
+						case 'minpasswordlength':
+								if(!strlen($this->input->post('password'))>=$row->value) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpassworddigits':
+								if(!preg_match('/[0-9]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordlower':
+								if(!preg_match('/[a-z]{'.$row->value.'}+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+						case 'minpasswordupper':
+								if(!preg_match('/[A-Z]+/', $this->input->post('password'))) 
+								$passwordOk = "Password do not corresponding to Password policy.";
+							break;
+					}
+				}
+        	}
+			if($passwordOk==""){	
+				if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
+				{
+					$user = $this->Model_user->selectuser($this->session->userdata('username'));
+					if($user->password==$this->hash->make($this->input->post('old_password')))
+					{
+						$data = array('password'=>$this->hash->make($this->input->post('password')));
+						$this->Model_user->update($data,$this->session->userdata('user_id'));
+					}
+					else {
+						echo '<br><p class="text-danger">Old password is not valid!</p>';
+					}
 				}
 			}
+			else {
+				echo '<br><p>'.$passwordOk.'</p>';		            
+			}
+					
 			$this->logout();	
 		}	
 	}
@@ -320,7 +389,7 @@ class Users extends Website_Controller{
 					
 					$this->load->library('email');
 
-					$this->email->from($this->Model_user->getsiteemail()->value, $this->Model_user->getsitetitle()->value);
+					$this->email->from($this->Model_user->getsiteemail(), $this->Model_user->getsitetitle());
 					$this->email->to($this->input->post('email')); 
 					
 					$this->email->subject('Change password');

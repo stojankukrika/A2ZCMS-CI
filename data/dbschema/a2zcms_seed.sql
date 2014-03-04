@@ -54,8 +54,7 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (23, 'minpassworddigits', 'Digits', 'password', '1', '1', 'text', 'integer'),
 (24, 'minpasswordlower', 'Lowercase letters', 'password', '1', '1', 'text', 'integer'),
 (25, 'minpasswordupper', 'Uppercase letters', 'password', '1', '1', 'text', 'integer'),
-(26, 'minpasswordnonalphanum', 'Non-alphanumeric characters', 'password', '1', '1', 'text', 'integer'),
-(27, 'usegravatar', 'Use Gravatar', 'general', 'No', 'Yes;No', 'radio', '');
+(26, 'usegravatar', 'Use Gravatar', 'general', 'No', 'Yes;No', 'radio', '');
 
 --
 -- Dumping data for table `pages`
