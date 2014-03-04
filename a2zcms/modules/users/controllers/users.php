@@ -22,16 +22,16 @@ class Users extends Website_Controller{
 		}
 		
 		if($_POST){
-			  if ($u = $this->Model_user->login($this->input->post('username'),$this->input->post('password')))
+			  if ($u = $this->Model_user->login($this->input->post('email'),$this->input->post('password')))
 		        {		        													
-		        	$user = $this->Model_user->selectuser($this->input->post('username'));
+		        	$user = $this->Model_user->selectuser($this->input->post('email'));
 		        	$data = array(
 		        	'user_id' => $user->id,
 					'username' => $user->username,
 					'name' => $user->name,
 					'surname' => $user->surname,
 					'logged_in' => true,
-					'avatar' =>$user->avatar,
+					'avatar' =>($this->session->userdata('usegravatar')=="No")?$user->avatar:$this->gravatar->get_gravatar($user->email),
 					'admin_logged_in' => $this->_is_admin($user->id),
 					);
 					$this->session->set_userdata($data);
@@ -110,7 +110,7 @@ class Users extends Website_Controller{
 					
 					$this->load->library('email');
 
-					$this->email->from($this->Model_user->getsiteemail()->value, $this->Model_user->getsitetitle()->value);
+					$this->email->from($this->Model_user->getsiteemail(), $this->Model_user->getsitetitle());
 					$this->email->to($this->input->post('email')); 
 					
 					$this->email->subject('Confirmation');
@@ -143,7 +143,9 @@ class Users extends Website_Controller{
 	
 	function userdata(){
 		if($this->_is_logged_in()){
-			return $this->Model_user->select($this->session->userdata('user_id'));
+			$user = $this->Model_user->select($this->session->userdata('user_id'));
+			$user->avatar = ($this->session->userdata('usegravatar')=="No")?$user->avatar:$this->gravatar->get_gravatar($user->email);
+			return $user;
 		}else{
 			return false;
 		}

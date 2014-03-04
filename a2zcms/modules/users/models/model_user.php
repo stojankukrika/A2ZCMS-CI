@@ -16,7 +16,7 @@ class Model_user extends CI_Model {
     }
 	public function selectuser($username)
 	{
-		return $this->db->where('username', $username)
+		 return $this->db->where('username', $username)
         			->or_where('email', $username)
         			->where('confirmed','1')
 					->where('active','1')		 				
@@ -147,14 +147,14 @@ class Model_user extends CI_Model {
 	{
 		return $this->db->where('varname', 'email')
 						->select('value')	 				
-        				->get('settings')->first_row();
+        				->get('settings')->first_row()->value;
 	}
 	
 	public function getsitetitle()
 	{
 		return $this->db->where('varname', 'title')
 						->select('value')	 				
-        				->get('settings')->first_row();
+        				->get('settings')->first_row()->value;
 	}
 	
 }

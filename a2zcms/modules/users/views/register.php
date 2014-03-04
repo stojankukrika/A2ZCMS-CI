@@ -67,7 +67,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('password', 'Password', "", 'form-control');
+							$this -> form_builder -> password('password', 'Password', "", 'form-control');
 						?>
 						</div>
 					</div>
@@ -75,7 +75,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('confirm_password', 'Confirm password', "", 'form-control');
+							$this -> form_builder -> password('confirm_password', 'Confirm password', "", 'form-control');
 						?>
 						</div>
 					</div>

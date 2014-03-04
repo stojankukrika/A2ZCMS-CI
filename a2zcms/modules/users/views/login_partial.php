@@ -2,11 +2,17 @@
    	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
    	<div class="row">
   		<div class="col-md-4">
-			<? if($this->session->userdata('avatar')!=""){ ?>
-			<img alt="Avatar" src="<?=base_url().'/data/avatar/'.$this->session->userdata('avatar');?>">
-			<?} else {?>
-			<img alt="Avatar" src="<?=base_url().'/data/avatar/avatar.png';?>">
-			<? }?>
+			<? if($this->session->userdata('avatar')!=""){
+				if($this->session->userdata('usegravatar')=="No"){ 
+					echo '<img alt="Avatar" src="'.base_url().'/data/avatar/'.$this->session->userdata('avatar').'">';
+					}
+					else {
+					 echo '<img alt="Avatar" src="'.$this->session->userdata('avatar').'">';
+					}
+				} else {
+				echo '<img alt="Avatar" src="'.base_url().'/data/avatar/avatar.png">';
+				}
+				?>
 		</div>
 		<div class="col-md-8">
 		<ul style="list-style: none;">

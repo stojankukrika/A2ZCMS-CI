@@ -16,12 +16,17 @@
 						<li class="dropdown">
 							<a class="btn account dropdown-toggle" data-toggle="dropdown" href="#">
 							<div class="avatar">
-								<?php if($currentuser->avatar!="" && $currentuser->avatar!="NULL"){ ?>
-									<img alt="Avatar" src="<?=base_url()?>data/avatar/<?=$currentuser->avatar;?>">
-								<?php } 
-								else { ?>
-									<img alt="Avatar" src="<?=base_url()?>data/avatar/avatar.png">
-								<?php } ?>
+								<? if($this->session->userdata('avatar')!=""){
+										if($this->session->userdata('usegravatar')=="No"){ 
+											echo '<img alt="Avatar" src="'.base_url().'/data/avatar/'.$this->session->userdata('avatar').'">';
+											}
+											else {
+											 echo '<img alt="Avatar" src="'.$this->session->userdata('avatar').'">';
+											}
+									} else {
+									echo '<img alt="Avatar" src="'.base_url().'/data/avatar/avatar.png">';
+									}
+									?>
 							</div>
 							<div class="user">
 								<span class="hello">Welcome!</span>

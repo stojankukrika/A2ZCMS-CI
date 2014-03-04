@@ -22,7 +22,7 @@
 		}
 		?>
 			<div class="page-header">
-				<h3>Change password/avatar</h3>
+				<h3>Edit profil</h3>
 			</div>
 						
 			<?php if(@$error): ?>
@@ -54,12 +54,17 @@
 						?>
 						</div>
 					</div>
+					<? 
+					if($this->session->userdata('usegravatar')=="No"){ ?>
 					<div class="form-group">
 						<div class="col-lg-12">
 							<label class="control-label" for="avatar">Avatar</label>
 							<input name="avatar" type="file" class="uploader" id="avatar" value="Upload" /> 
 						</div>
 					</div>
+					<?php
+					}
+					?>
 					<div class="form-group">&nbsp;</div>
 					<div class="form-group">
 						<div class="col-md-offset-2 col-md-10">
