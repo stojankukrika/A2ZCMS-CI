@@ -31,6 +31,7 @@ class Users extends Website_Controller{
 					'name' => $user->name,
 					'surname' => $user->surname,
 					'logged_in' => true,
+					'avatar' =>$user->avatar,
 					'admin_logged_in' => $this->_is_admin($user->id),
 					);
 					$this->session->set_userdata($data);
@@ -176,20 +177,51 @@ class Users extends Website_Controller{
 		
 		$this->load->view('account', $data);
 		
-		$this->load->library('hash');					
-		if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
-		{
-			$user = $this->Model_user->selectuser($this->session->userdata('username'));
-			if($user->password==$this->hash->make($this->input->post('old_password')))
+		$this->load->library('hash');
+			   	
+	   if($_POST)
+        {
+			if($_FILES['avatar']['name']!=""){
+					$filename = $_FILES['avatar']['name'];
+					$sha = sha1($filename.time());
+					$file = $sha.'.'.pathinfo($filename, PATHINFO_EXTENSION);
+					$config['file_name'] = $file;
+					$config['upload_path'] = DATA_PATH.'/avatar/';
+					$config['allowed_types'] = 'gif|jpg|png';
+					$this->load->library('upload', $config);
+					$this->upload->do_upload('avatar');
+					
+					$config_manip['source_image'] = $config['upload_path'].$file;
+					$config_manip['new_image'] = DATA_PATH.'/avatar/';
+		            $config_manip['maintain_ratio'] = TRUE;
+				    $config_manip['create_thumb'] = TRUE;
+				    $config_manip['width'] = 80;
+				    $config_manip['quality'] = 100;
+					$config_manip['height'] = 80;
+		            $this->load->library('image_lib', $config_manip);
+		            $this->image_lib->resize();
+					
+					unlink($config['upload_path'].$file);
+					rename($config['upload_path'].$sha.'_thumb.'.pathinfo($filename, PATHINFO_EXTENSION), $config['upload_path'].$file);
+					
+					$data = array('avatar'=>$file);
+					$this->Model_user->update($data,$this->session->userdata('user_id'));
+				
+				}					
+			if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
 			{
-				$data = array('password'=>$this->hash->make($this->input->post('password')));
-				$this->Model_user->update($data,$this->session->userdata('user_id'));
-				$this->logout();
+				$user = $this->Model_user->selectuser($this->session->userdata('username'));
+				if($user->password==$this->hash->make($this->input->post('old_password')))
+				{
+					$data = array('password'=>$this->hash->make($this->input->post('password')));
+					$this->Model_user->update($data,$this->session->userdata('user_id'));
+				}
+				else {
+					echo '<br><p class="text-danger">Old password is not valid!</p>';
+				}
 			}
-			else {
-				echo '<br><p class="text-danger">Old password is not valid!</p>';
-			}
-		}
+			$this->logout();	
+		}	
 	}
 	
 	function messages ()

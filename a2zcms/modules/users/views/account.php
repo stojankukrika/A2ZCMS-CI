@@ -22,7 +22,7 @@
 		}
 		?>
 			<div class="page-header">
-				<h3>Change password</h3>
+				<h3>Change password/avatar</h3>
 			</div>
 						
 			<?php if(@$error): ?>
@@ -31,7 +31,7 @@
 				<?php echo $error; ?>
 			</div>
 			<?php endif; ?>
-			<form method="post" action="">
+			<form method="post" action="" enctype="multipart/form-data" >
 				<div class="form-group">
 					<div class="form-group">
 						<div class="col-lg-12">
@@ -52,6 +52,12 @@
 						<?
 							$this -> form_builder -> password('confirm_password', 'Confirm password', "", 'form-control');
 						?>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-lg-12">
+							<label class="control-label" for="avatar">Avatar</label>
+							<input name="avatar" type="file" class="uploader" id="avatar" value="Upload" /> 
 						</div>
 					</div>
 					<div class="form-group">&nbsp;</div>

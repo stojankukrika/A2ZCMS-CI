@@ -17,7 +17,7 @@
 							<a class="btn account dropdown-toggle" data-toggle="dropdown" href="#">
 							<div class="avatar">
 								<?php if($currentuser->avatar!="" && $currentuser->avatar!="NULL"){ ?>
-									<img alt="Avatar" src="<?=base_url()?>data/avatar/'.<?=$currentuser->avatar;?>">
+									<img alt="Avatar" src="<?=base_url()?>data/avatar/<?=$currentuser->avatar;?>">
 								<?php } 
 								else { ?>
 									<img alt="Avatar" src="<?=base_url()?>data/avatar/avatar.png">
