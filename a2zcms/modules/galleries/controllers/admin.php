@@ -665,12 +665,7 @@ class Admin extends Administrator_Controller {
 						->where('plugin_id',$plugin_id->id)->get()->result();
 						
 			foreach ($plugins as $item) {
-					$data = array(
-			               'deleted_at' => date("Y-m-d H:i:s")
-			            );
-			
-					$this->db->where('plugin_function_id', $item->id);
-					$this->db->update('page_plugin_functions', $data); 
+					$this->db->delete('page_plugin_functions', array('plugin_function_id' => $item->id)); 	
 			}	
 			
 			/*delete plugin functions*/			
