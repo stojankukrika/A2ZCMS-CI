@@ -13,12 +13,11 @@ class Install extends CI_Controller {
 	function __construct()
     {
         parent::__construct();
-		
+		$this->load->helper('url');
     	$this->load->config('a2zcms');
     	$installed = $this->config->item('installed');
 		if($installed!='false')
 		{
-			$this->load->helper('url');
 			redirect('/');
 		}
 	}
@@ -151,15 +150,27 @@ class Install extends CI_Controller {
             $config['db']['database'] = $this->input->post('database');
             $config['db']['prefix'] = $this->input->post('prefix');
             $config['db']['port'] = $this->input->post('port');
-            $this->load->library('installer', $config);
+            $this->load->library('Installer', $config);
 
             try 
             {
-                $this->installer->test_db_connection();
-                $this->installer->write_ci_config();
-                $this->installer->write_db_config();
-                $this->installer->db_connect();
-                $this->installer->import_schema();
+            	$config['db']['hostname'] = $this->input->post('hostname');
+		        $config['db']['username'] = $this->input->post('username');
+		        $config['db']['password'] = $this->input->post('password');
+		        $config['db']['database'] = $this->input->post('database');
+		        $config['db']['prefix'] = $this->input->post('prefix');
+		        $config['db']['port'] = $this->input->post('port');
+				
+            	$install = new Installer($config);
+                $install->test_db_connection();
+                $install->write_ci_config();
+                $install->write_db_config();
+                $install->db_connect();
+                $install->import_schema();
+				
+				$this->userdata = array(); 
+				if (ob_get_contents()) ob_end_clean();
+				 
                 redirect('install/step4');
             }
             catch (Exception $e)
@@ -168,7 +179,6 @@ class Install extends CI_Controller {
             }
         }
 
-        $data['rewrite_support'] = $this->test_mod_rewrite();
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step3', $data, TRUE);
 		$data['title'] = "Installer | Step 3 of 5";
@@ -190,23 +200,24 @@ class Install extends CI_Controller {
 		
         if ($this->form_validation->run())
         {
-	    	$database = $this->load->database('default', TRUE);				
-			$config['db']['hostname'] = $database->hostname;
-	        $config['db']['username'] = $database->username;
-	        $config['db']['password'] = $database->password;
-	        $config['db']['database'] = $database->database;
-	        $config['db']['prefix'] = $database->dbprefix;
-	        $config['db']['port'] = $database->port;
-			
-	        $this->load->library('installer', $config);	
-			$this->load->library('hash');
+	        $this->load->library('Installer');	
+			$this->load->library('Hash');
 				            
             try 
             {
-				$this->installer->test_db_connection();                
-				$this->installer->db_connect();
+            	$database = $this->load->database('default', TRUE);				
+				$config['db']['hostname'] = $database->hostname;
+		        $config['db']['username'] = $database->username;
+		        $config['db']['password'] = $database->password;
+		        $config['db']['database'] = $database->database;
+		        $config['db']['prefix'] = $database->dbprefix;
+		        $config['db']['port'] = $database->port;
 				
-				$admin_password = $this->hash->make($this->input->post('admin_password'));
+            	$install = new Installer($config);
+				$install->test_db_connection();                
+				$install->db_connect();
+				
+				$admin_password = $this->Hash->make($this->input->post('admin_password'));
 				$date_time = date('Y-m-d H:i:s');
 				$data = array(
 					   'name' => $this->input->post('first_name') ,
@@ -224,8 +235,8 @@ class Install extends CI_Controller {
 					   'deleted_at' => NULL,
 					);
 										
-				$this->installer->import_admin($data);
-                $this->installer->import_seeddatabase();
+				$install->import_admin($data);
+                $install->import_seeddatabase();
 				
                 redirect('install/step5');
             }
@@ -262,15 +273,15 @@ class Install extends CI_Controller {
 	            $config['db']['prefix'] = $database->dbprefix;
 	            $config['db']['port'] = $database->port;
 				
-				$this->load->library('installer', $config);
+				$this->load->library('Installer', $config);
 		   
-                $this->installer->test_db_connection();
-				$this->installer->write_a2z_config($this->input->post('theme'));   
-				$this->installer->db_connect();		                
-                $this->installer->update_site_name($this->input->post('title'));
-                $this->installer->update_pageitem($this->input->post('per_page'));
-				$this->installer->update_site_theme($this->input->post('theme'));
-				$this->installer->update_pageitemadmin($this->input->post('pageitemadmin'));
+                $this->Installer->test_db_connection();
+				$this->Installer->write_a2z_config($this->input->post('theme'));   
+				$this->Installer->db_connect();		                
+                $this->Installer->update_site_name($this->input->post('title'));
+                $this->Installer->update_pageitem($this->input->post('per_page'));
+				$this->Installer->update_site_theme($this->input->post('theme'));
+				$this->Installer->update_pageitemadmin($this->input->post('pageitemadmin'));
 								
                 redirect('install/complite');
             }
