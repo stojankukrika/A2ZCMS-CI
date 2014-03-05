@@ -15,8 +15,8 @@
 			<div class="controls">
 				<select name="theme">
 					<?php
-						foreach(glob(CMS_ROOT . '../\data\assets\site\*', GLOB_ONLYDIR) as $dir) {
-						    $dir = str_replace(CMS_ROOT . '../\data\assets\site\\', '', $dir);
+						foreach(glob(CMS_ROOT . '../data/assets/site/*', GLOB_ONLYDIR) as $dir) {
+						    $dir = str_replace(CMS_ROOT . '../data/assets/site/', '', $dir);
 						   echo '<option value="'.$dir.'">'.ucfirst($dir).'</option>';
 						}
 					?>

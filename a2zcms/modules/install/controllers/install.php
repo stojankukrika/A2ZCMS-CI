@@ -168,10 +168,7 @@ class Install extends CI_Controller {
                 $install->db_connect();
                 $install->import_schema();
 				
-				$this->userdata = array(); 
-				if (ob_get_contents()) ob_end_clean();
-				 
-                redirect('install/step4');
+				redirect('install/step4');
             }
             catch (Exception $e)
             {
@@ -200,9 +197,6 @@ class Install extends CI_Controller {
 		
         if ($this->form_validation->run())
         {
-	        $this->load->library('Installer');	
-			$this->load->library('Hash');
-				            
             try 
             {
             	$database = $this->load->database('default', TRUE);				
@@ -211,13 +205,16 @@ class Install extends CI_Controller {
 		        $config['db']['password'] = $database->password;
 		        $config['db']['database'] = $database->database;
 		        $config['db']['prefix'] = $database->dbprefix;
-		        $config['db']['port'] = $database->port;
-				
+								
+		        $this->load->library('Installer',$config);	
+				$this->load->library('Hash');    
+				        	
             	$install = new Installer($config);
 				$install->test_db_connection();                
 				$install->db_connect();
 				
-				$admin_password = $this->Hash->make($this->input->post('admin_password'));
+				$hash = new Hash();
+				$admin_password = $hash->make($this->input->post('admin_password'));
 				$date_time = date('Y-m-d H:i:s');
 				$data = array(
 					   'name' => $this->input->post('first_name') ,
@@ -264,24 +261,25 @@ class Install extends CI_Controller {
            
             try 
             {
-            	$database = $this->load->database('default', TRUE);	
-							
+            	$database = $this->load->database('default', TRUE);				
 				$config['db']['hostname'] = $database->hostname;
-	            $config['db']['username'] = $database->username;
-	            $config['db']['password'] = $database->password;
-	            $config['db']['database'] = $database->database;
-	            $config['db']['prefix'] = $database->dbprefix;
-	            $config['db']['port'] = $database->port;
-				
-				$this->load->library('Installer', $config);
-		   
-                $this->Installer->test_db_connection();
-				$this->Installer->write_a2z_config($this->input->post('theme'));   
-				$this->Installer->db_connect();		                
-                $this->Installer->update_site_name($this->input->post('title'));
-                $this->Installer->update_pageitem($this->input->post('per_page'));
-				$this->Installer->update_site_theme($this->input->post('theme'));
-				$this->Installer->update_pageitemadmin($this->input->post('pageitemadmin'));
+		        $config['db']['username'] = $database->username;
+		        $config['db']['password'] = $database->password;
+		        $config['db']['database'] = $database->database;
+		        $config['db']['prefix'] = $database->dbprefix;
+								
+		        $this->load->library('Installer',$config);	
+				$this->load->library('Hash');    
+				        	
+            	$install = new Installer($config);
+				$install->test_db_connection();                
+				$install->db_connect();
+		   		
+				$install->write_a2z_config($this->input->post('theme'));
+				$install->update_site_name($this->input->post('title'));
+				$install->update_pageitem($this->input->post('per_page'));
+				$install->update_site_theme($this->input->post('theme'));
+				$install->update_pageitemadmin($this->input->post('pageitemadmin'));
 								
                 redirect('install/complite');
             }

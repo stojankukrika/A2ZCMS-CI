@@ -31,7 +31,7 @@ class Users extends Website_Controller{
 					'name' => $user->name,
 					'surname' => $user->surname,
 					'logged_in' => true,
-					'avatar' =>($this->session->userdata('usegravatar')=="No")?$user->avatar:$this->gravatar->get_gravatar($user->email),
+					'avatar' =>($this->session->userdata('usegravatar')=="No")?($user->avatar!='NULL')?$user->avatar:"":$this->gravatar->get_gravatar($user->email),
 					'admin_logged_in' => $this->_is_admin($user->id),
 					);
 					$this->session->set_userdata($data);
@@ -118,14 +118,15 @@ class Users extends Website_Controller{
         	}			
 			if($passwordOk==""){
 				
-			$this->load->library('hash');
+			$this->load->library('Hash');
+			$hash = new Hash();
 				if($this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
 					{
 						$code = md5(microtime() . $this->input->post('password'));
 						$this->Model_user->insert(array('name'=>$this->input->post('name'),
 													'surname'=>$this->input->post('surname'),
 													'username'=>$this->input->post('username'),
-													'password'=>$this->hash->make($this->input->post('password')),
+													'password'=>$hash->make($this->input->post('password')),
 													'email'=>$this->input->post('email'),
 													'confirmation_code'=> $code,
 													'confirmed'=>0,
@@ -134,7 +135,7 @@ class Users extends Website_Controller{
 													'updated_at' => date("Y-m-d H:i:s")));
 			        	echo '<div class="container"><div class="col-xs-12 col-sm-6 col-lg-8"><br>
 								<div class="row">You have successfully registered</p></div></div></div>';
-							
+	
 							//Send validation mail 
 							
 							$this->load->library('email');
@@ -154,12 +155,8 @@ class Users extends Website_Controller{
 			else {
 				echo '<br><p>'.$passwordOk.'</p>';		            
 			}
-
 		}		
-		
-		
-	}
-	
+	}	
 
 	function _member_area(){
 		if($this->_is_logged_in()){
@@ -178,7 +175,7 @@ class Users extends Website_Controller{
 	function userdata(){
 		if($this->_is_logged_in()){
 			$user = $this->Model_user->select($this->session->userdata('user_id'));
-			$user->avatar = ($this->session->userdata('usegravatar')=="No")?$user->avatar:$this->gravatar->get_gravatar($user->email);
+			$user->avatar = ($this->session->userdata('usegravatar')=="No")?($user->avatar!='NULL')?$user->avatar:"":$this->gravatar->get_gravatar($user->email);
 			return $user;
 		}else{
 			return false;
@@ -212,11 +209,11 @@ class Users extends Website_Controller{
         );
 		
 		$this->load->view('account', $data);
-		
-		$this->load->library('hash');
 			   	
 	   if($_POST)
         {
+        	$this->load->library('Hash');
+			$hash = new Hash();
 			if($_FILES['avatar']['name']!=""){
 					$filename = $_FILES['avatar']['name'];
 					$sha = sha1($filename.time());
@@ -241,8 +238,7 @@ class Users extends Website_Controller{
 					rename($config['upload_path'].$sha.'_thumb.'.pathinfo($filename, PATHINFO_EXTENSION), $config['upload_path'].$file);
 					
 					$data = array('avatar'=>$file);
-					$this->Model_user->update($data,$this->session->userdata('user_id'));
-				
+					$this->Model_user->update($data,$this->session->userdata('user_id'));				
 				}
 
 			$passwordOk = "";
@@ -277,9 +273,9 @@ class Users extends Website_Controller{
 				if($this->input->post('old_password')!="" && $this->input->post('password')!="" && $this->input->post('password')==$this->input->post('confirm_password'))
 				{
 					$user = $this->Model_user->selectuser($this->session->userdata('username'));
-					if($user->password==$this->hash->make($this->input->post('old_password')))
+					if($user->password==$hash->make($this->input->post('old_password')))
 					{
-						$data = array('password'=>$this->hash->make($this->input->post('password')));
+						$data = array('password'=>$hash->make($this->input->post('password')));
 						$this->Model_user->update($data,$this->session->userdata('user_id'));
 					}
 					else {
@@ -381,8 +377,9 @@ class Users extends Website_Controller{
 				    for ($i = 0; $i < 8; $i++) {
 				        $randstring = $characters[rand(0, strlen($characters))];
 				    }
-					$this->load->library('hash');	
-					$data = array('password'=>$this->hash->make($randstring));
+					$this->load->library('Hash');	
+					$hash = new Hash();
+					$data = array('password'=>$hash->make($randstring));
 					$this->Model_user->update($data,$u->id);
 				
 					//Send validation mail 

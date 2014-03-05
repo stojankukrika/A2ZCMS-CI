@@ -74,7 +74,7 @@
 ### Step 2: Install CMS
 
 Now that you have the environment configured, you need to create a database configuration for it. 
-Create database on your phpMyAdmin to CMS can use it.
+Before begin to install create database on your phpMyAdmin to CMS can use it, and in php.ini set output_buffering to ON.
 If you install A2ZCMS on your localhost in folder a2zcms, you can type on web browser: 
 	http://localhost/a2zcms/install
 And than finish the installation. Instalation would populate a database with tables and start-up data(you can delete that data later).

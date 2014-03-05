@@ -177,13 +177,15 @@ class Admin extends Administrator_Controller{
 				}
         	}			
         	if($passwordOk==""){
-        		$this->load->library('hash');
-				if($id==0){
-					$this->Model_user->insert(array('name'=>$this->input->post('name'),
+        		$this->load->library('Hash');
+				$hash = new Hash();				
+					
+        		if($id==0){
+        			$this->Model_user->insert(array('name'=>$this->input->post('name'),
 												'surname'=>$this->input->post('surname'),
 												'email'=>$this->input->post('email'),
 												'username'=>$this->input->post('username'),
-												'password'=>$this->hash->make($this->input->post('password')),
+												'password'=>$hash->make($this->input->post('password')),
 												'confirmation_code'=>rand(9999, 99999999),
 												'confirmed'=>1,
 												'active'=>$this->input->post('active'),												
@@ -197,7 +199,7 @@ class Admin extends Administrator_Controller{
 													'updated_at'=>date("Y-m-d H:i:s")),$id);
 					if($this->input->post('password')!="")
 					{
-						$this->Model_user->update(array('password'=> $this->hash->make($this->input->post('password')), 
+						$this->Model_user->update(array('password'=> $hash->make($this->input->post('password')), 
 													'updated_at'=>date("Y-m-d H:i:s")),$id);
 					}
 					$this->Model_assigned_role->deleteuser($id);
