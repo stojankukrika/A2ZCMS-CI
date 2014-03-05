@@ -1,5 +1,9 @@
 <?php
-
+//if the ecarrent config file doesn't exist, the ecarrent hasn't been installed.
+if( !ini_get('date.timezone') )
+{
+    date_default_timezone_set('America/New_York');
+} 
 if ( ! file_exists('a2zcms/config/a2zcms.php') || 
  		(file_exists('a2zcms/config/a2zcms.php') 
  			&& !is_readable('a2zcms/config/a2zcms.php')))
