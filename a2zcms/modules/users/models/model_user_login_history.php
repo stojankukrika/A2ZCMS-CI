@@ -16,7 +16,7 @@ class Model_user_login_history extends CI_Model {
     }
 	
 	public function insert($data) {		
-		$this->db->insert('users', $data);
+		$this->db->insert('user_login_historys', $data);
 		return $this -> db -> insert_id();
     }
 	

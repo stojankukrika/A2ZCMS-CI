@@ -11,7 +11,7 @@ class Users extends Website_Controller{
 	private $pagecontent;
 	function __construct(){
 		parent::__construct();		
-		$this->load->model(array('Model_user', "Model_message"));	
+		$this->load->model(array('Model_user', "Model_message","Model_password_reminder"));	
 	
 	}
 	function login(){
@@ -374,16 +374,20 @@ class Users extends Website_Controller{
 		        {
 		        	$characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 				    $randstring = '';
-				    for ($i = 0; $i < 8; $i++) {
-				        $randstring = $characters[rand(0, strlen($characters))];
+				    for ($i = 0; $i < 50; $i++) {
+				        $randstring .= $characters[rand(0, strlen($characters))];
 				    }
 					$this->load->library('Hash');	
 					$hash = new Hash();
 					$data = array('password'=>$hash->make($randstring));
 					$this->Model_user->update($data,$u->id);
-				
-					//Send validation mail 
 					
+					$data = array('email'=>$this->input->post('email'), 
+									'token' => $randstring,
+									'created_at' => date("Y-m-d H:i:s"));
+					$this->Model_password_reminder->insert($data);
+					
+					//Send validation mail 					
 					$this->load->library('email');
 
 					$this->email->from($this->Model_user->getsiteemail(), $this->Model_user->getsitetitle());
