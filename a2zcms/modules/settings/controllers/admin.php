@@ -21,7 +21,10 @@ class Admin extends Administrator_Controller {
 	{
 		$data['view'] = 'settings';
 		$settingsgroup = $this->Model_settings->getSettignsgroup();
-		
+		foreach($settingsgroup as $group)
+		{
+			$group->items = $this->Model_settings->getSettignsForGroup($group -> groupname);
+		}
 		$data['content'] = array('settingsgroup'=>$settingsgroup,);
 		$this->load->view('adminpage', $data);
 		
