@@ -16,7 +16,7 @@
 				<div class="tab-content" id="myTabContent">';
 				foreach ($content['settingsgroup'] as $group) {
 				echo '<div class="tab-pane active" id="' . $group -> groupname . '">';				
-				foreach ($group->item as $item) {
+				foreach ($group->items as $item) {
 					echo '<div class="form-group">
 							<div class="col-md-12">';
 					switch ($item->type) {
