@@ -17,7 +17,7 @@ class Model_plugin extends CI_Model {
 	public function getall()
 	{
 		return $this->db->from('plugins p')
-				->join('admin_navigations an','p.id=an.plugin_id','left')
+				->join('admin_navigations an','p.id=an.plugin_id')
         		->where('p.deleted_at', NULL)
 				->where('an.deleted_at', NULL)
 				->order_by('ISNULL(an.order), an.order','ASC')

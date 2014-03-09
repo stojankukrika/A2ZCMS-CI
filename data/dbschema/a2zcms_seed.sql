@@ -11,8 +11,7 @@ INSERT INTO `plugins` (`id`, `name`,`title`, `function_id`, `function_grid`,
 (4, 'roles', 'Roles', NULL, NULL, 0,'1.0', 1, NOW(), NOW(), NULL),
 (5, 'plugins', 'Plugins', NULL, NULL, 0, '1.0', 1, NOW(), NOW(), NULL),
 (6, 'adminmenu', 'Admin menu', NULL, NULL, 0,'1.0', 1, NOW(), NOW(), NULL),
-(7, 'home', 'Website home', NULL, NULL, 0, '1.0', 1, NOW(), NOW(), NULL),
-(8, 'menu', 'Website menu', NULL, NULL, 0, '1.0', 1, NOW(), NOW(), NULL);
+(7, 'menu', 'Website menu', NULL, NULL, 0, '1.0', 1, NOW(), NOW(), NULL);
 
 --
 -- Dumping data for table `plugin_functions`
