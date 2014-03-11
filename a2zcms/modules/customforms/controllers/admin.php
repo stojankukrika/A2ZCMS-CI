@@ -155,7 +155,7 @@ class Admin extends Administrator_Controller {
 														'type'=>$params[$i+2],
 														'options'=>$params[$i+3],
 														'order'=>$order,
-														'custom_form_id'=>$customform_id,
+														'customform_id'=>$customform_id,
 														'user_id'=>$user_id,
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
@@ -195,7 +195,7 @@ class Admin extends Administrator_Controller {
 			
 			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."custom_form_fields` (
 					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-					  `custom_form_id` int(10) unsigned NOT NULL,
+					  `customform_id` int(10) unsigned NOT NULL,
 					  `user_id` int(10) unsigned NOT NULL,
 					  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
 					  `options` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -206,7 +206,7 @@ class Admin extends Administrator_Controller {
 					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 					  `deleted_at` timestamp NULL DEFAULT NULL,
 					  PRIMARY KEY (`id`),
-					  KEY `custom_form_fields_custom_form_id_index` (`custom_form_id`),
+					  KEY `custom_form_fields_customform_id_index` (`customform_id`),
 					  KEY `custom_form_fields_user_id_index` (`user_id`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
 			$this->db->query($query);
@@ -217,7 +217,7 @@ class Admin extends Administrator_Controller {
 			
 			$query = "ALTER TABLE `".$database->dbprefix."custom_form_fields`
 					  ADD CONSTRAINT `custom_form_fields_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE,
-					  ADD CONSTRAINT `custom_form_fields_custom_form_id_foreign` FOREIGN KEY (`custom_form_id`) REFERENCES `".$database->dbprefix."custom_forms` (`id`) ON DELETE CASCADE;";
+					  ADD CONSTRAINT `custom_form_fields_customform_id_foreign` FOREIGN KEY (`customform_id`) REFERENCES `".$database->dbprefix."custom_forms` (`id`) ON DELETE CASCADE;";
 			$this->db->query($query);
 			
 			/*add to plugins*/

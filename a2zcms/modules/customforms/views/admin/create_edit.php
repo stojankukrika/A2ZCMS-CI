@@ -67,14 +67,14 @@
 											$this -> form_builder -> text('name'.$item->id, 'Fild name', $item->name, '');
 										?><div>
 											<label class="control-label" for="mandatory">Mandatory </label>
-											<select name="mandatory<?=$item->custom_form_id?>" id="mandatory<?=$item->id?>"> 
+											<select name="mandatory<?=$item->customform_id?>" id="mandatory<?=$item->id?>"> 
 												<option value="1" <?=($item->mandatory=='1')?"selected":"";?>>No</option>
 										  		<option value="2" <?=($item->mandatory=='2')?"selected":"";?>>Yes</option>
 										  		<option value="3" <?=($item->mandatory=='3')?"selected":"";?>>Only numbers</option>
 										  		<option value="4" <?=($item->mandatory=='4')?"selected":"";?>>Valid email</option>
 											</select>
 											<label class="control-label" for="type">Type </label>
-											<select name="type<?=$item->custom_form_id?>" id="type<?=$item->id?>"> 
+											<select name="type<?=$item->customform_id?>" id="type<?=$item->id?>"> 
 												<option value="1" <?=($item->type=='1')?"selected":"";?>>Input field</option>
 												<option value="2" <?=($item->type=='2')?"selected":"";?>>Text area</option>
 												<option value="3" <?=($item->type=='3')?"selected":"";?>>Select</option>

@@ -45,7 +45,7 @@ class Model_customform_field extends CI_Model {
 		$data = array(
                'deleted_at' => date("Y-m-d H:i:s")
             );
-			$this->db->where('custom_form_id', $id);
+			$this->db->where('customform_id', $id);
 			$this->db->update('custom_form_fields', $data);
     }
 
@@ -54,11 +54,11 @@ class Model_customform_field extends CI_Model {
     }
 	
 	public function selectorder($order,$id) {		
-		return $this->db->where('custom_form_id', $id)->where(array('deleted_at' => NULL))->order_by($order,'ASC')->get('custom_form_fields')->result();
+		return $this->db->where('customform_id', $id)->where(array('deleted_at' => NULL))->order_by($order,'ASC')->get('custom_form_fields')->result();
     }
 	
 	public function selectcount($id) {		
-		return $this->db->where('custom_form_id', $id)->where(array('deleted_at' => NULL))->count_all('custom_form_fields');
+		return $this->db->where('customform_id', $id)->where(array('deleted_at' => NULL))->count_all('custom_form_fields');
     }
 	
 	public function insert($data) {		
@@ -71,7 +71,7 @@ class Model_customform_field extends CI_Model {
 		$this->db->update('custom_form_fields', $data);
     }
 	public function selectForId($id) {		
-		return $this->db->where('custom_form_id', $id)
+		return $this->db->where('customform_id', $id)
 								->where(array('deleted_at' => NULL))
 								->select('id, name, options, type, order, mandatory')
 								->order_by('order','ASC')
