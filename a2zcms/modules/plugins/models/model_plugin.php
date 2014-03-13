@@ -21,7 +21,7 @@ class Model_plugin extends CI_Model {
         		->where('p.deleted_at', NULL)
 				->where('an.deleted_at', NULL)
 				->order_by('ISNULL(an.order), an.order','ASC')
-				->select('p.id,p.name,p.title,p.can_uninstall,p.created_at')
+				->select('p.id,p.name,p.title,p.can_uninstall,p.created_at,p.pluginversion')
 				->get()->result();
 	}
 	

@@ -13,6 +13,7 @@
 	        <tr>
 	          <th>Title</th>
 	          <th>Name</th>
+	          <th>Version</th>
 	          <th>Installed at</th>
 	          <th>Actions</th>
 	        </tr>
@@ -22,6 +23,7 @@
             echo '<tr>
 		            <td>'.$item->title.'</td>		            
 					<td>'.$item->name.'</td>
+					<th>'.$item->pluginversion.'</th>
 					<td>'.$item->created_at.'</td>
 					<td class="">';
 					if(isset($item->not_installed))      
