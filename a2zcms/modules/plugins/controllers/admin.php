@@ -31,7 +31,7 @@ class Admin extends Administrator_Controller {
 			$dir = str_replace(FCPATH.'/a2zcms/modules/', '', $dir);
 			if(!in_array($dir,$temp) && $dir!='install' && $dir!='testmodule' && $dir!='offline' && $dir!='menu' && $dir!='adminmenu')
 			$plugin[] =(object) array('name' => $dir, 'id'=>0,
-			'title' => ucfirst($dir), 'created_at' => '', 'can_uninstall' =>0, 'not_installed'=>TRUE);
+			'title' => ucfirst($dir), 'pluginversion' => '', 'created_at' => '', 'can_uninstall' =>0, 'not_installed'=>TRUE);
 		}
 			
         $data['content'] = array(
