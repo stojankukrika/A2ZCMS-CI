@@ -33,7 +33,7 @@ INSERT INTO `settings` (`id`, `varname`, `vartitle`, `groupname`, `value`, `defa
 (3, 'version', 'Version', 'version', '1.0', '1.0', 'text', ''),
 (4, 'offlinemessage', 'Offline message', 'offline', '<p>Sorry, the site is unavailable at the moment while we are testing some functionality.</p>', 'Sorry, the site is unavailable at the moment while we are testing some functionality.', 'textarea', ''),
 (5, 'title', 'Title', 'general', 'A2Z CMS-dev', 'A2Z CMS', 'text', 'required'),
-(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2014', 'A2Z CMS 20134', 'text', 'required'),
+(6, 'copyright', 'Copyright', 'general', 'yoursite.com &copy; 2014', 'A2Z CMS 2014', 'text', 'required'),
 (7, 'metadesc', 'Meta desc', 'metadata', '', '', 'textarea', ''),
 (8, 'metakey', 'Meta key', 'metadata', '', '', 'textarea', ''),
 (9, 'metaauthor', 'Meta author', 'metadata', 'http://www.yoursite.com', 'http://www.a2zcms.com', 'text', ''),
