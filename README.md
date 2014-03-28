@@ -7,7 +7,7 @@
 [![Flattr donate button](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=mrakodol&url=https%3A%2F%2Fgithub.com%2Fmrakodol%2FA2ZCMS)
 [![BitCoin donate button](http://img.shields.io/bitcoin/donate.png?color=yellow)](https://coinbase.com/checkouts/4d0769619eaebde35c378920a895596e "Donate once-off to this project using BitCoin")
 <!-- /DONATE -->
-<!-- /DONATE -->
+[Demo](http://a2zcms.mrakodol.info)
 ======
 ## A2Z CMS based on Codeigniter 2.1.4
 * [A2Z CMS Features](#feature1)
@@ -30,15 +30,19 @@
 	* Manage custom forms.
 	* Manage pages aranged into cateogry and possition.
 	* Manage to-do list.
+	* Manage plugins(install/uninstall)
+	* Manage polls
+	* Set would be use gravatar or avatar users
     * DataTables dynamic table sorting and filtering.
     * Colorbox Lightbox jQuery modal popup.
     * Add Summernote WYSIWYG in textareas.
     * soon will be more...
 * Front-end
 	* User login, registration, forgot password
-	* Blog,Gallery,Messages and more functionality
+	* Blog,Gallery,Messages and soon more functionality
 	* Voting content(Blog,Gallery,Page) and voting comments
 	* Custom themes
+	* Voting on active polls
 	* User can use avatar
 	* Add Summernote WYSIWYG in textareas
 	* soon will be more...
