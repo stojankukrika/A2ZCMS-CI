@@ -413,11 +413,6 @@ ALTER TABLE `permission_role`
   ADD CONSTRAINT `permission_role_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `tags`
---
-ALTER TABLE `tags`
-  ADD CONSTRAINT `tags_plugin_id_foreign` FOREIGN KEY (`plugin_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE;
---
 -- Constraints for table `user_login_historys`
 --
 ALTER TABLE `user_login_historys`
