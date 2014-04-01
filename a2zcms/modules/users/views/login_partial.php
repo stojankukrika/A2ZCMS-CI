@@ -38,7 +38,7 @@
 		</div></div>
 		<? } 
 		else { ?>
-		<h4>Login to system</h4>
+		<h4><?=trans('LoginUsers')?></h4>
 		<form method="POST" action="<?=base_url('users/login')?>" accept-charset="UTF-8">
 			<fieldset>
 				<div class="form-group">

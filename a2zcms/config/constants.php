@@ -47,5 +47,12 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 */
 define('CMS_ROOT', dirname(BASEPATH) . '/');
 
+define('DEF_LANG' , 'en');
+define('MYSQL_DATE_FORMAT' , 'Y-m-d G:i:s');
+define('SQL_NOW' , date('Y-m-d G:i:s') );
+define('HTML_DATE_FORMAT' , '%d.%m.%Y.');
+define('HTML_DATETIME_FORMAT' , '%d.%m.%Y %H:%i');
+define('REGEX_ISMYSQLDATEFORMAT', '/^[0-9]{4}-[0-9]{2}-[0-9]{2}/');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
