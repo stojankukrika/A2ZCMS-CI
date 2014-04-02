@@ -13,7 +13,7 @@ class MY_Controller extends MX_Controller
 	 {
 	  	parent::__construct();	
 		if( ! isset($_SESSION['lang'])){
-            $_SESSION['lang'] = 'sr';
+            $_SESSION['lang'] = DEF_LANG;
         }
 		
 		$get_lang = $this->input->get('lang');

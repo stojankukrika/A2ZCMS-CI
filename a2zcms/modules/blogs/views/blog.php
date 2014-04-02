@@ -25,7 +25,7 @@
 		<div class="page-header">
 		<h3><?=$blog->title?></h3>
 	</div>
-         <p><i class="icon-time"></i> Posted on <?=$blog->created_at;?> by <?=$blog->fullname;?></p>
+         <p><i class="icon-time"></i> <?=trans('PostedOn')?> <?=$blog->created_at;?> <?=trans('By')?> <?=$blog->fullname;?></p>
           <hr>
           <?php 
           if($blog->image) { ?>
@@ -36,13 +36,13 @@
 			<?= $blog->content?>
 			</p>
    		<p>
-   			<strong>Resource :</strong><?=$blog->resource_link?>
+   			<strong><?=trans('Resource')?> :</strong><?=$blog->resource_link?>
    		</p>          
      <hr>
-     <p id="vote">Numer of votes <span id="countvote"><?=$blog->voteup-$blog->votedown;?></span> 
+     <p id="vote"><?=trans('NumerOfVotes')?> <span id="countvote"><?=$blog->voteup-$blog->votedown;?></span> 
 		<?php
 		if (!$this->session->userdata("post_blog_vote")){
-		echo '<br><b><i>You need to be logged in or have permission to add vote. </i></b>';
+		echo '<br><b><i>'.trans('LoginToVote').' </i></b>';
 		}
 		else {	?>			
 		<span style="display: inline-block;" onclick="contentvote('blogs','1','blog','<?=$blog->id?>','countvote')" class="up"></span>
@@ -52,7 +52,7 @@
 	echo '</p>
 		<!-- the comment box -->
   <div class="well">            
-	<h4>'.$blog->blog_comments.' comments</h4>';
+	<h4>'.$blog->blog_comments.' '.trans('Comments').'</h4>';
 	
 	if ($blog->blog_comments>0){
 	foreach ($blog_comments as $comment){
@@ -61,7 +61,7 @@
 		|| Numer of votes <span id="commentcountvote'.$comment->id.'">';
 	 	echo $comment->voteup-$comment->votedown.'</span> ';
 	if (!$this->session->userdata("post_image_vote")){
-		echo '<br>(<i>You need to be logged in or have permission to add vote.</i>)';
+		echo '<br>(<i>'.trans('LoginToVote').'</i>)';
 		}
 		else {	?>			
 		<span style="display: inline-block;" onclick="contentvote('blogs','1','blogcomment','<?=$comment->id?>','commentcountvote<?=$comment->id?>')" class="up"></span>
@@ -78,18 +78,17 @@
 	echo '</div>';
 	
 	if (! $this->session->userdata("user_id")){
-	echo 'To add comment you need to login.
+	echo trans('LoginToComment').'<br />
 	<br />
-	<br />
-	Click <a href="'.base_url('user/login').'">here</a> to login
+	'.trans('Click').' <a href="'.base_url('user/login').'">here</a> '.trans('ToLogin').'
 	<br>';
 	}
 	else if (!$this->session->userdata("post_blog_comment")){
-	echo '<br><b><i>You do not have a permittion to add comment</i></b>';
+	echo '<br><b><i>'.trans('PermissionToComment').'</i></b>';
 	}
 	else {
 	echo '<div class="new_comment">
-		<h4>Add comment </h4>
+		<h4>'.trans('AddComment').' </h4>
 		<form method="post" action="">
 			<div class="form-group">			
 				<div class="col-md-12">';
@@ -98,7 +97,7 @@
 				<label id="characterLeft"></label>
 			</div>
 			<div class="form-group">
-				<button type="submit" class="btn btn-success">Submit</button>
+				<button type="submit" class="btn btn-success">'.trans('Submit').'</button>
 			</div>
 		</form>
 	</div>';

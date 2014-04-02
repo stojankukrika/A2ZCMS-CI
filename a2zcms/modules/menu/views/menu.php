@@ -14,16 +14,16 @@
      		<?php if($currentuser): ?>
 					<li class='dropdown'>
 						<a class="dropdown-toggle" id="dLabel" role="button" data-toggle="dropdown" data-target="#" href="#">
-							Logged as <strong><?php echo $currentuser->username; ?></strong><b class="caret"></b>
+							<?=trans('LoggedAs')?> <strong><?php echo $currentuser->username; ?></strong><b class="caret"></b>
 						</a>
 						<ul class='dropdown-menu' role="menu" aria-labelledby="dLabel">
 							<? if(isset($admin)) {?>
-								<li><a href="<?=base_url('admin/plugins/dashboard'); ?>">Admin panel</a></li>
+								<li><a href="<?=base_url('admin/plugins/dashboard'); ?>"><?=trans('AdminPanel')?></a></li>
 								<li class="divider"></li>
 							<? }?>
-							<li><a href="<?=base_url('users/account'); ?>">Edit Account</a></li>
+							<li><a href="<?=base_url('users/account'); ?>"><?=trans('ChangeProfile')?></a></li>
 							<li class="divider"></li>
-							<li><a href="<?=base_url('users/logout'); ?>">Logout</a></li>
+							<li><a href="<?=base_url('users/logout'); ?>"><?=trans('Logout')?></a></li>
 						</ul>
 					</li>
 			<?php endif; ?>

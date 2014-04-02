@@ -5,7 +5,7 @@
 			echo form_open('');
 			echo '<div class="box">
 			<div class="box-header">
-				<h2><i class="icon-th"></i><span class="break"></span>Settings Management</h2>
+				<h2><i class="icon-th"></i><span class="break"></span>'.trans('SettingsManagement').'</h2>
 				<ul id="myTab" class="nav tab-menu nav-tabs">';
 			foreach ($content['settingsgroup'] as $group) {
 				echo '<li><a href="#' . $group -> groupname . '">' . ucfirst($group -> groupname) . '</a></li>';
@@ -72,14 +72,14 @@
 			<div class="form-group">
 					<div class="col-md-12">
 						<button type="reset" class="btn btn-warning close_popup">
-							<span class="icon-remove"></span> Cancel
-						</button>
-						<button type="reset" class="btn btn-default">
-							<span class="icon-refresh"></span> Reset
-						</button>
-						<button type="submit" class="btn btn-success">
-							<span class="icon-ok"></span> Save
-						</button>
+						<span class="icon-remove"></span> '.trans('Cancel').'
+					</button>
+					<button type="reset" class="btn btn-default">
+						<span class="icon-refresh"></span> '.trans('Reset').'
+					</button>
+					<button type="submit" class="btn btn-success">
+						<span class="icon-ok"></span>'.trans('Save').'
+					</button>
 					</div>
 				</div>
 			</div></div>';

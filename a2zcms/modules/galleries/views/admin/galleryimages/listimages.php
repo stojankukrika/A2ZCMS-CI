@@ -1,11 +1,11 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Galleries Images - <?=$content['gallery']->title?></h1>
+			<h1><?=trans('GalleriesImages')?> - <?=$content['gallery']->title?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/galleries/create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create')?></a>
 		</div>
 		<div class="clearfix"></div>
 		<div class="form-group">

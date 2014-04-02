@@ -1,16 +1,16 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Comments for image gallery: <b><?=$content['gallery']->title?></b></h1>
+			<h1><?=trans('GalleriesImageComments')?>: <b><?=$content['gallery']->title?></b></h1>
 		</div>
 		<?php if (!empty($content['galleryimagecomment'])) { ?>
    
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Content</th>
-	          <th>Created at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Content')?></th>
+	          <th><?=trans('CreatedAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>
@@ -30,7 +30,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+         <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

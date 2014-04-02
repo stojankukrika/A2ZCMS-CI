@@ -1,8 +1,8 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Admin panel</h1>
-			<b>Welcome to admin panel in A2Z CMS!</b>
+			<h1><?=trans('AdminPanel')?></h1>
+			<b><?=trans('WelcomeToAdminPanel')?></b>
 		</div>
 			<?php
 			foreach($content['navigation'] as $item){				
@@ -12,7 +12,7 @@
 					<i class="<?=$item->icon.' '.$item->background_color?>">&nbsp;</i>
 					<span class="title"><?=$item->title?><br><br></span>
 					<a href="<?=base_url('admin/'.$item->name)?>" class="more">
-						<span>View More</span>
+						<span><?=trans('ViewMore')?></span>
 						<i class="icon-chevron-right"></i>
 					</a>
 				</div>

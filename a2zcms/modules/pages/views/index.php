@@ -17,11 +17,11 @@ echo '<div class="row">';
 	if($page->showtags=='1') 
 	echo '<p id="tags">Tags: '.$page->tags.'</p>';
 	if($page->showvote=='1'){
-	echo '<p id="vote">Num of votes <span id="countvote">';
+	echo '<p id="vote">'.trans('NumOfVotes').' <span id="countvote">';
 	echo $page->voteup-$page->votedown;
 	echo '</span>'; 
 		if (!$this->session->userdata("user_id")){
-		echo '<br><b><i>You need to be logged in or have permission to add vote. </i></b>';
+		echo '<br><b><i>'.trans('LoginToVote').'</i></b>';
 		}	
 		else{ ?>		
 		<span style="display: inline-block;" onclick="contentvote('pages','1','page',<?=$page->id;?>,'countvote')" class="up"></span>

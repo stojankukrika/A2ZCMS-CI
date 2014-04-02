@@ -1,17 +1,17 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Galleries Image Management</h1>
+			<h1><?=trans('GalleriesImageManagement')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/galleries/create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create')?></a>
 		</div>
 		<div class="clearfix"></div>
 		<div class="form-group">
 			<div class="col-md-12">
 				<div class="control-group lesser-inputs ">	
-					<label for="useravatheight" class="control-label">Choose gallery</label>	
+					<label for="useravatheight" class="control-label"><?=trans('ChooseGallery')?></label>	
 					<div class="controls">
 						<select name="galleryid" id="galleryid" class="form-control">
 							<option value=""> </option>

@@ -66,7 +66,7 @@ if(!empty($showCustomFormId)){
 								}					
 						echo '</div>';
 						}
-				echo '<input class="btn btn-primary" type="submit" value="Submit">
+				echo '<input class="btn btn-primary" type="submit" value="'.trans('Submit').'">
 				</form>';
 	echo '</div>	
 </div> 

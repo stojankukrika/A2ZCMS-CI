@@ -8,9 +8,9 @@
 		<table class="table table-hover">
 			<thead>
         <tr>
-          <th>Comment</th>
-          <th>Created at</th>          
-          <th>Actions</th>
+          <th><?=trans('Comment')?></th>
+          <th><?=trans('CreatedAt')?></th>
+          <th><?=trans('Actions')?></th>
         </tr>
       </thead>
       <tbody>
@@ -32,7 +32,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

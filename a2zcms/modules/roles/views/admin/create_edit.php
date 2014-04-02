@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,19 +14,19 @@
 			<div class="form-group">								
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('name', 'Name', (isset($content['rolename']))?$content['rolename']:"", 'form-control');
+						$this -> form_builder -> text('name', trans('Title'), (isset($content['rolename']))?$content['rolename']:"", 'form-control');
 					?>
 				</div>
 			</div>
 			<!-- ./ name -->
 			<!-- Permissions -->
 			<div class="form-group">
-			<label class="col-md-2 control-label" for="name">Choose role</label>
+			<label class="col-md-2 control-label" for="name"><?=trans('ChooseRole')?></label>
 				<div class="col-md-10">
 					<select tabindex="3" name="permission[]" id="permission" multiple="" style="width:350px;" 
-					data-placeholder="Choose role">		             
+					data-placeholder="<?=trans('ChooseRole')?>">		             
 		            	<?php		            	
-		            	$opt ='<optgroup label="User role">';
+		            	$opt ='<optgroup label="'.trans('UserRole').'">';
 		            	foreach ($content['permissionsUser'] as $permission){
 		            		$opt .= '<option value="'.$permission->id.'"';
 		            			foreach($content['permisionsadd'] as $item) {
@@ -36,7 +36,7 @@
 		            		$opt .=">".$permission->display_name."</option>";
 		            	}
 		            	$opt .='</optgroup>
-  							<optgroup label="Admin role">';
+  							<optgroup label="'.trans('AdminRole').'">';
 		            	foreach ($content['permissionsAdmin'] as $permission){
 		            		$opt .= '<option value="'.$permission->id.'"';
 		            			foreach($content['permisionsadd'] as $item) {
@@ -60,13 +60,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>

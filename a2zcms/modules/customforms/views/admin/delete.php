@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<input class="form-control" type="hidden" name="customformid" id="customformid" value="<?=$content['customformid']?>" />
 				<div class="col-md-10">
-					<label>Do you want do delete this item?</label>				
+					<label><?=trans('DeleteItemQuestion')?></label>				
 				</div>
 			</div>
 			<!-- ./ name -->			
@@ -27,13 +27,10 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
-			</button>
-			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Delete
+				<span class="icon-ok"></span><?=trans('Delete')?>
 			</button>
 		</div>
 	</div>

@@ -22,20 +22,20 @@
 		}
 		?>
 		<div class="page-header">
-				<h3>Forgot password</h3>
+				<h3><?=trans('ForgotPassword')?></h3>
 			</div>
 			<form method="post" action="">
 				<div class="form-group">					
 					<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('username', 'Username', "", 'form-control');
+						$this -> form_builder -> text('username', trans('Username'), "", 'form-control');
 					?>
 					</div>
 					</div>	
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('email', 'Email', "", 'form-control');
+							$this -> form_builder -> text('email', trans('Email'), "", 'form-control');
 						?>
 						</div>
 					</div>					
@@ -43,7 +43,7 @@
 					<div class="form-group">
 						<div class="col-md-offset-2 col-md-10">
 							<button class="btn btn-primary" type="submit" tabindex="3">
-								Return password				
+								<?=trans('ReturnPassword')?>				
 							</button>
 						</div>
 					</div>

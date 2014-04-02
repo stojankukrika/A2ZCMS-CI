@@ -1,25 +1,25 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>List of blogs</h1>
+			<h1><?=trans('ListOfBlogs')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/blogs/blog_create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create');?></a>
 		</div>
 		<?php if (!empty($content['blogs'])) { ?>
 			   
 		<table class="table table-hover">
 			<thead>
         <tr>
-          <th>Title</th>
-          <th>Vote</th>
-          <th>Hits</th>
-          <th>Comments</th>
-          <th>Start publish</th>
-          <th>End publish</th>
-          <th>Created at</th>          
-          <th>Actions</th>
+          <th><?=trans('Title')?></th>
+          <th><?=trans('Votes')?></th>
+          <th><?=trans('Hits')?></th>
+          <th><?=trans('Comments')?></th>
+          <th><?=trans('StartPublish')?></th>
+          <th><?=trans('EndPublish')?></th>
+          <th><?=trans('CreatedAt')?></th>
+          <th><?=trans('Actions')?></th>
         </tr>
       </thead>
       <tbody>
@@ -51,7 +51,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

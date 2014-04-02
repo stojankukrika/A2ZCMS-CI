@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?php
-					$this -> form_builder -> text('title', 'Title', 
+					$this -> form_builder -> text('title', trans('Title'), 
 					(isset($content['navigation_edit']->title))?$content['navigation_edit']->title:"", 'form-control');
 					?>
 				</div>
@@ -31,7 +31,7 @@
 							$options[] = (object) array('id' => $parent->id, 'name' => $parent->title);
 						}
 					}
-					$this -> form_builder -> option('parent', 'Parent', $options, 
+					$this -> form_builder -> option('parent', trans('Parent'), $options, 
 					(isset($content['navigation_edit']->parent))?$content['navigation_edit']->parent:"", 'form-control');
 					?>
 				</div>
@@ -43,10 +43,10 @@
 				<div class="col-lg-12">
 					<?php
 					$options = '';
-					$options[] = (object) array('id' => 'page', 'name' => 'Page');
+					$options[] = (object) array('id' => 'page', 'name' => trans('Page'));
 					$options[] = (object) array('id' => 'url', 'name' => 'URL');
 					$options[] = (object) array('id' => 'uri', 'name' => 'URI');
-					$this -> form_builder -> option('link_type', 'Link Type', $options, 
+					$this -> form_builder -> option('link_type', trans('LinkType'), $options, 
 						(isset($content['navigation_edit']->link_type))?$content['navigation_edit']->link_type:"page", 'form-control');
 					?>
 				</div>
@@ -63,7 +63,7 @@
 							$options[] = (object) array('id' => $parent->id, 'name' => $parent->title);
 						}
 					}
-					$this -> form_builder -> option('page_id', 'Page', $options, (isset($content['navigation_edit']->page_id))?$content['navigation_edit']->page_id:"", 'form-control');
+					$this -> form_builder -> option('page_id', trans('Page'), $options, (isset($content['navigation_edit']->page_id))?$content['navigation_edit']->page_id:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -98,7 +98,7 @@
 						foreach ($content['navigationGroupList'] as $key => $parent) {
 							$options[] = (object) array('id' => $parent['id'], 'name' => $parent['title']);
 						}
-						$this -> form_builder -> option('navigation_group_id', 'Navigation Group', $options, 
+						$this -> form_builder -> option('navigation_group_id', trans('NavigationGroup'), $options, 
 						(isset($content['navigation_edit']->page_id))?$content['navigation_edit']->page_id:"", 'form-control');
 					}
 					?>
@@ -113,7 +113,7 @@
 					$options = '';
 					$options[] = (object) array('id' => 'selected', 'name' => 'Self');
 					$options[] = (object) array('id' => '_blank', 'name' => 'Blank page');
-					$this -> form_builder -> option('target', 'Target', $options, 
+					$this -> form_builder -> option('target', trans('Target'), $options, 
 					(isset($content['navigation_edit']->target))?$content['navigation_edit']->target:"_blank", 'form-control');
 					?>
 				</div>
@@ -124,7 +124,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?php
-					$this -> form_builder -> text('class', 'Class', 
+					$this -> form_builder -> text('class', trans('Class'), 
 					(isset($content['navigation_edit']->class))?$content['navigation_edit']->class:"", 'form-control');
 					?>
 				</div>
@@ -140,13 +140,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>

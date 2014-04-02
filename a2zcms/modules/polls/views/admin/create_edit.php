@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,12 +14,12 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('poll', 'Title', (isset($content['poll_edit']->title))?$content['poll_edit']->title:"", 'form-control');
+						$this -> form_builder -> text('poll', trans('Title'), (isset($content['poll_edit']->title))?$content['poll_edit']->title:"", 'form-control');
 					?>
 				</div>
 			</div>
 			<!-- ./ name -->
-			<a class="btn btn-link" id="add" href="#"><i class="icon-plus-sign"></i> Add filed</a>
+			<a class="btn btn-link" id="add" href="#"><i class="icon-plus-sign"></i> <?=trans('AddFiled')?></a>
 			<div id="fields">
 				<div class="row responsive-utilities-test">
 					<div class="col-md-10 col-xs-10" id="form_fields">
@@ -31,7 +31,7 @@
 							if(!empty($content['poll_options'])){
 								foreach($content['poll_options'] as $item) { ?>								
 									<li class="ui-state-default" name="formf" value="<?=$item->id?>" id="formf<?=$item->id?>">
-										<label class="control-label" for="name">Answer title</label>
+										<label class="control-label" for="name"><?=trans('AnswerTitle')?></label>
 										<input id="id<?=$item->id?>" type="hidden" value="<?=$item->id?>" name="id<?=$item->id?>">
 										<input id="title<?=$item->id?>" type="text" value="<?=$item->title?>" name="title<?=$item->id?>">	
 										<a class="btn btn-default btn-sm btn-small remove"><span class="icon-trash"><input type="hidden" 
@@ -53,13 +53,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>
@@ -68,7 +68,7 @@
 
 <div class="hidden" id ="addfield">
 	<li id="formf" class="ui-state-default" name="formf" value="formf">
-		<label class="control-label" for="name">Answer title</label>
+		<label class="control-label" for="name"><?=trans('AnswerTitle')?></label>
 		<input id="title" type="text" value="" name="title">		
 		<a class="btn btn-default btn-sm btn-small remove">
 			<span class="icon-trash">

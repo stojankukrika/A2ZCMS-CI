@@ -1,20 +1,20 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Results of voting in poll: <b><?=$content['poll']->title?></b></h1>
+			<h1><?=trans('ResultsOfPoll')?>: <b><?=$content['poll']->title?></b></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info" href="<?=base_url("admin/polls/index")?>">
-				<span class="icon-share-alt icon-white"></span> Back</a>
+				<span class="icon-share-alt icon-white"></span> <?=trans('Back')?></a>
 		</div>
 		<?php if (!empty($content['pollOptions'])) { ?>
 			   
 		<table class="table table-hover">
 			<thead>
         <tr>
-          <th>Answer</th>
-          <th>Votes</th>
-          <th>Percentage</th>
+          <th><?=trans('Answer')?></th>
+          <th><?=trans('Votes')?></th>
+          <th><?=trans('Percentage')?></th>
         </tr>
 	      </thead>
 	      <tbody>
@@ -31,7 +31,7 @@
 		</table>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

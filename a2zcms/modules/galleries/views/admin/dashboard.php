@@ -1,23 +1,23 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Galleries Management</h1>
+			<h1><?=trans('GalleriesManagement')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/galleries/create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create')?></a>
 		</div>
 		<?php if (!empty($content['gallery'])) { ?>
    
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Title</th>
-	          <th>Views</th>
-	          <th># of Images</th>
-	          <th># of Comments</th>
-	          <th>Created at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Title')?></th>
+	          <th><?=trans('Views')?></th>
+	          <th># <?=trans('OfImages')?></th>
+	          <th># <?=trans('OfComments')?></th>
+	          <th><?=trans('CreatedAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>
@@ -42,7 +42,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

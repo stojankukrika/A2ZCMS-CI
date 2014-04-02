@@ -16,7 +16,7 @@
 	}
 </style>
 <p>
-	Gallery: <b><?=$content['title']?></b>
+	<?=trans('Gallery')?>: <b><?=$content['title']?></b>
 </p>
 
 <div id="jquery-wrapped-fine-uploader"></div>
@@ -25,7 +25,7 @@
 <div class="form-group">
 	<div class="col-md-12">
 		<button type="reset" class="btn btn-warning close_popup">
-			<span class="icon-remove"></span>  Cancel
+			<span class="icon-remove"></span>  <?=trans('Cancel')?>
 		</button>
 	</div>
 </div>
@@ -38,7 +38,7 @@
 					params: { 'gid' : '<?=$content['gid']?>'},
 				},
 				text: {
-					uploadButton: 'Upload your images'
+					uploadButton: '<?=trans('UploadYourImages')?>'
 				},
 				template:
 					'<div class="qq-uploader span8 offset2">' +

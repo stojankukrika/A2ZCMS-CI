@@ -1,7 +1,7 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Navigation Management</h1>
+			<h1><?=trans('NavigationManagement')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/pages/navigation_create")?>">
@@ -12,12 +12,12 @@
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Title</th>
-	          <th>Link Type</th>
-	          <th>Page</th>
-	          <th>Navigation Group</th>
-	          <th>Created at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Title')?></th>
+	          <th><?=trans('LinkType')?></th>
+	          <th><?=trans('Page')?></th>
+	          <th><?=trans('NavigationGroup')?></th>
+	          <th><?=trans('CreatedAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>
@@ -39,7 +39,7 @@
 	</table>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

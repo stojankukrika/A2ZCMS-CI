@@ -1,21 +1,18 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Plugins</h1>
-			<br><b>
-					* Reorder plugins causes a change in the admin navigation<br>
-					** After install some plugin, you need to add role to some user group that 
-							they can access to that plugin. User get that roles after first login to website.
+			<h1><?=trans('Plugins')?></h1>
+			<br><b><?=trans('PluginsInfo')?>
 				</b>
 		</div>
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Title</th>
-	          <th>Name</th>
-	          <th>Version</th>
-	          <th>Installed at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Title')?></th>
+	          <th><?=trans('Name')?></th>
+	          <th><?=trans('Version')?></th>
+	          <th><?=trans('InstalledAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>

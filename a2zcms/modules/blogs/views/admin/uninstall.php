@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,7 +14,7 @@
 			<input class="form-control" type="hidden" name="plugin" id="plugin" value="blogs" />
 			<div class="form-group">
 				<div class="col-md-10">
-					<label>Do you want do uninstall this plugin?</label>				
+					<label><?=trans('UninstallQuestion')?></label>				
 				</div>
 			</div>
 			<!-- ./ name -->			
@@ -27,10 +27,10 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Uninstall
+				<span class="icon-ok"></span><?=trans('Uninstall')?>
 			</button>
 		</div>
 	</div>

@@ -15,8 +15,8 @@
 <div class="align_right">
     <?php echo form_open(); ?>
         <div class="box">
-            <label>I agree to the license <?php echo form_checkbox(array('name' => 'accept', 'value' => '1')); ?></label>
+            <label><?=trans('IAgree')?> <?php echo form_checkbox(array('name' => 'accept', 'value' => '1')); ?></label>
         </div>
-        <input type="submit" name="submit" class="btn save" value="Continue" />
+        <input type="submit" name="submit" class="btn save" value="<?=trans('Continue')?>" />
     <?php echo form_close(); ?>
 </div>

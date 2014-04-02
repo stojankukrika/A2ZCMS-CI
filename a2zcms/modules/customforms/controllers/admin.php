@@ -155,7 +155,7 @@ class Admin extends Administrator_Controller {
 														'type'=>$params[$i+2],
 														'options'=>$params[$i+3],
 														'order'=>$order,
-														'customform_id'=>$customform_id,
+														'custom_form_id'=>$customform_id,
 														'user_id'=>$user_id,
 														'updated_at' => date("Y-m-d H:i:s"),
 														'created_at' => date("Y-m-d H:i:s")));
@@ -195,7 +195,7 @@ class Admin extends Administrator_Controller {
 			
 			$query = "CREATE TABLE IF NOT EXISTS `".$database->dbprefix."custom_form_fields` (
 					  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-					  `customform_id` int(10) unsigned NOT NULL,
+					  `custom_form_id` int(10) unsigned NOT NULL,
 					  `user_id` int(10) unsigned NOT NULL,
 					  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
 					  `options` varchar(255) COLLATE utf8_unicode_ci NOT NULL,

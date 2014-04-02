@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('title', 'Title', (isset($content['gallery_edit']->title)?$content['gallery_edit']->title:""), 'form-control');
+					$this -> form_builder -> text('title', trans('Title'), (isset($content['gallery_edit']->title)?$content['gallery_edit']->title:""), 'form-control');
 				?>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('start_publish', 'Start publish', (isset($content['gallery_edit']->start_publish)?$content['gallery_edit']->start_publish:""), 'form-control');
+					$this -> form_builder -> text('start_publish', trans('StartPublish'), (isset($content['gallery_edit']->start_publish)?$content['gallery_edit']->start_publish:""), 'form-control');
 				?>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('end_publish', 'End publish', (isset($content['gallery_edit']->end_publish)?$content['gallery_edit']->end_publish:""), 'form-control');
+					$this -> form_builder -> text('end_publish', trans('EndPublish'), (isset($content['gallery_edit']->end_publish)?$content['gallery_edit']->end_publish:""), 'form-control');
 				?>
 				</div>
 			</div>
@@ -46,13 +46,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>

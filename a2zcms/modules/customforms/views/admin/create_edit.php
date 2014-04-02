@@ -1,10 +1,10 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 	<li class="">
-		<a href="#tab-dates" data-toggle="tab">Fields</a>
+		<a href="#tab-dates" data-toggle="tab"><?=trans('Fields')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -18,7 +18,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('title', 'Title', isset($content['customform_edit']->title)?$content['customform_edit']->title:"", 'form-control');
+					$this -> form_builder -> text('title', trans('Title'), isset($content['customform_edit']->title)?$content['customform_edit']->title:"", 'form-control');
 				?>
 				</div>
 			</div>
@@ -28,9 +28,9 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('recievers', 'Recievers', isset($content['customform_edit']->recievers)?$content['customform_edit']->recievers:"", 'form-control');
+					$this -> form_builder -> text('recievers', trans('Recievers'), isset($content['customform_edit']->recievers)?$content['customform_edit']->recievers:"", 'form-control');
 				?>
-				<small>(Disassemble the different recievers ​​with a semicolon)</small>
+				<small>(<?=trans('RecieversDesc')?>)</small>
 				</div>
 			</div>
 			<!-- ./ resource recievers -->
@@ -39,7 +39,7 @@
 				<div class="col-md-12">
 					<div class="col-md-12">
 						<?
-							$this -> form_builder -> textarea('message', 'Message', isset($content['customform_edit']->message)?$content['customform_edit']->message:"", 'wysihtml5');
+							$this -> form_builder -> textarea('message', trans('Message'), isset($content['customform_edit']->message)?$content['customform_edit']->message:"", 'wysihtml5');
 						?>
 					</div>
 				</div>
@@ -50,11 +50,11 @@
 		
 		<!-- Dates tab -->
 		<div class="tab-pane" id="tab-dates">
-			<a class="btn btn-link" id="add" href="#"><i class="icon-plus-sign"></i> Add filed</a>
+			<a class="btn btn-link" id="add" href="#"><i class="icon-plus-sign"></i> <?=trans('AddFiled')?></a>
 			<div id="fields">
 				<div class="row responsive-utilities-test">
 					<div class="col-md-10 col-xs-10" id="form_fields">
-						<label class="control-label"><b>** Disassemble the different values in options ​​with a semicolon **</b></label>
+						<label class="control-label"><b>** <?=trans('AddFiledDesc')?> **</b></label>
 						<div class="clearfix"></div>
 						<ul id="sortable1">
 							<input type="hidden" value="<?=isset($content['customformfields_count'])?$content['customformfields_count']:0?>" name="count" id="count">
@@ -64,26 +64,26 @@
 								foreach($content['customformfields'] as $item) { ?>								
 									<li class="ui-state-default" name="formf" value="<?=$item->id?>" id="formf<?=$item->id?>">
 										<?
-											$this -> form_builder -> text('name'.$item->id, 'Fild name', $item->name, '');
+											$this -> form_builder -> text('name'.$item->id, trans('FildName'), $item->name, '');
 										?><div>
-											<label class="control-label" for="mandatory">Mandatory </label>
+											<label class="control-label" for="mandatory"><?=trans('Mandatory')?> </label>
 											<select name="mandatory<?=$item->customform_id?>" id="mandatory<?=$item->id?>"> 
-												<option value="1" <?=($item->mandatory=='1')?"selected":"";?>>No</option>
-										  		<option value="2" <?=($item->mandatory=='2')?"selected":"";?>>Yes</option>
-										  		<option value="3" <?=($item->mandatory=='3')?"selected":"";?>>Only numbers</option>
-										  		<option value="4" <?=($item->mandatory=='4')?"selected":"";?>>Valid email</option>
+												<option value="1" <?=($item->mandatory=='1')?"selected":"";?>><?=trans('No')?></option>
+										  		<option value="2" <?=($item->mandatory=='2')?"selected":"";?>><?=trans('Yes')?></option>
+										  		<option value="3" <?=($item->mandatory=='3')?"selected":"";?>><?=trans('OnlyNumbers')?></option>
+										  		<option value="4" <?=($item->mandatory=='4')?"selected":"";?>><?=trans('ValidEmail')?></option>
 											</select>
-											<label class="control-label" for="type">Type </label>
+											<label class="control-label" for="type"><?=trans('Type')?> </label>
 											<select name="type<?=$item->customform_id?>" id="type<?=$item->id?>"> 
-												<option value="1" <?=($item->type=='1')?"selected":"";?>>Input field</option>
-												<option value="2" <?=($item->type=='2')?"selected":"";?>>Text area</option>
-												<option value="3" <?=($item->type=='3')?"selected":"";?>>Select</option>
-												<option value="4" <?=($item->type=='4')?"selected":"";?>>Radio</option>
-												<option value="5" <?=($item->type=='5')?"selected":"";?>>Upload</option>
-												<option value="6" <?=($item->type=='6')?"selected":"";?>>Checkbox</option>
+												<option value="1" <?=($item->type=='1')?"selected":"";?>><?=trans('InputField')?></option>
+												<option value="2" <?=($item->type=='2')?"selected":"";?>><?=trans('TextArea')?></option>
+												<option value="3" <?=($item->type=='3')?"selected":"";?>><?=trans('Select')?></option>
+												<option value="4" <?=($item->type=='4')?"selected":"";?>><?=trans('Radio')?></option>
+												<option value="5" <?=($item->type=='5')?"selected":"";?>><?=trans('Upload')?></option>
+												<option value="6" <?=($item->type=='6')?"selected":"";?>><?=trans('Checkbox')?></option>
 											</select>
 										</div>
-											<label class="control-label" for="options"> Options</label>
+											<label class="control-label" for="options"> <?=trans('Options')?></label>
 											<input type="text" name="options<?=$item->id?>" value="<?=$item->options?>" id="options<?=$item->id?>">
 										<a class="btn btn-default btn-sm btn-small remove"><span class="icon-trash"><input type="hidden" value="<?=$item->id?>" class="remove" name="remove"></span></a>
 										
@@ -103,13 +103,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span>  Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span> Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>
@@ -117,32 +117,32 @@
 </form>
 <div class="hidden" id ="addfield">
 	<li id="formf" class="ui-state-default" name="formf" value="formf">
-		<label class="control-label" for="name">Fild name</label>
+		<label class="control-label" for="name"><?=trans('FildName')?></label>
 		<input id="name" type="text" value="" name="name">
 		<div>
-			<label class="control-label" for="mandatory">Mandatory </label>
+			<label class="control-label" for="mandatory"><?=trans('Mandatory')?> </label>
 			<select id="mandatory" name="mandatory"> 
-				<option value="1">No</option>
-		  		<option value="2">Yes</option>
-		  		<option value="3">Only numbers</option>
-		  		<option value="4">Valid email</option>
+				<option value="1"><?=trans('No')?></option>
+		  		<option value="2"><?=trans('Yes')?></option>
+		  		<option value="3"><?=trans('OnlyNumbers')?></option>
+		  		<option value="4"><?=trans('ValidEmail')?></option>
 			</select>
-			<label class="control-label" for="type">Type </label>
+			<label class="control-label" for="type"><?=trans('Type')?> </label>
 			<select id="type" name="type"> 
-				<option value="1">Input field</option>
-				<option value="2">Text area</option>
-				<option value="3">Select</option>
-				<option value="4">Radio</option>
-				<option value="5">Upload</option>
-				<option value="6">Checkbox</option>
+				<option value="1"><?=trans('InputField')?></option>
+				<option value="2"><?=trans('TextArea')?></option>
+				<option value="3"><?=trans('Select')?></option>
+				<option value="4"><?=trans('Radio')?></option>
+				<option value="5"><?=trans('Upload')?></option>
+				<option value="6"><?=trans('Checkbox')?></option>
 			</select>
 		</div>		
-		<label class="control-label" for="options"> Options </label>
+		<label class="control-label" for="options"> <?=trans('Options')?> </label>
 		<input  id="options" type="text" name="options" value="">
 		<a class="btn btn-default btn-sm btn-small remove">
 			<span class="icon-trash">
 			</span>
-		</a>									
+		</a>
 	</li>
 </div>
 

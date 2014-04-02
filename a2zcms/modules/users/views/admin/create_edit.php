@@ -1,7 +1,7 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -14,7 +14,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('name', 'Name', (isset($content['user_edit']->name))?$content['user_edit']->name:"", 'form-control');
+						$this -> form_builder -> text('name', trans('FirstName'), (isset($content['user_edit']->name))?$content['user_edit']->name:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -23,7 +23,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('surname', 'Surname', (isset($content['user_edit']->surname))?$content['user_edit']->surname:"", 'form-control');
+						$this -> form_builder -> text('surname', trans('LastName'), (isset($content['user_edit']->surname))?$content['user_edit']->surname:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -32,7 +32,7 @@
 			<div class="form-group">
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('username', 'Username', (isset($content['user_edit']->username))?$content['user_edit']->username:"", 'form-control');
+						$this -> form_builder -> text('username', trans('Username'), (isset($content['user_edit']->username))?$content['user_edit']->username:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -42,7 +42,7 @@
 			<div class="form-group">				
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('email', 'Email', (isset($content['user_edit']->email))?$content['user_edit']->email:"", 'form-control');
+						$this -> form_builder -> text('email', trans('Email'), (isset($content['user_edit']->email))?$content['user_edit']->email:"", 'form-control');
 					?>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 			<div class="form-group">								
 				<div class="col-lg-12">
 					<?
-						$this -> form_builder -> password('password', 'Password', "", 'form-control');
+						$this -> form_builder -> password('password', trans('Password'), "", 'form-control');
 					?>
 				</div>
 			</div>
@@ -63,10 +63,10 @@
 				<div class="col-lg-12">
 					<?php
 						$radios = '';
-						$radios[] = (object) array('id' => 0, 'name' => 'Yes');
-						$radios[] = (object) array('id' => 1, 'name' => 'No');
+						$radios[] = (object) array('id' => 0, 'name' => trans('Yes'));
+						$radios[] = (object) array('id' => 1, 'name' => trans('No'));
 					
-						$this -> form_builder -> radio('confirm', 'Activate User?', $radios, (isset($content['page_edit']->active))?$content['page_edit']->active:"1", 'form-control');							
+						$this -> form_builder -> radio('confirm', trans('ActivateUser'), $radios, (isset($content['page_edit']->active))?$content['page_edit']->active:"1", 'form-control');							
 					?>	
 				</div>
 			</div>
@@ -74,7 +74,7 @@
 
 			<!-- Groups -->
 			<div class="form-group {{{ $errors->has('roles') ? 'error' : '' }}}">
-				<label class="col-md-2 control-label" for="roles">Roles</label>
+				<label class="col-md-2 control-label" for="roles"><?=trans('Roles')?></label>
 				<div class="col-md-6">
 					<select name="roles[]" id="roles" multiple style="width:350px;" >
 						<?php
@@ -87,8 +87,7 @@
 							
 						?>
 					</select>
-
-					<span class="help-block">Select a group to assign to the user, remember that a user takes on the permissions of the group they are assigned.  </span>
+					<span class="help-block"><?=trans('RolesInfo')?> </span>
 				</div>
 			</div>
 			<!-- ./ groups -->
@@ -103,13 +102,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>

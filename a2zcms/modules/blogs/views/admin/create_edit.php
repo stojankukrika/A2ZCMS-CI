@@ -1,10 +1,10 @@
 <!-- Tabs -->
 <ul class="nav nav-tabs">
 	<li class="active">
-		<a href="#tab-general" data-toggle="tab">General</a>
+		<a href="#tab-general" data-toggle="tab"><?=trans('General')?></a>
 	</li>	
 	<li class="">
-		<a href="#tab-dates" data-toggle="tab">Publish date</a>
+		<a href="#tab-dates" data-toggle="tab"><?=trans('PublishDate')?></a>
 	</li>
 </ul>
 <!-- ./ tabs -->
@@ -17,7 +17,7 @@
 			<div class="form-group">				
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('title', 'Title', isset($content['blog_edit']->title)?$content['blog_edit']->title:"", 'form-control');
+					$this -> form_builder -> text('title', trans('Title'), isset($content['blog_edit']->title)?$content['blog_edit']->title:"", 'form-control');
 				?>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('resource_link', 'Resource link', isset($content['blog_edit']->resource_link)?$content['blog_edit']->resource_link:"", 'form-control');
+					$this -> form_builder -> text('resource_link', trans('ResourceLink'), isset($content['blog_edit']->resource_link)?$content['blog_edit']->resource_link:"", 'form-control');
 				?>
 				</div>
 			</div>
@@ -34,14 +34,14 @@
 			<!-- Show image -->
 			<div class="form-group">
 				<div class="col-lg-12">
-					<label class="control-label" for="image">Image</label>
+					<label class="control-label" for="image"><?=trans('Image')?></label>
 					<input name="image" type="file" class="uploader" id="image" value="Upload" /> 
 				</div>
 			</div>
 			<!-- ./ show image -->
 			<!-- category -->
 			<div class="form-group">
-				<label class="col-md-2 control-label" for="category">Category</label>
+				<label class="col-md-2 control-label" for="category"><?=trans('Category')?></label>
 				<div class="col-md-6">
 					<select name="category[]" id="category" multiple style="width:350px;" >
 						<?php						
@@ -64,7 +64,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> textarea('content', 'Content', isset($content['blog_edit']->content)?$content['blog_edit']->content:"", 'wysihtml5');
+					$this -> form_builder -> textarea('content', trans('Content'), isset($content['blog_edit']->content)?$content['blog_edit']->content:"", 'wysihtml5');
 				?>
 				</div>
 			</div>
@@ -77,7 +77,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('start_publish', 'Start publish', isset($content['blog_edit']->start_publish)?$content['blog_edit']->start_publish:"", 'form-control');
+					$this -> form_builder -> text('start_publish', trans('StartPublish'), isset($content['blog_edit']->start_publish)?$content['blog_edit']->start_publish:"", 'form-control');
 				?>
 				</div>
 			</div>
@@ -87,7 +87,7 @@
 			<div class="form-group">
 				<div class="col-md-12">
 				<?
-					$this -> form_builder -> text('end_publish', 'End publish', isset($content['blog_edit']->end_publish)?$content['blog_edit']->end_publish:"", 'form-control');
+					$this -> form_builder -> text('end_publish', trans('EndPublish'), isset($content['blog_edit']->end_publish)?$content['blog_edit']->end_publish:"", 'form-control');
 				?>
 				</div>
 			</div>
@@ -99,13 +99,13 @@
 	<div class="form-group">
 		<div class="col-md-12">
 			<button type="reset" class="btn btn-warning close_popup">
-				<span class="icon-remove"></span> Cancel
+				<span class="icon-remove"></span> <?=trans('Cancel')?>
 			</button>
 			<button type="reset" class="btn btn-default">
-				<span class="icon-refresh"></span> Reset
+				<span class="icon-refresh"></span> <?=trans('Reset')?>
 			</button>
 			<button type="submit" class="btn btn-success">
-				<span class="icon-ok"></span>Save
+				<span class="icon-ok"></span><?=trans('Save')?>
 			</button>
 		</div>
 	</div>

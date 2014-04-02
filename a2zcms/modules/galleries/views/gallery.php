@@ -25,7 +25,7 @@
 		<div class="page-header">
 		<h3><?=$gallery->title?></h3>
 	</div>
-         <p><i class="icon-time"></i> Posted on 
+         <p><i class="icon-time"></i> <?=trans('PostedOn')?> 
          	<?=$gallery->created_at;?> by <?=$gallery->fullname;?></p>
           <hr> 
     <div class="row"> 

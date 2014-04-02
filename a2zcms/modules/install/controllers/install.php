@@ -25,8 +25,8 @@ class Install extends CI_Controller {
 	{
         $data = array();
 
-        $this->form_validation->set_rules('accept', 'Agree to License', 'trim|required');
-        $this->form_validation->set_message('required', 'You must agree to the license before you can install A2Z CMS!');
+        $this->form_validation->set_rules('accept', trans('AgreeToLicense'), 'trim|required');
+        $this->form_validation->set_message('required', trans('AgreeToLicenceDesc'));
 
         if ($this->form_validation->run())
         {
@@ -34,19 +34,19 @@ class Install extends CI_Controller {
         }
 
         $data['content'] = $this->load->view('install/step1', $data, TRUE);
-		$data['title'] = "Installer | Step 1 of 5";
+		$data['title'] = trans("Installer").' | '.trans("Step").' 1 '.trans("Of").' 5';
         $this->load->view('install/global', $data);
 	}
 	private function validate()
     {
         if ( ! is_writable(CMS_ROOT . 'config/config.php'))
         {
-            $this->errors[] =  CMS_ROOT . 'config/config.php is not writable.';
+            $this->errors[] =  CMS_ROOT . 'config/config.php '.trans('is not writable.');
         }
 
         if ( ! is_writable(CMS_ROOT . 'config/database.php'))
         {
-            $this->errors[] =  CMS_ROOT . 'config/database.php is not writable.';
+            $this->errors[] =  CMS_ROOT . 'config/database.php '.trans('is not writable.');
         }
 
         $writable_dirs = $this->writable_dirs;
@@ -54,33 +54,33 @@ class Install extends CI_Controller {
         {
             if ( ! $is_writable)
             {
-                $this->errors[] = CMS_ROOT .'../'. $path . ' is not writable.';
+                $this->errors[] = CMS_ROOT .'../'. $path .trans('is not writable.');
             }
         }
 
         if (phpversion() < '5.1.6')
         {
-            $this->errors[] = 'You need to use PHP 5.1.6 or greater.';
+            $this->errors[] = trans('YouNeedToUse').' PHP 5.1.6 '.trans('OrGreater');
         }
 
         if ( ! ini_get('file_uploads'))
         {
-            $this->errors[] = 'File uploads need to be enabled in your PHP configuration.';
+            $this->errors[] = trans('FileUploadsInfo');
         }
 
         if ( ! extension_loaded('mysql'))
         {
-            $this->errors[] = 'The PHP MySQL extension is required.';
+            $this->errors[] = trans('MysqlExtension');
         }
 
         if ( ! extension_loaded('gd'))
         {
-            $this->errors[] = 'The PHP GD extension is required.';
+            $this->errors[] = trans('GDExtension');
         }
 
         if ( ! extension_loaded('curl'))
         {
-            $this->errors[] = 'The PHP cURL extension is required.';
+            $this->errors[] = trans('CurlExtension');
         }
 
         if (empty($this->errors))
@@ -126,7 +126,7 @@ class Install extends CI_Controller {
         $data['writable_dirs'] = $this->writable_dirs;
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step2', $data, TRUE);
-        $data['title'] = "Installer | Step 2 of 5";
+        $data['title'] = trans("Installer").' | '.trans("Step").' 2 '.trans("Of").' 5';
         $this->load->view('install/global', $data);
 	}
 	
@@ -135,12 +135,12 @@ class Install extends CI_Controller {
     {
         $data = array();
 
-        $this->form_validation->set_rules('hostname', 'Database Host', 'trim|required');
-        $this->form_validation->set_rules('username', 'Database Username', 'trim|required');
-        $this->form_validation->set_rules('password', 'Database Password', 'trim');
-        $this->form_validation->set_rules('database', 'Database Name', 'trim|required');
-        $this->form_validation->set_rules('port', 'Database Port', 'trim|required');
-        $this->form_validation->set_rules('prefix', 'Database Prefix', 'trim');
+        $this->form_validation->set_rules('hostname', trans('DatabaseHost'), 'trim|required');
+        $this->form_validation->set_rules('username', trans('DatabaseUsername'), 'trim|required');
+        $this->form_validation->set_rules('password', trans('DatabasePassword'), 'trim');
+        $this->form_validation->set_rules('database', trans('DatabaseName'), 'trim|required');
+        $this->form_validation->set_rules('port', trans('DatabasePort'), 'trim|required');
+        $this->form_validation->set_rules('prefix', trans('DatabasePrefix'), 'trim');
         
         if ($this->form_validation->run())
         {
@@ -178,7 +178,7 @@ class Install extends CI_Controller {
 
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step3', $data, TRUE);
-		$data['title'] = "Installer | Step 3 of 5";
+		$data['title'] = trans("Installer").' | '.trans("Step").' 3 '.trans("Of").' 5';
         $this->load->view('install/global', $data);
     }
 
@@ -187,12 +187,12 @@ class Install extends CI_Controller {
 	{
 		$data = array();
 
-        $this->form_validation->set_rules('first_name', 'First name', 'trim|required');
-        $this->form_validation->set_rules('last_name', 'Last Name', 'trim|required');
-        $this->form_validation->set_rules('username', 'Username', 'trim|required');
-        $this->form_validation->set_rules('email', 'Email', 'trim|required|valid_email');
-		$this->form_validation->set_rules('admin_password', 'Password', 'trim|required|min_length[5]');
-        $this->form_validation->set_rules('confirm_admin_password', 'Confirm Password', 'trim|required|matches[admin_password]');
+        $this->form_validation->set_rules('first_name',  trans('FirstName'), 'trim|required');
+        $this->form_validation->set_rules('last_name',  trans('LastName'), 'trim|required');
+        $this->form_validation->set_rules('username',  trans('Username'), 'trim|required');
+        $this->form_validation->set_rules('email',  trans('Email'), 'trim|required|valid_email');
+		$this->form_validation->set_rules('admin_password',  trans('Password'), 'trim|required|min_length[5]');
+        $this->form_validation->set_rules('confirm_admin_password',  trans('ConfirmPassword'), 'trim|required|matches[admin_password]');
       	
 		
         if ($this->form_validation->run())
@@ -244,17 +244,17 @@ class Install extends CI_Controller {
         }
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step4', $data, TRUE);
-		$data['title'] = "Installer | Step 4 of 5";
+		$data['title'] = trans("Installer").' | '.trans("Step").' 4 '.trans("Of").' 5';
         $this->load->view('install/global', $data);
 	}
 	public function step5()
 	{
 		$data = array();
 
-        $this->form_validation->set_rules('title', 'Site Name', 'trim|required');
-        $this->form_validation->set_rules('theme', 'Site theme', 'trim|required');
-		$this->form_validation->set_rules('per_page', 'Posts per page', 'trim|required');
-      	$this->form_validation->set_rules('pageitemadmin', 'Posts per page-Admin', 'trim|required');
+        $this->form_validation->set_rules('title', trans('SiteName'), 'trim|required');
+        $this->form_validation->set_rules('theme', trans('SiteTheme'), 'trim|required');
+		$this->form_validation->set_rules('per_page', trans('PostsPerPage'), 'trim|required');
+      	$this->form_validation->set_rules('pageitemadmin', trans('PostsPerPageAdmin'), 'trim|required');
 		
         if ($this->form_validation->run())
         {
@@ -298,7 +298,7 @@ class Install extends CI_Controller {
 		$data = array();
 		$data['errors'] = $this->errors;
 		$data['content'] = $this->load->view('install/complite', $data, TRUE);
-		$data['title'] = "Installer | Complite";
+		$data['title'] = trans("Installer").' | '.trans("Complite");
         $this->load->view('install/global', $data);
 	}
 }

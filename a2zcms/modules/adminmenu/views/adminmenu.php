@@ -29,21 +29,21 @@
 									?>
 							</div>
 							<div class="user">
-								<span class="hello">Welcome!</span>
+								<span class="hello"><?=trans('Welcome1')?></span>
 								<span class="name"><?=$currentuser->name;?> <?=$currentuser->surname?></span>
 							</div> </a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="<?=base_url()?>"><i class="icon-home"></i> Back to website</a>
+									<a href="<?=base_url()?>"><i class="icon-home"></i> <?=trans('BackToWebsite')?></a>
 								</li>
 								<li>
-									<a href="<?=base_url('users/account')?>"><i class="icon-cog"></i> Edit profile</a>
+									<a href="<?=base_url('users/account')?>"><i class="icon-cog"></i> <?=trans('ChangeProfile')?></a>
 								</li>
 								<li>
-									<a href="<?=base_url('users/messages')?>"><i class="icon-envelope"></i> Messages</a>
+									<a href="<?=base_url('users/messages')?>"><i class="icon-envelope"></i> <?=trans('Messages')?></a>
 								</li>
 								<li>
-									<a href="<?=base_url('users/logout')?>"><i class="icon-road icon-white"></i> Logout</a>
+									<a href="<?=base_url('users/logout')?>"><i class="icon-road icon-white"></i> <?=trans('Logout')?></a>
 								</li>
 							</ul>
 						</li>

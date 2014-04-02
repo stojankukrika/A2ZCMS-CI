@@ -22,7 +22,7 @@
 		}
 		?>
 		<? if($this->session->userdata('logged_in')){ ?>
-   	<h4>Welcome <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
+   	<h4><?=trans('Welcome')?> <?=$this->session->userdata('name').' '.$this->session->userdata('surname')?></h4>
    		div class="row">
   		<div class="col-md-4">
 			<? if($this->session->userdata('avatar')!=""){
@@ -42,19 +42,19 @@
 		<? if($this->session->userdata('admin_logged_in')){
 		?>
 		<li>
-			<a href="<?=base_url('admin/plugins/dashboard')?>">Admin panel</a>
+			<a href="<?=base_url('admin/plugins/dashboard')?>"><?=trans('AdminPanel')?></a>
 		</li>
 		<? } ?>
 		<li>
-			<a href="<?=base_url('users/messages')?>">Messages</a>
+			<a href="<?=base_url('users/messages')?>"><?=trans('Messages')?></a>
 		</li>
 		<li>
-			<a href="<?=base_url('users/account')?>">Edit profile</a>
+			<a href="<?=base_url('users/account')?>"><?=trans('ChangeProfile')?></a>
 		</li>
 		<li>
 			<a href="<?=base_url('users/logout')?>">
 				<button tabindex="3" type="submit" class="btn btn-danger">
-						Logout
+						<?=trans('Logout')?>
 					</button></a>
 		</li>
 		</ul>
@@ -67,21 +67,21 @@
 				<div class="form-group">					
 					<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('email', 'Username or email', "", 'form-control');
+						$this -> form_builder -> text('email', trans('UsernameOrEmail'), "", 'form-control');
 					?>
 					</div>
 				</div>
 				<div class="form-group">
 					<div class="col-lg-12">
 					<?
-						$this -> form_builder -> password('password', 'Password', "", 'form-control');
+						$this -> form_builder -> password('password', trans('Password'), "", 'form-control');
 					?>
 					</div>
 				</div>			
 				<div class="form-group">
 					<div class="col-md-offset-2 col-md-10">
 						<div class="checkbox">
-							<label for="remember">Remember me
+							<label for="remember"><?=trans('RememberMe');?>
 								<input type="hidden" name="remember" value="0">
 								<input tabindex="4" type="checkbox" name="remember" id="remember" value="1">
 							</label>
@@ -96,18 +96,18 @@
 			<?php endif; ?>		
 				<p>
 					<button tabindex="3" type="submit" class="btn btn-primary">
-						Submit
+						<?=trans('Login');?>
 					</button>
-					<a class="btn btn-success" href="<?=base_url('users/forgot');?>">Forgot password</a>
+					<a class="btn btn-success" href="<?=base_url('users/forgot');?>"><?=trans('ForgotPassword');?></a>
 				</p>
 			</fieldset>
 		</form>	
-	    <h4>Need an account</h4>
+	    <h4><?=trans('NeedAnAccount');?></h4>
 			<p>
-				Create an account here?
+				<?=trans('CreateAnAccountHere')?>
 			</p>
 			<p>
-				<a href="<?=base_url('users/register');?>" class="btn btn-info">Create account</a>
+				<a href="<?=base_url('users/register');?>" class="btn btn-info"><?=trans('CreateAccount')?></a>
 			</p>
 		<? } ?>
 		<?php	echo '</div>';

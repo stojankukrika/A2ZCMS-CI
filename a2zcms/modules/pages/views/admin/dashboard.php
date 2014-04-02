@@ -1,24 +1,24 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Page Management </h1>
+			<h1><?=trans('PageManagement')?> </h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/pages/create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create')?></a>
 		</div>
 		<?php if (!empty($content['page'])) { ?>
    
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Title</th>
-	          <th>Status</th>
-	          <th>Votes</th>
-	          <th>Hits</th>
-	          <th>Sidebar Position</th>
-	          <th>Created at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Title')?></th>
+	          <th><?=trans('Create')?></th>
+	          <th><?=trans('Votes')?></th>
+	          <th><?=trans('Hits')?></th>
+	          <th><?=trans('SidebarPosition')?></th>
+	          <th><?=trans('CreatedAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>
@@ -28,7 +28,7 @@
 					<td>'.(($item->status=='1')?'<i class="icon-eye-open"></i>':'<i class="icon-eye-close"></i>').'</td>
 					<td>'.($item->voteup - $item->votedown).'</td>
 					<td>'.$item->hits.'</td>
-					<td>'.(($item->sidebar=='1')?'Right':'Left').'</td>
+					<td>'.(($item->sidebar=='1')?trans('Right'):trans('Left')).'</td>
 					<td>'.$item->created_at.'</td>
 					<td class="">      
 						<a class="btn btn-link btn-sm" href="'.base_url("admin/pages/change/".$item->id).'"><i class="icon-exchange"></i></a>        
@@ -44,7 +44,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

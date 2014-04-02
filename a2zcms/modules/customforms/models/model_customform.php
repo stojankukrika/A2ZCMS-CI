@@ -23,7 +23,7 @@ class Model_customform extends CI_Model {
         if ($query->num_rows() > 0) {
             foreach ($query->result() as $row) {
             	$row->countfields = $this->db->where(array('deleted_at' => NULL))
-												->where('customform_id',$row->id)
+												->where('custom_form_id',$row->id)
             									->count_all_results("custom_form_fields");
                 $data[] = $row;
             }

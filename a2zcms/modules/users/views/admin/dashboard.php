@@ -1,7 +1,7 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>List of users</h1>
+			<h1><?=trans('ListOfUsers')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/users/create")?>">
@@ -12,15 +12,15 @@
 		<table class="table table-hover">
 			<thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Active</th>
-          <th>Confirmed</th>
-          <th>Last login</th>
-          <th>Created at</th>          
-          <th>Actions</th>
+          <th><?=trans('FirstName')?></th>
+          <th><?=trans('LastName')?></th>
+          <th><?=trans('Username')?></th>
+          <th><?=trans('Email')?></th>
+          <th><?=trans('Active')?></th>
+          <th><?=trans('Confirmed')?></th>
+          <th><?=trans('LastLogin')?></th>
+          <th><?=trans('CreatedAt')?></th>
+	      <th><?=trans('Actions')?></th>
         </tr>
       </thead>
       <tbody>
@@ -50,7 +50,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>

@@ -35,7 +35,7 @@
 				<div class="form-group">
 					<div class="col-lg-12">
 					<?
-						$this -> form_builder -> text('name', 'Name', "", 'form-control');
+						$this -> form_builder -> text('name', trans('FirstName'), "", 'form-control');
 					?>
 					</div>
 					</div>
@@ -43,7 +43,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('surname', 'Surname', "", 'form-control');
+							$this -> form_builder -> text('surname', trans('LastName'), "", 'form-control');
 						?>
 						</div>
 					</div>		
@@ -51,7 +51,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('username', 'Username', "", 'form-control');
+							$this -> form_builder -> text('username', trans('Username'), "", 'form-control');
 						?>
 						</div>
 					</div>	
@@ -59,7 +59,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> text('email', 'Email', "", 'form-control');
+							$this -> form_builder -> text('email', trans('Email'), "", 'form-control');
 						?>
 						</div>
 					</div>
@@ -67,7 +67,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> password('password', 'Password', "", 'form-control');
+							$this -> form_builder -> password('password', trans('Password'), "", 'form-control');
 						?>
 						</div>
 					</div>
@@ -75,7 +75,7 @@
 					<div class="form-group">
 						<div class="col-lg-12">
 						<?
-							$this -> form_builder -> password('confirm_password', 'Confirm password', "", 'form-control');
+							$this -> form_builder -> password('confirm_password', trans('ConfirmPassword'), "", 'form-control');
 						?>
 						</div>
 					</div>
@@ -83,7 +83,7 @@
 					<div class="form-group">
 						<div class="col-md-offset-2 col-md-10">
 							<button class="btn btn-primary" type="submit" tabindex="3">
-								Create new account				
+								<?=trans('CreateAccount')?>			
 							</button>
 						</div>
 					</div>

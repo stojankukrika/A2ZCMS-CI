@@ -1,21 +1,21 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
 		<div class="page-header">
-			<h1>Navigation group Management</h1>
+			<h1><?=trans('NavigationGroupManagement')?></h1>
 		</div>
 		<div class="pull-right">
 			<a class="btn btn-small btn-info iframe cboxElement" href="<?=base_url("admin/pages/navigationgroups_create")?>">
-				<span class="icon-plus-sign icon-white"></span> Create</a>
+				<span class="icon-plus-sign icon-white"></span> <?=trans('Create')?></a>
 		</div>
 		<?php if (!empty($content['navigationgroup'])) { ?>
    
     <table class="table table-hover">
 		<thead>
 	        <tr>
-	          <th>Title</th>
-	          <th>Slug</th>
-	          <th>Created at</th>
-	          <th>Actions</th>
+	          <th><?=trans('Title')?></th>
+	          <th><?=trans('Slug')?></th>
+	         <th><?=trans('CreatedAt')?></th>
+	          <th><?=trans('Actions')?></th>
 	        </tr>
       	</thead>
       	<tbody>
@@ -37,7 +37,7 @@
     </div>
 <?php } else { ?>
     <div class="item_list_empty">
-        No items found. 
+        <?=trans('NoItemsFound')?>
     </div>
 <?php } ?>
 	</div>
