@@ -10,6 +10,7 @@ class Admin extends Administrator_Controller {
 
 	function __construct()
 	{
+		$this->load->language('customforms', $this->session->userdata('lang'));
 		parent::__construct();	
 		$this->load->model(array("Model_customform","Model_customform_field"));		
 	}
@@ -206,7 +207,7 @@ class Admin extends Administrator_Controller {
 					  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
 					  `deleted_at` timestamp NULL DEFAULT NULL,
 					  PRIMARY KEY (`id`),
-					  KEY `custom_form_fields_customform_id_index` (`customform_id`),
+					  KEY `custom_form_fields_customform_id_index` (`custom_form_id`),
 					  KEY `custom_form_fields_user_id_index` (`user_id`)
 					) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;";
 			$this->db->query($query);
@@ -217,7 +218,7 @@ class Admin extends Administrator_Controller {
 			
 			$query = "ALTER TABLE `".$database->dbprefix."custom_form_fields`
 					  ADD CONSTRAINT `custom_form_fields_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `".$database->dbprefix."users` (`id`) ON DELETE CASCADE,
-					  ADD CONSTRAINT `custom_form_fields_customform_id_foreign` FOREIGN KEY (`customform_id`) REFERENCES `".$database->dbprefix."custom_forms` (`id`) ON DELETE CASCADE;";
+					  ADD CONSTRAINT `custom_form_fields_customform_id_foreign` FOREIGN KEY (`custom_form_id`) REFERENCES `".$database->dbprefix."custom_forms` (`id`) ON DELETE CASCADE;";
 			$this->db->query($query);
 			
 			/*add to plugins*/

@@ -12,6 +12,7 @@ class Customforms extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
+		$this->load->language('customforms', $this->session->userdata('lang'));
 		$this->load->model(array("Model_customform","Model_customform_field","Model_content_vote"));
 		$this->pagecontent = Website_Controller::createSiderContent(0);
     }

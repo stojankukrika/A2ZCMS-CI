@@ -11,6 +11,7 @@ class Polls extends Website_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->language('polls', $this->session->userdata('lang'));
 		$this->load->model(array("Model_poll"));
 	}
 

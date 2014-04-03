@@ -11,6 +11,7 @@ class Admin extends Administrator_Controller {
 	function __construct()
 	{
 		parent::__construct();
+		$this->load->language('todolist', $this->session->userdata('lang'));
 		$this->load->model(array("Model_todolist"));
 		
 	}

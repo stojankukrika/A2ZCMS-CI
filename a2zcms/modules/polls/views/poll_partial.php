@@ -21,7 +21,7 @@ if(!empty($poll)){
 		     <div class="form-group">
 				<div class="col-md-12">
 					<button type="submit" class="btn btn-success">
-						<span class="icon-ok"></span>Vote
+						<span class="icon-ok"></span><?=trans('Vote')?>
 					</button>
 				</div>
 			</div>

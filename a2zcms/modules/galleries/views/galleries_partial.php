@@ -1,4 +1,4 @@
-<h4>New galeries</h4>
+<h4><?=trans('NewGaleries')?></h4>
   <div class="row">
     <div class="col-lg-12">
       <ul class="list-unstyled">

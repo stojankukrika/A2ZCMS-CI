@@ -12,7 +12,8 @@ class Galleries extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-    	$this->load->model(array("Model_gallery","Model_gallery_image","Model_gallery_image_comment","Model_content_vote"));
+    	$this->load->language('galleries', $this->session->userdata('lang'));
+		$this->load->model(array("Model_gallery","Model_gallery_image","Model_gallery_image_comment","Model_content_vote"));
 		$this->pagecontent = Website_Controller::createSiderContent(0);
 	}
 	/*function for plugins*/

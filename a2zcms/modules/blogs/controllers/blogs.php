@@ -12,7 +12,8 @@ class Blogs extends Website_Controller{
 	function __construct()
     {
         parent::__construct();
-        $this->load->model(array("Model_blog","Model_blog_category","Model_blog_comment","Model_content_vote"));
+        $this->load->language('blogs', $this->session->userdata('lang'));
+		$this->load->model(array("Model_blog","Model_blog_category","Model_blog_comment","Model_content_vote"));
 		$this->pagecontent = Website_Controller::createSiderContent(0);
 	
     }

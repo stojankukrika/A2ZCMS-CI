@@ -113,8 +113,6 @@ $lang['Logout'] = "Logout";
 /*************************************************************************************/
 /*								ADMIN LANGUAGE										*/
 /***********************************************************************************/
-
-
 $lang['UninstallQuestion'] = "Do you want do uninstall this plugin?";
 $lang['Cancel'] = "Cancel";
 $lang['Uninstall'] = "Uninstall";
@@ -157,61 +155,6 @@ $lang['Settings'] = "Settings";
 $lang['Welcome'] = "Welcome";
 $lang['Welcome1'] = "Welcome!";
 $lang['BackToWebsite'] = "Back to website";
-
-/*
- * blogs
- */
-$lang['ListOfBlogComments'] = "List of blog comments";
-$lang['ListOfBlogCategories'] = "List of blog categories";
-$lang['ListOfBlogs'] = "List of blogs";
-$lang['PublishDate'] = "Publish date";
-$lang['ResourceLink'] = "Resource link";
-$lang['Image'] = "Image";
-$lang['Category'] = "Category";
-$lang['StartPublish'] = "Start publish";
-$lang['EndPublish'] = "End publish";
-$lang['Comments'] = "Comments";
-$lang['Comment'] = "Comment";
-
-/*
- * custom forms
- * */
-$lang['CustomFormManagement'] = "Custom Form Management";
-$lang['Fields'] = "Fields";
-$lang['Recievers'] = "Recievers";
-$lang['RecieversDesc'] = "Disassemble the different recievers ​​with a semicolon";
-$lang['Message'] = "Message";
-$lang['AddFiled'] = "Add filed";
-$lang['AddFiledDesc'] = "Disassemble the different values in options ​​with a semicolon";
-$lang['FildName'] = "Fild name";
-$lang['Mandatory'] = "Mandatory";
-$lang['No'] = "No";
-$lang['Yes'] = "Yes";
-$lang['OnlyNumbers'] = "Only numbers";
-$lang['ValidEmail'] = "Valid email";
-$lang['Type'] = "Type";
-$lang['InputField'] = "Input field";
-$lang['TextArea'] = "Text area";
-$lang['Select'] = "Select";
-$lang['Radio'] = "Radio";
-$lang['Upload'] = "Upload";
-$lang['Checkbox'] = "Checkbox";
-$lang['Options'] = "Options";
-$lang['OfFields'] = "of Fields";
-
-/*
- * galleries
- * */
-$lang['GalleriesManagement'] = "Galleries Management";
-$lang['GalleriesImageComments'] = "Galleries Image Comments";
-$lang['GalleriesImages'] = "Galleries Images";
-$lang['GalleriesImageManagement'] = "Galleries Image Management";
-$lang['ChooseGallery'] = "Choose gallery";
-$lang['Views'] = "Views";
-$lang['OfImages'] = "of Images";
-$lang['OfComments'] = "of Comments";
-$lang['Gallery'] = "Gallery";
-$lang['UploadYourImages'] = "Upload your images";
 
 /*
  * menu
@@ -277,16 +220,6 @@ $lang['PluginsInfo'] = "* Reorder plugins causes a change in the admin navigatio
 							they can access to that plugin. User get that roles after first login to website.";
 
 /*
- * polls
- * */
-$lang['PollsManagement'] = "Polls Management";
-$lang['NotActive'] = "Not active";
-$lang['AnswerTitle'] = "Answer title";
-$lang['ResultsOfPoll'] = "Results of voting in poll";
-$lang['Percentage'] = "Percentage";
-$lang['Answer'] = "Answer";
-
-/*
  * roles
  * */
 $lang['OfUsers'] = "of Users";
@@ -294,12 +227,6 @@ $lang['ChooseRole'] = "Choose role";
 $lang['UserRole'] = "User role";
 $lang['AdminRole'] = "Admin role";
 $lang['RoleMenagement'] = "Role";
-
-/*
- * todolist
- * */
-$lang['Finished'] = "Finished";
-$lang['Work'] = "Work";
 
 /*
  * users

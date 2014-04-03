@@ -187,8 +187,6 @@ $config['ui_langs'] = array(
     'sr' => 'Српски',
     'sr1' => 'Srpski',
     'en' => 'Engish',
-    'hr' => 'Hrvatski',
-    'bs' => 'Bosanski',
 );
 
 // end of file(filename)
