@@ -8,7 +8,7 @@
 				<h2><i class="icon-th"></i><span class="break"></span>'.trans('SettingsManagement').'</h2>
 				<ul id="myTab" class="nav tab-menu nav-tabs">';
 			foreach ($content['settingsgroup'] as $group) {
-				echo '<li><a href="#' . $group -> groupname . '">' . ucfirst($group -> groupname) . '</a></li>';
+				echo '<li><a href="#' . $group -> groupname . '">' . trans(ucfirst($group -> groupname)) . '</a></li>';
 			}
 			echo '</ul>
 			</div>
@@ -21,19 +21,19 @@
 							<div class="col-md-12">';
 					switch ($item->type) {
 						case 'text' :							
-							$this -> form_builder -> text($item -> varname, $item -> vartitle, $item -> value, 'form-control');
+							$this -> form_builder -> text($item -> varname, trans($item -> vartitle), $item -> value, 'form-control');
 							break;
 						case 'textarea' :
-							$this -> form_builder -> textarea($item -> varname, $item -> vartitle, $item -> value, 'form-control');
+							$this -> form_builder -> textarea($item -> varname, trans($item -> vartitle), $item -> value, 'form-control');
 							break;
 						case 'radio' :
 							$variables = explode(";", $item -> defaultvalue);
 							$radios = array();
 
 							foreach ($variables as $variable) {
-								$radios[] = (object) array('id' => $variable, 'name' => $variable);
+								$radios[] = (object) array('id' => $variable, 'name' => trans($variable));
 							}
-							$this -> form_builder -> radio($item -> varname, $item -> vartitle, $radios, $item -> value, 'form-control');
+							$this -> form_builder -> radio($item -> varname, trans($item -> vartitle), $radios, $item -> value, 'form-control');
 							break;
 						case 'option' :
 							$options = array();
@@ -45,23 +45,23 @@
 							} else {
 								$variables = explode(";", $item -> defaultvalue);
 								foreach ($variables as $variable) {
-									$options[] = (object) array('id' => $variable, 'name' => $variable);
+									$options[] = (object) array('id' => $variable, 'name' => trans($variable));
 								}
 							}
-							$this -> form_builder -> option($item -> varname, $item -> vartitle, $options, $item -> value, 'form-control');
+							$this -> form_builder -> option($item -> varname, trans($item -> vartitle), $options, $item -> value, 'form-control');
 							break;
 						case 'checkbox' :
 							$variables = explode(";", $item -> defaultvalue);
 							$checkboxes = array();
 							foreach ($variables as $variable) {
-								$checkboxes[] = (object) array('id' => $variable, 'name' => $variable);
+								$checkboxes[] = (object) array('id' => $variable, 'name' => trans($variable));
 							}
-							$this -> form_builder -> checkboxes($item -> varname, $item -> vartitle, $checkboxes, $item -> value, 'form-control');
+							$this -> form_builder -> checkboxes($item -> varname, trans($item -> vartitle), $checkboxes, $item -> value, 'form-control');
 							break;
 						case 'password' :
-							$this -> form_builder -> password($item -> varname, $item -> vartitle, $item -> value, 'form-control');
+							$this -> form_builder -> password($item -> varname, trans($item -> vartitle), $item -> value, 'form-control');
 						case 'date' :
-							$this -> form_builder -> date($item -> varname, $item -> vartitle, $item -> value, 'form-control');
+							$this -> form_builder -> date($item -> varname, trans($item -> vartitle), $item -> value, 'form-control');
 					}
 					echo '</div>
 						</div>';

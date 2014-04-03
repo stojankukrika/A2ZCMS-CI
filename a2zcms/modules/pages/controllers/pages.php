@@ -106,6 +106,19 @@ class Pages extends Website_Controller{
 		}		
 		echo $newvalue;
 	}
+
+	public function change_uilang()
+	{
+		$old_lang = @$_SESSION['lang'];
+		$lang = $this->uri->segment(3);
+		if (!valid_lang($lang)) {
+			$lang = DEF_LANG;
+		}
+		$this->session->set_userdata('lang', $lang);
+		
+		$redirect = $this->input->get('return') ? $this->input->get('return') : $_SERVER['HTTP_REFERER'];
+		redirect($redirect);
+	}
 }
 
 ?>

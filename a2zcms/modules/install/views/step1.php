@@ -15,8 +15,8 @@
 <div class="align_right">
     <?php echo form_open(); ?>
         <div class="box">
-            <label><?=trans('IAgree')?> <?php echo form_checkbox(array('name' => 'accept', 'value' => '1')); ?></label>
+            <label><?=trans('IAgree',DEF_LANG)?> <?php echo form_checkbox(array('name' => 'accept', 'value' => '1')); ?></label>
         </div>
-        <input type="submit" name="submit" class="btn save" value="<?=trans('Continue')?>" />
+        <input type="submit" name="submit" class="btn save" value="<?=trans('Continue',DEF_LANG)?>" />
     <?php echo form_close(); ?>
 </div>

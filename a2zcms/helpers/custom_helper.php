@@ -159,7 +159,6 @@ function trans($key, $forceLang = "") {
 	}
 	$lang = $forceLang != "" ? $forceLang : getTransLang();
 
-//	return isset($out) && !empty($out) ? $out : "*** no_trans($key , $lang )***";
 	if(isset($out) && !empty($out)){
 	    return $out;
     } else {

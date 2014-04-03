@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta charset="utf-8">
-		<title>A2Z CMS - <?=trans('Install')?></title>
+		<title>A2Z CMS - <?=trans('Install',DEF_LANG)?></title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<!-- @todo: fill with your company info or remove -->
 		<meta name="description" content="">
@@ -30,7 +30,7 @@
 			<div class="navbar navbar-fixed-top">
 				<div class="navbar-inner">
 					<div class="container">
-						<a class="brand brand-bootbus" href="#"><?=trans('Install')?> A2Z CMS</a>
+						<a class="brand brand-bootbus" href="#"><?=trans('Install',DEF_LANG)?> A2Z CMS</a>
 						<!-- Below button used for responsive navigation -->
 						<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 							<span class="icon-bar"></span>

@@ -72,6 +72,7 @@ $lang['Click'] = "Кликните";
 $lang['ToLogin'] = "за пријаву";
 $lang['Comments'] = "коментара";
 $lang['NumOfVotes'] = "Број гласова";
+$lang['Jezik'] = "Језик";
 /*
  * pages
  * */
@@ -293,11 +294,6 @@ $lang['AdminRole'] = "Улоге администратора";
 $lang['RoleMenagement'] = "Улоге";
 
 /*
- * settings
- * */
-$lang['SettingsManagement'] = "Подешавања сајта";
-
-/*
  * todolist
  * */
 $lang['Finished'] = "Завршено";
@@ -319,5 +315,34 @@ $lang['ActivateUser'] = "Активирајте корисника?";
 $lang['Roles'] = "Улоге";
 $lang['RolesInfo'] = "Одаберите улогу коју желите да додјелите кориснику.";
 $lang['ListOfUsers'] = "Листа корисника";
+
+ 
+ /*
+ * settings
+ * */
+$lang['SettingsManagement'] = "Подешавања сајта";
+$lang['Analytic'] = "Аналитика";
+$lang['Metadata'] = "Метаподаци";
+$lang['Password'] = "Лозинка";
+$lang['Search'] = "Претрага";
+$lang['Analytics'] = "Аналитика";
+$lang['Copyright'] = "Ауторска права";
+$lang['ContactEmail'] = "Контакт емаил";
+$lang['DateFormat'] = "Формат датума";
+$lang['TimeFormat'] = "Формат времена";
+$lang['ConvertToTimeAgo'] = "Конвертовати датум/вријеме у 'xx времена од постављања' стилу";
+$lang['UserAvatarWidth'] = "Ширина корисничког аватара";
+$lang['UserAvatarHeight'] = "Висина корисничког аватара";
+$lang['MetaAuthor'] = "Мта аутор";
+$lang['UseGravatar'] = "Умјесто аватара користити Граватар";
+$lang['Offline'] = "Сајт није доступан";
+$lang['OfflineMessage'] = "Порука када је сајт није доступан";
+$lang['PasswordPolicy'] = "Политика лозинке";
+$lang['PasswordLength'] = "Минимална дужина лозинке";
+$lang['Digits'] = "Број бројева";
+$lang['LowercaseLetters'] = "Малих слова";
+$lang['UppercaseLetters'] = "Великих слова";
+$lang['SearchCode'] = "Код за претрагу сајта";
+
 
 //end of file

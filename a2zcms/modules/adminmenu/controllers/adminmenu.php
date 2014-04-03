@@ -17,6 +17,7 @@ class AdminMenu extends Website_Controller{
 	function head_navigation(){
 		$data['current'] = $this->uri->segment(1);
 		$data['currentuser'] = @$this->users->userdata();
+		$data['langs'] = $this->config->item('ui_langs');
 		$this->load->view("adminmenu",$data);
 	}
 	function left_navigation(){

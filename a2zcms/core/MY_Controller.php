@@ -12,15 +12,11 @@ class MY_Controller extends MX_Controller
 	 function __construct()
 	 {
 	  	parent::__construct();	
-		if( ! isset($_SESSION['lang'])){
-            $_SESSION['lang'] = DEF_LANG;
+		if($this->session->userdata('lang')==""){
+			$this->session->set_userdata('lang',DEF_LANG);
         }
-		
-		$get_lang = $this->input->get('lang');
-		
 		$staticLang = $this->uri->segment(1);
-		$lang = valid_lang($staticLang) ? $staticLang : ($this->input->get('lang') != "" ? $this->input->get('lang') : $_SESSION['lang']);
-
+		$lang = valid_lang($staticLang) ? $staticLang : ($this->input->get('lang') != "" ? $this->input->get('lang') : $this->session->userdata('lang'));
 		if (valid_lang($lang)) {
 			$this->lang->load($lang, 'a2zcms');
 			$this->session->set_userdata('lang', $lang);
@@ -34,6 +30,9 @@ class MY_Controller extends MX_Controller
 		if(!defined('ASSETS_PATH')){
 			  define('ASSETS_PATH', base_url('/data/assets/site'));
     	}
+		if(!defined('FLAG_PATH')){
+			  define('FLAG_PATH', base_url('/data/assets/flags'));
+    	}
 		if(!defined('ASSETS_PATH_FULL')){
 			  define('ASSETS_PATH_FULL', FCPATH.'/data/assets/site');
     	}  		  
@@ -43,18 +42,5 @@ class MY_Controller extends MX_Controller
 		if(!defined('DATA_PATH')){
 			  define('DATA_PATH', FCPATH.'/data');
     	}
-     }
-	public function change_uilang()
-	{
-		$old_lang = @$_SESSION['lang'];
-		$lang = $this->uri->segment(3);
-		if (!valid_lang($lang)) {
-			$lang = DEF_LANG;
-		}
-		$this->session->set_userdata('lang', $lang);
-		$_SESSION['lang'] = $lang;
-	
-		$redirect = $this->input->get('return') ? $this->input->get('return') : $_SERVER['HTTP_REFERER'];
-		redirect($redirect);
-	}
+     }	
 }

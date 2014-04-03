@@ -17,6 +17,7 @@ class Menu extends Website_Controller{
 	function mainmenu($type){
 		$data['current'] = $this->uri->segment(1);
 		$data['items'] = $this->Model_menu->pagesmenu($type);
+		$data['langs'] = $this->config->item('ui_langs');
 		$data['sitename'] = $this->getsitetitle()->value;
 		//Admin links
 		if($this->users->_is_admin($this->session->userdata('user_id'))){

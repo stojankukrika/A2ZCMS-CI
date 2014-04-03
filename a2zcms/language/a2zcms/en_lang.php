@@ -71,6 +71,7 @@ $lang['Submit'] = "Submit";
 $lang['Click'] = "Click";
 $lang['ToLogin'] = "to login";
 $lang['Comments'] = "comments";
+$lang['Jezik'] = "Language";
 
 /*
  * pages
@@ -293,10 +294,6 @@ $lang['ChooseRole'] = "Choose role";
 $lang['UserRole'] = "User role";
 $lang['AdminRole'] = "Admin role";
 $lang['RoleMenagement'] = "Role";
-/*
- * settings
- * */
-$lang['SettingsManagement'] = "Settings Management";
 
 /*
  * todolist
@@ -321,5 +318,33 @@ $lang['ActivateUser'] = "Activate User?";
 $lang['Roles'] = "Roles";
 $lang['RolesInfo'] = "Select a role to assign to the user.";
 $lang['ListOfUsers'] = "List of users";
+
+/*
+ * settings
+ * */
+$lang['SettingsManagement'] = "Settings Management";
+$lang['Analitic'] = "Analitic";
+$lang['Metadata'] = "Metadata";
+$lang['Password'] = "Password";
+$lang['Search'] = "Search";
+$lang['Analytics'] = "Analytics";
+$lang['Copyright'] = "Copyright";
+$lang['ContactEmail'] = "Contact email";
+$lang['DateFormat'] = "Date format";
+$lang['TimeFormat'] = "Time format";
+$lang['ConvertToTimeAgo'] = "Convert any date/time to 'xx Time ago' style";
+$lang['UserAvatarWidth'] = "User avatar width";
+$lang['UserAvatarHeight'] = "User avatar height";
+$lang['MetaAuthor'] = "Meta author";
+$lang['UseGravatar'] = "Use Gravatar";
+$lang['Offline'] = "Offline";
+$lang['OfflineMessage'] = "Offline message";
+$lang['PasswordPolicy'] = "Password policy";
+$lang['PasswordLength'] = "Password length";
+$lang['Digits'] = "Digits";
+$lang['LowercaseLetters'] = "Lowercase letters";
+$lang['UppercaseLetters'] = "Uppercase letters";
+$lang['SearchCode'] = "Search code";
+
 
 //end of file

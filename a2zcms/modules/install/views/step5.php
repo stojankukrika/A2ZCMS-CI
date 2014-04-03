@@ -5,13 +5,13 @@
 <?php echo form_open('install/step5',array('class' => 'form-horizontal')); ?>
 <div class="box form">	
 	<div class="control-group">
-			<label class="control-label" for="title"><?=trans('SiteName')?>:<span class="required">*</span></label>
+			<label class="control-label" for="title"><?=trans('SiteName',DEF_LANG)?>:<span class="required">*</span></label>
 			<div class="controls">
 				<?php echo form_input(array('name' => 'title', 'id' => 'title', 'value' => set_value('first_name'))); ?>
 			</div>
 		</div>
 		<div class="control-group">
-			<label class="control-label" for="theme"><?=trans('SiteTheme')?>:<span class="required">*</span></label>
+			<label class="control-label" for="theme"><?=trans('SiteTheme',DEF_LANG)?>:<span class="required">*</span></label>
 			<div class="controls">
 				<select name="theme">
 					<?php
@@ -24,7 +24,7 @@
 			</div>
 		</div>
 	<div class="control-group">
-			<label class="control-label" for="per_page"><?=trans('PostsPerPage')?>:<span class="required">*</span></label>
+			<label class="control-label" for="per_page"><?=trans('PostsPerPage',DEF_LANG)?>:<span class="required">*</span></label>
 			<div class="controls">
 				<select name="per_page" class="form-control">
 					<?php
@@ -36,7 +36,7 @@
 			</div>
 	</div>
 	<div class="control-group">
-			<label class="control-label" for="per_page"><?=trans('PostsPerPageAdmin')?>:<span class="required">*</span></label>
+			<label class="control-label" for="per_page"><?=trans('PostsPerPageAdmin',DEF_LANG)?>:<span class="required">*</span></label>
 			<div class="controls">
 				<select name="pageitemadmin" class="form-control">
 					<?php
@@ -49,7 +49,7 @@
 	</div>
 	<div class="control-group">
 	<div class="controls">
-		<input type="submit" name="submit" class="btn save" value="<?=trans('Finish')?>" />
+		<input type="submit" name="submit" class="btn save" value="<?=trans('Finish',DEF_LANG)?>" />
 	</div>
 </div>
 	<?php echo form_close(); ?>

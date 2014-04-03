@@ -3,7 +3,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-class Install extends CI_Controller {
+class Install extends MX_Controller {
 	
 	public $errors = array();
     public $writable_dirs = array(
@@ -25,8 +25,8 @@ class Install extends CI_Controller {
 	{
         $data = array();
 
-        $this->form_validation->set_rules('accept', trans('AgreeToLicense'), 'trim|required');
-        $this->form_validation->set_message('required', trans('AgreeToLicenceDesc'));
+        $this->form_validation->set_rules('accept', trans('AgreeToLicense',DEF_LANG), 'trim|required');
+        $this->form_validation->set_message('required', trans('AgreeToLicenceDesc',DEF_LANG));
 
         if ($this->form_validation->run())
         {
@@ -34,19 +34,19 @@ class Install extends CI_Controller {
         }
 
         $data['content'] = $this->load->view('install/step1', $data, TRUE);
-		$data['title'] = trans("Installer").' | '.trans("Step").' 1 '.trans("Of").' 5';
+		$data['title'] = trans("Installer",DEF_LANG).' | '.trans("Step",DEF_LANG).' 1 '.trans("Of",DEF_LANG).' 5';
         $this->load->view('install/global', $data);
 	}
 	private function validate()
     {
         if ( ! is_writable(CMS_ROOT . 'config/config.php'))
         {
-            $this->errors[] =  CMS_ROOT . 'config/config.php '.trans('is not writable.');
+            $this->errors[] =  CMS_ROOT . 'config/config.php '.trans('is not writable.',DEF_LANG);
         }
 
         if ( ! is_writable(CMS_ROOT . 'config/database.php'))
         {
-            $this->errors[] =  CMS_ROOT . 'config/database.php '.trans('is not writable.');
+            $this->errors[] =  CMS_ROOT . 'config/database.php '.trans('is not writable.',DEF_LANG);
         }
 
         $writable_dirs = $this->writable_dirs;
@@ -54,33 +54,33 @@ class Install extends CI_Controller {
         {
             if ( ! $is_writable)
             {
-                $this->errors[] = CMS_ROOT .'../'. $path .trans('is not writable.');
+                $this->errors[] = CMS_ROOT .'../'. $path .trans('is not writable.',DEF_LANG);
             }
         }
 
         if (phpversion() < '5.1.6')
         {
-            $this->errors[] = trans('YouNeedToUse').' PHP 5.1.6 '.trans('OrGreater');
+            $this->errors[] = trans('YouNeedToUse',DEF_LANG).' PHP 5.1.6 '.trans('OrGreater',DEF_LANG);
         }
 
         if ( ! ini_get('file_uploads'))
         {
-            $this->errors[] = trans('FileUploadsInfo');
+            $this->errors[] = trans('FileUploadsInfo',DEF_LANG);
         }
 
         if ( ! extension_loaded('mysql'))
         {
-            $this->errors[] = trans('MysqlExtension');
+            $this->errors[] = trans('MysqlExtension',DEF_LANG);
         }
 
         if ( ! extension_loaded('gd'))
         {
-            $this->errors[] = trans('GDExtension');
+            $this->errors[] = trans('GDExtension',DEF_LANG);
         }
 
         if ( ! extension_loaded('curl'))
         {
-            $this->errors[] = trans('CurlExtension');
+            $this->errors[] = trans('CurlExtension',DEF_LANG);
         }
 
         if (empty($this->errors))
@@ -126,7 +126,7 @@ class Install extends CI_Controller {
         $data['writable_dirs'] = $this->writable_dirs;
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step2', $data, TRUE);
-        $data['title'] = trans("Installer").' | '.trans("Step").' 2 '.trans("Of").' 5';
+        $data['title'] = trans("Installer",DEF_LANG).' | '.trans("Step",DEF_LANG).' 2 '.trans("Of",DEF_LANG).' 5';
         $this->load->view('install/global', $data);
 	}
 	
@@ -135,12 +135,12 @@ class Install extends CI_Controller {
     {
         $data = array();
 
-        $this->form_validation->set_rules('hostname', trans('DatabaseHost'), 'trim|required');
-        $this->form_validation->set_rules('username', trans('DatabaseUsername'), 'trim|required');
-        $this->form_validation->set_rules('password', trans('DatabasePassword'), 'trim');
-        $this->form_validation->set_rules('database', trans('DatabaseName'), 'trim|required');
-        $this->form_validation->set_rules('port', trans('DatabasePort'), 'trim|required');
-        $this->form_validation->set_rules('prefix', trans('DatabasePrefix'), 'trim');
+        $this->form_validation->set_rules('hostname', trans('DatabaseHost',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('username', trans('DatabaseUsername',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('password', trans('DatabasePassword',DEF_LANG), 'trim');
+        $this->form_validation->set_rules('database', trans('DatabaseName',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('port', trans('DatabasePort',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('prefix', trans('DatabasePrefix',DEF_LANG), 'trim');
         
         if ($this->form_validation->run())
         {
@@ -178,7 +178,7 @@ class Install extends CI_Controller {
 
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step3', $data, TRUE);
-		$data['title'] = trans("Installer").' | '.trans("Step").' 3 '.trans("Of").' 5';
+		$data['title'] = trans("Installer",DEF_LANG).' | '.trans("Step",DEF_LANG).' 3 '.trans("Of",DEF_LANG).' 5';
         $this->load->view('install/global', $data);
     }
 
@@ -187,12 +187,12 @@ class Install extends CI_Controller {
 	{
 		$data = array();
 
-        $this->form_validation->set_rules('first_name',  trans('FirstName'), 'trim|required');
-        $this->form_validation->set_rules('last_name',  trans('LastName'), 'trim|required');
-        $this->form_validation->set_rules('username',  trans('Username'), 'trim|required');
-        $this->form_validation->set_rules('email',  trans('Email'), 'trim|required|valid_email');
-		$this->form_validation->set_rules('admin_password',  trans('Password'), 'trim|required|min_length[5]');
-        $this->form_validation->set_rules('confirm_admin_password',  trans('ConfirmPassword'), 'trim|required|matches[admin_password]');
+        $this->form_validation->set_rules('first_name',  trans('FirstName',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('last_name',  trans('LastName',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('username',  trans('Username',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('email',  trans('Email',DEF_LANG), 'trim|required|valid_email');
+		$this->form_validation->set_rules('admin_password',  trans('Password',DEF_LANG), 'trim|required|min_length[5]');
+        $this->form_validation->set_rules('confirm_admin_password',  trans('ConfirmPassword',DEF_LANG), 'trim|required|matches[admin_password]');
       	
 		
         if ($this->form_validation->run())
@@ -244,17 +244,17 @@ class Install extends CI_Controller {
         }
         $data['errors'] = $this->errors;
         $data['content'] = $this->load->view('install/step4', $data, TRUE);
-		$data['title'] = trans("Installer").' | '.trans("Step").' 4 '.trans("Of").' 5';
+		$data['title'] = trans("Installer",DEF_LANG).' | '.trans("Step",DEF_LANG).' 4 '.trans("Of",DEF_LANG).' 5';
         $this->load->view('install/global', $data);
 	}
 	public function step5()
 	{
 		$data = array();
 
-        $this->form_validation->set_rules('title', trans('SiteName'), 'trim|required');
-        $this->form_validation->set_rules('theme', trans('SiteTheme'), 'trim|required');
-		$this->form_validation->set_rules('per_page', trans('PostsPerPage'), 'trim|required');
-      	$this->form_validation->set_rules('pageitemadmin', trans('PostsPerPageAdmin'), 'trim|required');
+        $this->form_validation->set_rules('title', trans('SiteName',DEF_LANG), 'trim|required');
+        $this->form_validation->set_rules('theme', trans('SiteTheme',DEF_LANG), 'trim|required');
+		$this->form_validation->set_rules('per_page', trans('PostsPerPage',DEF_LANG), 'trim|required');
+      	$this->form_validation->set_rules('pageitemadmin', trans('PostsPerPageAdmin',DEF_LANG), 'trim|required');
 		
         if ($this->form_validation->run())
         {
@@ -298,7 +298,7 @@ class Install extends CI_Controller {
 		$data = array();
 		$data['errors'] = $this->errors;
 		$data['content'] = $this->load->view('install/complite', $data, TRUE);
-		$data['title'] = trans("Installer").' | '.trans("Complite");
+		$data['title'] = trans("Installer",DEF_LANG).' | '.trans("Complite",DEF_LANG);
         $this->load->view('install/global', $data);
 	}
 }

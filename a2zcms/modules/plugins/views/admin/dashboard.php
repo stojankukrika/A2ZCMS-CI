@@ -10,7 +10,7 @@
 			<div class="col-lg-3 col-sm-6 col-xs-6 col-xxs-12">
 				<div class="smallstat box">
 					<i class="<?=$item->icon.' '.$item->background_color?>">&nbsp;</i>
-					<span class="title"><?=$item->title?><br><br></span>
+					<span class="title"><?=trans($item->title)?><br><br></span>
 					<a href="<?=base_url('admin/'.$item->name)?>" class="more">
 						<span><?=trans('ViewMore')?></span>
 						<i class="icon-chevron-right"></i>
