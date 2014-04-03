@@ -1,6 +1,6 @@
 <div id="content" class="col-lg-10 col-sm-11 ">
 	<div class="row">
-		<div class="page-header">
+		<div class="col-lg-12 col-sm-12 col-xxs-12">
 			<h1><?=trans('AdminPanel')?></h1>
 			<b><?=trans('WelcomeToAdminPanel')?></b>
 		</div>
