@@ -9,7 +9,6 @@
 		<thead>
 	        <tr>
 	          <th><?=trans('Title')?></th>
-	          <th><?=trans('Name')?></th>
 	          <th><?=trans('Version')?></th>
 	          <th><?=trans('InstalledAt')?></th>
 	          <th><?=trans('Actions')?></th>
@@ -18,8 +17,7 @@
       	<tbody>
         <?php foreach ($content['navigation'] as $item) {
             echo '<tr>
-		            <td>'.$item->title.'</td>		            
-					<td>'.$item->name.'</td>
+		            <td>'.trans($item->title).'</td>
 					<th>'.$item->pluginversion.'</th>
 					<td>'.$item->created_at.'</td>
 					<td class="">';
