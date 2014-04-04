@@ -131,6 +131,8 @@ $lang['Create'] = "Create";
 $lang['NoItemsFound'] = "No items found.";
 $lang['Hits'] = "Hits";
 $lang['Votes'] = "Votes";
+$lang['Yes'] = "Yes";
+$lang['No'] = "No";
  /*
  * admin menu
  */
@@ -250,15 +252,15 @@ $lang['ListOfUsers'] = "List of users";
  * settings
  * */
 $lang['SettingsManagement'] = "Settings Management";
-$lang['Analitic'] = "Analitic";
+$lang['Analytic'] = "Analitic";
 $lang['Metadata'] = "Metadata";
 $lang['Password'] = "Password";
 $lang['Search'] = "Search";
 $lang['Analytics'] = "Analytics";
 $lang['Copyright'] = "Copyright";
 $lang['ContactEmail'] = "Contact email";
-$lang['DateFormat'] = "Date format";
-$lang['TimeFormat'] = "Time format";
+$lang['DateFormat'] = "Date format (<i><a href='http://php.net/manual/en/function.date.php'>PHP DATE</a></i>)";
+$lang['TimeFormat'] = "Time format (<i><a href='http://php.net/manual/en/function.date.php'>PHP DATE</a></i>)";
 $lang['ConvertToTimeAgo'] = "Convert any date/time to 'xx Time ago' style";
 $lang['UserAvatarWidth'] = "User avatar width";
 $lang['UserAvatarHeight'] = "User avatar height";

@@ -129,6 +129,9 @@ $lang['Create'] = "Креирај";
 $lang['NoItemsFound'] = "Нема ставики.";
 $lang['Hits'] = "Посјећено";
 $lang['Votes'] = "Гласова";
+$lang['Yes'] = "Да";
+$lang['No'] = "Не";
+
  /*
  * admin menu
  */
@@ -256,8 +259,8 @@ $lang['Search'] = "Претрага";
 $lang['Analytics'] = "Аналитика";
 $lang['Copyright'] = "Ауторска права";
 $lang['ContactEmail'] = "Контакт емаил";
-$lang['DateFormat'] = "Формат датума";
-$lang['TimeFormat'] = "Формат времена";
+$lang['DateFormat'] = "Формат датума (<i><a href='http://php.net/manual/en/function.date.php'>PHP DATE</a></i>)";
+$lang['TimeFormat'] = "Формат времена (<i><a href='http://php.net/manual/en/function.date.php'>PHP DATE</a></i>)";
 $lang['ConvertToTimeAgo'] = "Конвертовати датум/вријеме у 'xx времена од постављања' стилу";
 $lang['UserAvatarWidth'] = "Ширина корисничког аватара";
 $lang['UserAvatarHeight'] = "Висина корисничког аватара";
