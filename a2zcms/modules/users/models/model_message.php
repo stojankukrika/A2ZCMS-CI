@@ -46,7 +46,7 @@ class Model_message extends CI_Model {
 		return $this->db->where('user_id_from', $user_id)
 						->where(array('messages.deleted_at_sender' => NULL))
 						->from('messages')
-						->join('users', 'messages.user_id_to=users.id')
+						->join('users', 'messages.user_id_from=users.id')
 						->select('messages.id,messages.subject,messages.content,messages.read,messages.created_at, users.name,users.surname')
 						->get()->result();
     }
