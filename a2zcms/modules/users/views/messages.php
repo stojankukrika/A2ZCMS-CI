@@ -25,6 +25,7 @@
 		<h3><?=trans('Messages')?></h3>
 	</div>
 	<div class="row">
+	<div id="tabs">
 		<ul id="myTab" class="nav nav-tabs">
             <li class="active"><a href="#service-one" data-toggle="tab"><?=trans('Received')?></a></li>
             <li><a href="#service-two" data-toggle="tab"><?=trans('Sent')?></a></li>
@@ -99,7 +100,9 @@
           </div>
        </div>
        </div>
-       <?php	echo '</div>';
+       </div>
+     </div>
+       <?php
 		if(!empty($content['right_content'])) {
 			echo '<div class="col-xs-6 col-lg-4"><br><br>';
 			foreach ($content['right_content'] as $item)
