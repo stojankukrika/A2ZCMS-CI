@@ -57,7 +57,7 @@
 									<a href="<?=base_url('users/account')?>"><i class="icon-cog"></i> <?=trans('ChangeProfile')?></a>
 								</li>
 								<li>
-									<a href="<?=base_url('users/messages')?>"><i class="icon-envelope"></i> <?=trans('Messages')?></a>
+									<a href="<?=base_url('users/messages')?>"><i class="icon-envelope"></i> <?=trans('Messages')?><?=$this->Model_message->selectNonRead($this->session->userdata('user_id'))?></a>
 								</li>
 								<li>
 									<a href="<?=base_url('users/logout')?>"><i class="icon-road icon-white"></i> <?=trans('Logout')?></a>
