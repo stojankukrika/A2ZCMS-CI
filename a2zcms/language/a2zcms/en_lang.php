@@ -109,6 +109,8 @@ $lang['CreateAnAccountHere'] = "Create an account here?";
 $lang['CreateAccount'] = "Create account";
 $lang['Messages'] = "Messages";
 $lang['Logout'] = "Logout";
+$lang['Replay'] = "Replay";
+$lang['NotRead'] = "Not read";
 
 /*************************************************************************************/
 /*								ADMIN LANGUAGE										*/

@@ -35,8 +35,6 @@ class Model_message extends CI_Model {
 		$this->db->update('messages', $data);
     }
 	
-	
-	
 	public function update($data,$id) {		
 		$this->db->where('id', $id);
 		$this->db->update('messages', $data);
@@ -46,7 +44,7 @@ class Model_message extends CI_Model {
 		return $this->db->where('user_id_from', $user_id)
 						->where(array('messages.deleted_at_sender' => NULL))
 						->from('messages')
-						->join('users', 'messages.user_id_from=users.id')
+						->join('users', 'messages.user_id_to=users.id')
 						->select('messages.id,messages.subject,messages.content,messages.read,messages.created_at, users.name,users.surname')
 						->get()->result();
     }
@@ -54,10 +52,19 @@ class Model_message extends CI_Model {
 		return $this->db->where('user_id_to', $user_id)
 						->where(array('messages.deleted_at_receiver' => NULL))
 						->from('messages')
-						->join('users', 'messages.user_id_to=users.id')
+						->join('users', 'messages.user_id_from=users.id')
 						->select('messages.id,messages.subject,messages.content,messages.read,messages.created_at, users.name,users.surname')
 						->get()->result();
     }
+	
+	public function selectNonRead($user_id) {		
+		$count =  $this->db->where('user_id_to', $user_id)
+						->where('read', 0)
+						->where(array('deleted_at_receiver' => NULL))
+						->from('messages')
+						->count_all_results();
+			return ($count>0)?" <span class='badge'>".$count."</span>":"";
+    } 
 	
 }
 

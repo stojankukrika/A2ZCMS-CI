@@ -348,6 +348,20 @@ class Users extends Website_Controller{
 		}
 		redirect(base_url('users/messages'));
 	}
+	function sendreplay($id_message)
+	{
+		if($id_message>0)
+		{
+			$message = $this->Model_message->select($id_message);
+			$this->Model_message->insert(array('subject'=>"RE: ".$message->subject,
+											'user_id_from'=>$this->session->userdata('user_id'),
+											'user_id_to'=>$message->user_id_from,
+											'content'=>$this->input->post('message'),
+											'read'=>'0',
+											'created_at' => date("Y-m-d H:i:s"),
+											'updated_at' => date("Y-m-d H:i:s")));
+		}
+	}
 	function deletereceiver($id_message)
 	{
 		$this->Model_message->deletereceiver($id_message);

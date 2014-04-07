@@ -46,7 +46,7 @@
 		</li>
 		<? } ?>
 		<li>
-			<a href="<?=base_url('users/messages')?>"><?=trans('Messages')?></a>
+			<a href="<?=base_url('users/messages')?>"><?=trans('Messages')?><?=$this->Model_message->selectNonRead($this->session->userdata('user_id'))?></a>
 		</li>
 		<li>
 			<a href="<?=base_url('users/account')?>"><?=trans('ChangeProfile')?></a>

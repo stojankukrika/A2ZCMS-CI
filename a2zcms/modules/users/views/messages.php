@@ -38,7 +38,7 @@
 	              <div class="panel-heading">
 	                <h4 class="panel-title">
 	                  <a class="accordion-toggle" id="msg-<?=$item->id?>" data-toggle="collapse" data-parent="#accordion" href="#<?=$item->id?>">
-	                   <b><?=$item->subject?></b>
+	                   <?=($item->read==0)?'<i>'.$item->subject.'</i> <span class="label label-info">'.trans('NotRead').'</span>':$item->subject;?>
 	                  </a>
 	                </h4><span><?=$item->name.' '.$item->surname?></span> 
 	                ( <?=$item->created_at?> ) 
@@ -46,7 +46,7 @@
 	              </div>
 	              <div id="<?=$item->id?>" class="panel-collapse collapse">
 	                <div class="panel-body">
-	                  <?=$item->content?>
+	                  <?=$item->content?><a id="replay-<?=$item->id?>" class="btn btn-sm btn-success"><?=trans('Replay')?><i class="glyphicon glyphicon-share-alt"></i></a>
 	                </div>
 	              </div>
 	            </div>
@@ -58,7 +58,7 @@
 	              <div class="panel-heading">
 	                <h4 class="panel-title">
 	                  <a class="accordion-toggle" id="" data-toggle="collapse" data-parent="#accordion" href="#<?=$item->id?>">
-	                    <b><?=$item->subject?></b>
+	                    <?=$item->subject?>
 	                  </a>
 	                </h4><span><?=$item->name.' '.$item->surname;?></span> 
  					( <?=$item->created_at?>)
@@ -74,16 +74,16 @@
           </div>
           <div class="tab-pane fade in" id="service-three">             
              <form role="form" method="POST" action="users/sendmessage">
-	             <div class="form-group col-lg-4">
+	             <div class="form-group col-lg-6">
 	                <label for="input1"><?=trans('Subject')?></label>
 	              	<input class="form-control" type="text" name="subject" id="subject" >
 	              </div>
 	               <div class="clearfix"></div>
-	               <div class="form-group col-lg-4">
+	               <div class="form-group col-lg-6">
 	                <label for="input1"><?=trans('Receivers')?></label>
-	               <select name="recipients[]" multiple="multiple" id="recipients">
+	               <select name="recipients[]" style="width:100%" id="recipients">
 	                     <?php foreach($allUsers as $usr) { ?>
-	                        <option value="<?=$usr->id?>"><?=$usr->surname.' '.$usr->name ?></option>
+	                        <option value="<?=$usr->id?>"><?=$usr->surname.' '.$usr->name.' - '.$usr->email ?></option>
 	                     <?php } ?>    
 	                </select>     
 	              </div>
@@ -119,7 +119,7 @@
 <script>
 	$( document ).ready(function() {		
 		/*set a multiselect users for sending a message*/
-		$("#recipients").multiselect();	
+		$("#recipients").select2();	
 		/*mark message as read*/
 		$("[id^='msg-']").click(function() {
 			var values = $(this).attr("id");
@@ -147,7 +147,24 @@
 				})
 			$(this).parent().parent().remove();
 		})
+		$("[id^='replay-']").click(function() {
+			var values = $(this).attr("id");
+			var value = values.split('-')[1];
+			$(this).parent().append('<br><div class="form-group col-lg-12"><label for="input4"><?=trans("Message")?></label><textarea name="message" class="form-control" rows="6" id="message-'+value+'"></textarea><label id="characterLeft"></label></div><div class="form-group col-lg-12"><button type="submit" id="sendreplay-'+value+'" class="btn btn-primary"><?=trans("Send")?></button></div>');
 			
+			$("[id^='sendreplay-']").click(function() {
+			var values = $(this).attr("id");
+			var value2 = values.split('-')[1];
+			$.ajax({
+					data : { message : $("#message-"+value2).val() },
+					url: 'users/sendreplay/'+value2,
+					type: "POST",							
+				})
+			window.parent.location.reload();
+			});	
+		})
+		
+		
 	});
 	
 </script>

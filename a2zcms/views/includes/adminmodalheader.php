@@ -40,6 +40,7 @@
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.tagit.css" >	
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.multiselect.css" >		
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
+		<link rel="stylesheet" type="text/css" href="<?ASSETS_PATH_ADMIN?>/css/select2.css">	
 		<!-- end: CSS -->
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>

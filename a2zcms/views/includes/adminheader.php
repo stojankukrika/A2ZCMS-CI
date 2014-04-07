@@ -33,8 +33,9 @@
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery.dataTables.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/colorbox.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/style.min.css">
-		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery-ui-1.10.3.custom.css">		
+		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/jquery-ui-1.10.3.custom.css">
 		<link rel="stylesheet" type="text/css" href="<?=ASSETS_PATH_ADMIN?>/css/bootstrap-dataTables.css">
+		<link rel="stylesheet" type="text/css" href="<?ASSETS_PATH_ADMIN?>/css/select2.css">	
 		<!-- end: CSS -->
 		<!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
