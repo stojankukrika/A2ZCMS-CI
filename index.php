@@ -1,4 +1,5 @@
 <?php
+ob_start();
 //if the ecarrent config file doesn't exist, the ecarrent hasn't been installed.
 if( !ini_get('date.timezone') )
 {

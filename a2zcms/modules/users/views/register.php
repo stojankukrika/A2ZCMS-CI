@@ -22,7 +22,7 @@
 		}
 		?>
 		<div class="page-header">
-				<h3>Signup for new account</h3>
+				<h3><?=trans('CreateAccount')?></h3>
 			</div>
 						
 			<?php if(@$error): ?>
@@ -83,7 +83,7 @@
 					<div class="form-group">
 						<div class="col-md-offset-2 col-md-10">
 							<button class="btn btn-primary" type="submit" tabindex="3">
-								<?=trans('CreateAccount')?>			
+								<?=trans('CreateAccount')?>
 							</button>
 						</div>
 					</div>
