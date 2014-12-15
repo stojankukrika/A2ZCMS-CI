@@ -9,7 +9,7 @@
 <!-- /DONATE -->
 [Demo](http://a2zcms.mrakodol.info)
 ======
-## A2Z CMS based on Codeigniter 2.1.4
+## A2Z CMS based on Codeigniter 2.2.0
 * [A2Z CMS Features](#feature1)
 * [Requirements](#feature2)
 * [How to install](#feature3)
@@ -19,7 +19,7 @@
 
 <a name="feature1"></a>
 ## A2Z CMS Features:
-* Codeigniter 2.1.4
+* Codeigniter 2.2.0
 * Twitter Bootstrap 3.0.0
 * Back-end
 	* Automatic install and settup website.
